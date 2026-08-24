@@ -24,6 +24,10 @@ interface FolderCard {
 
 
 
+// 原生 <img> 不会自动拼接 basePath，这里手动拼上前缀，
+// 保证 GitHub Pages 子路径（如 /gan）部署下图片不 404；本地 dev 时为空则走根路径
+const assetPath = (p: string) => `${process.env.NEXT_PUBLIC_BASE_PATH || ""}${p}`;
+
 // 原方案卡片参数（open-x / open-y / open-r / open-scale / z / delay）
 // peek 值：收拢时卡片在文件夹内部只露出约 1/3
 //
@@ -37,7 +41,7 @@ interface FolderCard {
 const folderCards: FolderCard[] = [
   {
     id: 1,
-    image: "/portfolio-cards/A_vibrant_graphic_design_poste_2026-08-24T00-39-32.png",
+    image: assetPath("/portfolio-cards/A_vibrant_graphic_design_poste_2026-08-24T00-39-32.png"),
     label: "SKATER",
     title: "Style Frame",
     w: 248,
@@ -55,7 +59,7 @@ const folderCards: FolderCard[] = [
   },
   {
     id: 2,
-    image: "/portfolio-cards/A_bright_lime_green_graphic_de_2026-08-24T00-39-37.png",
+    image: assetPath("/portfolio-cards/A_bright_lime_green_graphic_de_2026-08-24T00-39-37.png"),
     label: "youth",
     title: "Visual Poster",
     w: 254,
@@ -73,7 +77,7 @@ const folderCards: FolderCard[] = [
   },
   {
     id: 3,
-    image: "/portfolio-cards/A_sky_blue_gradient_card_with__2026-08-24T00-39-48.png",
+    image: assetPath("/portfolio-cards/A_sky_blue_gradient_card_with__2026-08-24T00-39-48.png"),
     label: "IP ACTION",
     title: "Character Shot",
     w: 244,
@@ -91,7 +95,7 @@ const folderCards: FolderCard[] = [
   },
   {
     id: 4,
-    image: "/portfolio-cards/A_dark_navy_blue_portfolio_car_2026-08-24T00-39-37.png",
+    image: assetPath("/portfolio-cards/A_dark_navy_blue_portfolio_car_2026-08-24T00-39-37.png"),
     label: "PORTFOLIO",
     title: "Design System",
     w: 264,
@@ -109,7 +113,7 @@ const folderCards: FolderCard[] = [
   },
   {
     id: 5,
-    image: "/portfolio-cards/A_dark_charcoal_card_featuring_2026-08-24T00-39-42.png",
+    image: assetPath("/portfolio-cards/A_dark_charcoal_card_featuring_2026-08-24T00-39-42.png"),
     label: "Characters",
     title: "3D Study",
     w: 240,
@@ -127,7 +131,7 @@ const folderCards: FolderCard[] = [
   },
   {
     id: 6,
-    image: "/portfolio-cards/A_bright_green_card_with_pixel_2026-08-24T00-39-40.png",
+    image: assetPath("/portfolio-cards/A_bright_green_card_with_pixel_2026-08-24T00-39-40.png"),
     label: "PUPLOOP",
     title: "Game Study",
     w: 244,
