@@ -1,0 +1,232 @@
+/* ============================================
+   Portfolio Folder - 卡片在文件夹内部，hover 展开
+   （组件专属样式，仅作用于 PortfolioCarousel3D）
+   ============================================ */
+
+.portfolio-folder {
+  /* 文件夹整体在页面中的垂直偏移（正值 = 向下） */
+  --folder-shift-y: 80px;
+  /* 卡片展开后的整体上移量（负值 = 向上抬升，值越负卡片离文件夹越高）
+     最终垂直位置 = 卡片 openY + --cards-open-drop */
+  --cards-open-drop: -112px;
+  /* 展开后卡片的水平间隔系数（>1 = 卡片之间左右间距变大，中心锚点不变） */
+  --open-x-scale: 1.25;
+
+  --folder-front-rest: translateX(-50%) translateY(0) rotateX(0deg) scale(0.96);
+  --folder-front-open: translateX(-50%) translateY(34px) rotateX(-9deg) scale(0.92);
+  --folder-back-rest: translateX(-50%) translateY(0) scale(0.96);
+  --folder-back-open: translateX(-50%) translateY(34px) scale(0.92);
+
+  position: relative;
+  width: 520px;
+  height: 390px;
+  isolation: isolate;
+  outline: 0;
+  transform: translateY(var(--folder-shift-y));
+  transform-style: preserve-3d;
+}
+
+/* ---- 文件夹背面（青色标签背板） ---- */
+.folder-back {
+  position: absolute;
+  bottom: 72px;
+  left: 50%;
+  z-index: 6;
+  width: 372px;
+  height: 276px;
+  border-radius: 26px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.02) 60%),
+    linear-gradient(160deg, #2dc8f2 0%, #1db5e6 100%);
+  box-shadow:
+    0 18px 30px rgba(16, 161, 215, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform: var(--folder-back-rest);
+  transition:
+    transform 580ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 380ms ease;
+  pointer-events: none;
+}
+
+.folder-back::before {
+  content: "";
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 132px;
+  height: 24px;
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(180deg, #3ed0f7 0%, #22bdee 100%);
+}
+
+/* ---- 卡片容器（相对定位，在文件夹内部） ---- */
+.folder-card-stack {
+  position: absolute;
+  bottom: 200px;          /* 文件夹开口处 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;
+  height: 200px;
+  z-index: 8;
+  pointer-events: none;
+  /* border: 1px dashed red;  debug */
+}
+
+/* ---- 卡片（相对 folder-card-stack 绝对定位） ---- */
+.folder-card {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: var(--card-z, 1);
+  transform-origin: center bottom;
+  transform: translate(calc(-50% + var(--peek-x)), var(--peek-y)) rotate(var(--peek-r)) scale(0.7);
+  transition:
+    opacity 240ms ease var(--card-delay),
+    transform 460ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--card-delay);
+  cursor: pointer;
+  pointer-events: auto;
+  will-change: transform;
+}
+
+/* 展开：层级与收拢保持一致（card-z + 20，相对顺序不变），整体抬升到文件夹正面(16)之上
+   位置公式：水平 = -50% + openX * open-x-scale；垂直 = openY + cards-open-drop；旋转 = openR；缩放 = openScale */
+.portfolio-folder:hover .folder-card,
+.portfolio-folder:focus-within .folder-card {
+  transform: translate(calc(-50% + var(--open-x) * var(--open-x-scale)), calc(var(--open-y) + var(--cards-open-drop))) rotate(var(--open-r)) scale(var(--card-hover-scale, var(--open-scale, 1)));
+  z-index: calc(var(--card-z, 1) + 20);
+}
+
+/* 展开状态下 hover 的卡片：层级置顶由 CSS 控制（z-index: 30），放大由 JS 的 hovering() 通过内联 --open-scale 控制 */
+.portfolio-folder:hover .folder-card.is-hovered,
+.portfolio-folder:focus-within .folder-card.is-hovered {
+  z-index: 30;
+  transition-delay: 0ms;
+}
+
+/* ---- 卡片内部 ---- */
+.folder-card-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.12),
+    0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+.folder-card-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.folder-card-label {
+  position: absolute;
+  top: 10px;
+  left: -4px;
+  padding: 3px 10px 3px 12px;
+  border-radius: 0 12px 12px 0;
+  background: var(--card-color);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.folder-card-title {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 9px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.04em;
+}
+
+/* ---- 文件夹正面（液态玻璃，盖在卡片上方） ---- */
+.folder-front {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  z-index: 16;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 384px;
+  height: 218px;
+  padding: 0 28px 30px;
+  border-radius: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.3) 0 14%, rgba(255, 255, 255, 0.08) 40%, rgba(255, 255, 255, 0.18) 100%),
+    linear-gradient(180deg, rgba(96, 218, 250, 0.58) 0%, rgba(38, 196, 235, 0.46) 100%);
+  backdrop-filter: blur(12px) saturate(1.5);
+  -webkit-backdrop-filter: blur(12px) saturate(1.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -20px 36px rgba(255, 255, 255, 0.18),
+    inset 0 0 28px rgba(255, 255, 255, 0.1),
+    0 20px 40px rgba(16, 161, 215, 0.22),
+    0 4px 12px rgba(16, 161, 215, 0.12);
+  pointer-events: none;
+  transform: var(--folder-front-rest);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 320ms ease,
+    transform 580ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 380ms ease;
+}
+
+/* 正面顶部开口高光线（液态玻璃边缘） */
+.folder-front::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+}
+
+.portfolio-folder:hover .folder-front,
+.portfolio-folder:focus-within .folder-front {
+  transform: var(--folder-front-open);
+  opacity: 0.85;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -14px 26px rgba(255, 255, 255, 0.12),
+    0 12px 26px rgba(16, 161, 215, 0.16);
+}
+
+.portfolio-folder:hover .folder-back,
+.portfolio-folder:focus-within .folder-back {
+  transform: var(--folder-back-open);
+}
+
+/* ============================================
+   3D Portfolio Carousel - Float Animation
+   ============================================ */
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 4s ease-in-out infinite;
+}
