@@ -18,8 +18,8 @@
 /.next-build/
 /out/
 
-# dev cache never published into dist
-/dist/dev/
+# static export staging dir (published copy lives in /docs)
+/dist/
 
 # production
 /build
