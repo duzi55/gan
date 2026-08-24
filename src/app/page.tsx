@@ -1,9 +1,4 @@
-import Link from "next/link";
-import { ProductCard } from "@/components/ui-components/ProductCard";
-import { ProfileCard } from "@/components/ui-components/ProfileCard";
-import { WeatherCard } from "@/components/ui-components/WeatherCard";
-
-const notes = [
+const posts = [
   {
     date: "2026.08.24",
     title: "从 14 个 UI 组件到一个静态博客",
@@ -22,130 +17,60 @@ const notes = [
   {
     date: "2026.07.12",
     title: "组件级样式的边界",
-    desc: "为什么每个组件应该有自己的 CSS 文件。",
+    desc: "为什么每个组件应该有自己的样式文件。",
+  },
+  {
+    date: "2026.06.30",
+    title: "把字体变成设计语言",
+    desc: "字体的气质，决定了界面的第一印象。",
+  },
+  {
+    date: "2026.06.15",
+    title: "不用渐变",
+    desc: "把装饰性渐变换成纯色、留白与更细的分割线。",
   },
 ];
 
 export default function Home() {
   return (
-    <div>
+    <div className="mx-auto w-full max-w-3xl px-6 pb-24">
       {/* Hero */}
-      <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-24 md:pb-28 md:pt-32">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-400">
-          Notes — a minimal blog
-        </p>
-        <h1 className="mt-6 text-4xl font-semibold tracking-tight text-zinc-900 md:text-5xl">
+      <section className="pt-24 pb-16 md:pt-32 md:pb-20">
+        <p className="text-[13px] tracking-[0.4em] text-zinc-400">NOTES</p>
+        <h1 className="mt-8 font-display text-[2.6rem] leading-[1.25] tracking-wide text-zinc-900 md:text-[3.4rem] md:leading-[1.22]">
           设计、代码
           <br />
           与界面的碎片。
         </h1>
-        <p className="mt-8 max-w-xl text-base leading-relaxed text-zinc-500">
-          记录组件设计、前端工程与极简界面实践。所有组件均为自建，
-          用作博客的组成零件。
+        <p className="mt-8 max-w-xl text-[15px] leading-loose text-zinc-500">
+          一个关于设计、前端工程与极简界面的个人笔记。
+          写得慢，想得多；博客与组件，都在这里慢慢生长。
         </p>
-        <div className="mt-10 flex items-center gap-6 text-sm">
-          <Link
-            href="/components/"
-            className="font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition-colors hover:decoration-zinc-900"
-          >
-            Browse components
-          </Link>
-          <Link
-            href="/components/portfolio-carousel/"
-            className="text-zinc-400 transition-colors hover:text-zinc-900"
-          >
-            3D Portfolio →
-          </Link>
-        </div>
       </section>
 
-      {/* Selected components */}
-      <section className="border-t border-zinc-200/70">
-        <div className="mx-auto w-full max-w-5xl px-6 py-20 md:py-24">
-          <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-medium text-zinc-400">Selected components</h2>
-            <Link
-              href="/components/"
-              className="text-sm text-zinc-500 transition-colors hover:text-zinc-900"
-            >
-              View all →
-            </Link>
-          </div>
-
-          <div className="mt-8 grid gap-10 md:grid-cols-2">
-            <Link href="/components/" className="group">
-              <div className="pointer-events-none select-none flex min-h-[300px] items-center justify-center overflow-hidden rounded-2xl border border-zinc-200/70 bg-white p-8 transition-colors group-hover:border-zinc-300">
-                <ProfileCard
-                  name="Chloe Harrison"
-                  role="Product designer"
-                  tags={["Figma", "UX Design"]}
-                  rating={4.5}
-                  earned="$15K+"
-                  rate="$80/hr"
-                />
-              </div>
-              <div className="mt-4 flex items-baseline justify-between">
-                <h3 className="text-sm font-medium text-zinc-900">Profile</h3>
-                <span className="font-mono text-xs text-zinc-400">01</span>
-              </div>
-            </Link>
-
-            <Link href="/components/" className="group">
-              <div className="pointer-events-none select-none flex min-h-[300px] items-center justify-center overflow-hidden rounded-2xl border border-zinc-200/70 bg-white p-8 transition-colors group-hover:border-zinc-300">
-                <ProductCard
-                  title="Crush Contrast"
-                  price="€165,95"
-                  imageUrl="https://picsum.photos/seed/blueshirt/400/400"
-                />
-              </div>
-              <div className="mt-4 flex items-baseline justify-between">
-                <h3 className="text-sm font-medium text-zinc-900">Product</h3>
-                <span className="font-mono text-xs text-zinc-400">02</span>
-              </div>
-            </Link>
-
-            <Link href="/components/" className="group md:col-span-2">
-              <div className="pointer-events-none select-none flex min-h-[320px] items-center justify-center overflow-hidden rounded-2xl border border-zinc-200/70 bg-white p-8 transition-colors group-hover:border-zinc-300">
-                <WeatherCard
-                  temperature={28}
-                  description="Pretty Sunny"
-                  time="11:21 AM"
-                  date="Feb 2, 2025"
-                  location="Calicut, Kerala"
-                  airQuality={72}
-                  airQualityLabel="Moderate"
-                  cloudCover={5}
-                />
-              </div>
-              <div className="mt-4 flex items-baseline justify-between">
-                <h3 className="text-sm font-medium text-zinc-900">Weather</h3>
-                <span className="font-mono text-xs text-zinc-400">03</span>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Notes */}
-      <section className="border-t border-zinc-200/70">
-        <div className="mx-auto w-full max-w-5xl px-6 py-20 md:py-24">
-          <h2 className="text-sm font-medium text-zinc-400">Notes</h2>
-          <ul className="mt-8 divide-y divide-zinc-200/70 border-t border-b border-zinc-200/70">
-            {notes.map((note) => (
-              <li key={note.title}>
-                <div className="flex flex-col gap-1 py-5 transition-colors hover:bg-zinc-100/60 sm:flex-row sm:items-baseline sm:gap-6">
-                  <span className="w-24 flex-shrink-0 font-mono text-xs text-zinc-400">
-                    {note.date}
+      {/* Posts */}
+      <section className="border-t border-zinc-200/70 pt-2">
+        <ul className="divide-y divide-zinc-200/70">
+          {posts.map((post) => (
+            <li key={post.title}>
+              <div className="group -mx-4 px-4 py-7 transition-colors hover:bg-stone-100/70">
+                <div className="flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:gap-6">
+                  <span className="font-mono text-[13px] tabular-nums text-zinc-400 sm:w-[7.5rem] sm:shrink-0">
+                    {post.date}
                   </span>
                   <div>
-                    <h3 className="text-base font-medium text-zinc-900">{note.title}</h3>
-                    <p className="mt-1 text-sm text-zinc-500">{note.desc}</p>
+                    <h2 className="text-[17px] font-bold leading-snug tracking-wide text-zinc-900">
+                      {post.title}
+                    </h2>
+                    <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">
+                      {post.desc}
+                    </p>
                   </div>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
   );
