@@ -8,6 +8,8 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const nextConfig: NextConfig = {
   // 静态导出：生成 ./out，可直接部署到 GitHub Pages / 任意静态托管
   output: "export",
+  // 构建缓存目录（默认 .next；使用独立目录，避免本机旧缓存残留问题）
+  distDir: ".next-build",
   basePath,
   // 静态资源（_next/static 等）前缀，GitHub Pages 子路径部署必须与 basePath 一致
   assetPrefix: basePath || undefined,
