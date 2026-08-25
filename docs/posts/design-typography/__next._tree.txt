@@ -1,0 +1,4 @@
+:HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
+:HL["/gan/_next/static/css/e5c3f0362d8f2206.css","style"]
+:HL["https://images.unsplash.com/photo-1499750310107-5fef78a3e42a?w=1200&h=800&fit=crop","image"]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"posts","param":null,"prefetchHints":4192,"slots":{"children":{"name":"slug","param":{"type":"d","key":"design-typography","siblings":[]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}}}},"staleTime":300,"buildId":"OqQTEPvF-LtjHMiGzS1E1"}

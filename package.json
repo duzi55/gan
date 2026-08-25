@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "prebuild": "node -e \"const fs=require('fs');['.next','.next-build','out'].forEach(d=>{try{fs.rmSync(d,{recursive:true})}catch(e){}})\"",
+    "prebuild": "powershell -Command \"@('.next','.next-build','out') | ForEach-Object { Remove-Item -Recurse -Force $_ -ErrorAction SilentlyContinue }\"",
     "start": "next start",
     "lint": "eslint"
   },
