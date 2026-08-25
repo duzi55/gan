@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 
 const navLinks = [
   { href: "/", label: "首页" },
+  { href: "/gallery", label: "图片流" },
   { href: "/components/", label: "组件" },
 ];
 

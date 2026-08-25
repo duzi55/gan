@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import Masonry from 'react-masonry-css';
 import { ProductCard } from '@/components/ui-components/ProductCard';
 import { BottomNavigation } from '@/components/ui-components/BottomNavigation';
@@ -41,13 +42,13 @@ export default function Components() {
         <p className="mt-4 max-w-md text-base text-zinc-500">
           14 个移动端 UI 组件，全部自建，用作博客的组成零件。
         </p>
-        <a
+        <Link
           href="/components/portfolio-carousel/"
           className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition-colors hover:decoration-zinc-900"
         >
           <span>View 3D Portfolio Carousel</span>
           <span>→</span>
-        </a>
+        </Link>
       </div>
 
       {/* Masonry Layout */}

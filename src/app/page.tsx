@@ -1,35 +1,5 @@
-const posts = [
-  {
-    date: "2026.08.24",
-    title: "从 14 个 UI 组件到一个静态博客",
-    desc: "把组件库改造成 GitHub Pages 静态博客的路径记录。",
-  },
-  {
-    date: "2026.08.10",
-    title: "极简风格的取舍",
-    desc: "留白、字距、分割线——克制背后的设计决策。",
-  },
-  {
-    date: "2026.07.28",
-    title: "Tailwind v4 主题配置笔记",
-    desc: "用 @theme inline 管理设计变量的实践。",
-  },
-  {
-    date: "2026.07.12",
-    title: "组件级样式的边界",
-    desc: "为什么每个组件应该有自己的样式文件。",
-  },
-  {
-    date: "2026.06.30",
-    title: "把字体变成设计语言",
-    desc: "字体的气质，决定了界面的第一印象。",
-  },
-  {
-    date: "2026.06.15",
-    title: "不用渐变",
-    desc: "把装饰性渐变换成纯色、留白与更细的分割线。",
-  },
-];
+import Link from "next/link";
+import { posts } from "@/data/posts";
 
 export default function Home() {
   return (
@@ -48,12 +18,30 @@ export default function Home() {
         </p>
       </section>
 
+      {/* Gallery Entry */}
+      <section className="mb-2 border-t border-zinc-200/70 py-6">
+        <Link
+          href="/gallery"
+          className="group flex items-baseline justify-between"
+        >
+          <span className="font-display text-lg text-zinc-900 transition-colors group-hover:text-zinc-500">
+            图片流
+          </span>
+          <span className="text-sm text-zinc-400 transition-colors group-hover:text-zinc-900">
+            以视觉叙事 →
+          </span>
+        </Link>
+      </section>
+
       {/* Posts */}
       <section className="border-t border-zinc-200/70 pt-2">
         <ul className="divide-y divide-zinc-200/70">
           {posts.map((post) => (
-            <li key={post.title}>
-              <div className="group -mx-4 px-4 py-7 transition-colors hover:bg-stone-100/70">
+            <li key={post.slug}>
+              <Link
+                href={`/posts/${post.slug}`}
+                className="group -mx-4 block px-4 py-7 transition-colors hover:bg-stone-100/70"
+              >
                 <div className="flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:gap-6">
                   <span className="font-mono text-[13px] tabular-nums text-zinc-400 sm:w-[7.5rem] sm:shrink-0">
                     {post.date}
@@ -63,11 +51,23 @@ export default function Home() {
                       {post.title}
                     </h2>
                     <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">
-                      {post.desc}
+                      {post.excerpt}
                     </p>
+                    {post.tags.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {post.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-xs text-zinc-400"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
+              </Link>
             </li>
           ))}
         </ul>

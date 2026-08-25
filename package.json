@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
+    "prebuild": "node -e \"const fs=require('fs');['.next','.next-build','out'].forEach(d=>{try{fs.rmSync(d,{recursive:true})}catch(e){}})\"",
     "start": "next start",
     "lint": "eslint"
   },
