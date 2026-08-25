@@ -4,7 +4,10 @@ export interface Post {
   date: string;
   excerpt: string;
   content: string;
-  cover: string;
+  /** CSS gradient string for the cover */
+  gradient: string;
+  /** Accent color for meta/decoration */
+  accent: string;
   tags: string[];
 }
 
@@ -14,8 +17,8 @@ export const posts: Post[] = [
     title: '字体设计：从阅读到观看',
     date: '2025-08-20',
     excerpt: '当文字从信息载体变成视觉元素，排版便不再是排版，而是构图。',
-    cover:
-      'https://images.unsplash.com/photo-1499750310107-5fef78a3e42a?w=1200&h=800&fit=crop',
+    gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+    accent: '#e2b4bd',
     tags: ['设计', '字体', '排版'],
     content: `## 字体的双重身份
 
@@ -44,8 +47,8 @@ export const posts: Post[] = [
     title: '极简不是少，而是刚好',
     date: '2025-08-15',
     excerpt: '极简主义设计的核心不是"去掉东西"，而是"每一样留下来的东西都有理由"。',
-    cover:
-      'https://images.unsplash.com/photo-1542435503-956c3e2c2e6e?w=1200&h=800&fit=crop',
+    gradient: 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 50%, #c7c7c7 100%)',
+    accent: '#525252',
     tags: ['设计', '极简', 'Web'],
     content: `## 克制的力量
 
@@ -73,8 +76,8 @@ export const posts: Post[] = [
     title: '图片流：以视觉叙事',
     date: '2025-08-10',
     excerpt: '文字是线性的，图片是瞬间的。当图片成流，叙事便可以脱离语法存在。',
-    cover:
-      'https://images.unsplash.com/photo-1542038784456-1ea8c9de271d?w=1200&h=800&fit=crop',
+    gradient: 'linear-gradient(135deg, #0d1117 0%, #1a3040 40%, #2d5e7e 100%)',
+    accent: '#7dd3fc',
     tags: ['摄影', '叙事', '图片流'],
     content: `## 图片流的逻辑
 
@@ -98,8 +101,8 @@ export const posts: Post[] = [
     title: '夜行记',
     date: '2025-08-05',
     excerpt: '城市的深夜是另一个城市。灯光代替太阳，影子比白天更长。',
-    cover:
-      'https://images.unsplash.com/photo-1493246507139-70e953496942?w=1200&h=800&fit=crop',
+    gradient: 'linear-gradient(135deg, #0c0c1d 0%, #1a0a2e 40%, #3a1a3e 100%)',
+    accent: '#e8a0bf',
     tags: ['随笔', '城市', '摄影'],
     content: `## 凌晨三点的街道
 
@@ -121,8 +124,8 @@ export const posts: Post[] = [
     title: '写作这件事',
     date: '2025-07-28',
     excerpt: '写作不是表达已知，而是通过写来思考未知。',
-    cover:
-      'https://images.unsplash.com/photo-1455390582262-044288c0ee5a?w=1200&h=800&fit=crop',
+    gradient: 'linear-gradient(135deg, #1c1917 0%, #44403c 50%, #78716c 100%)',
+    accent: '#d6d3d1',
     tags: ['写作', '随笔'],
     content: `## 写作是思考的工具
 
@@ -146,8 +149,8 @@ export const posts: Post[] = [
     title: '茶与时间',
     date: '2025-07-20',
     excerpt: '泡茶的过程是线性的，喝茶的体验却不是——每一口都是不同的时间层。',
-    cover:
-      'https://images.unsplash.com/photo-1544787219-7f4747a2fcc4?w=1200&h=800&fit=crop',
+    gradient: 'linear-gradient(135deg, #2c1810 0%, #5c3a1e 50%, #8b6914 100%)',
+    accent: '#e8dcc8',
     tags: ['茶', '随笔', '生活'],
     content: `## 一壶茶的时间
 

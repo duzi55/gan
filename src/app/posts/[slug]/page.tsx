@@ -28,20 +28,23 @@ export default async function PostPage({
 
   return (
     <article className="min-h-screen bg-zinc-50">
-      {/* Cover */}
-      <div className="relative h-[50vh] w-full overflow-hidden bg-zinc-200">
-        {post.cover ? (
-          <img
-            src={post.cover}
-            alt={post.title}
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-zinc-400">
-            <span className="text-sm">{post.title}</span>
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+      {/* Cover — CSS gradient, zero network */}
+      <div
+        className="relative flex h-[45vh] w-full items-end overflow-hidden px-6 pb-10 md:px-12 md:pb-14"
+        style={{ background: post.gradient }}
+      >
+        {/* Decorative typography */}
+        <div
+          className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 select-none text-[12rem] font-bold leading-none opacity-[0.08] md:text-[18rem]"
+          style={{ color: post.accent }}
+        >
+          {post.title.charAt(0)}
+        </div>
+        <div className="relative z-10">
+          <h1 className="max-w-2xl text-2xl font-bold leading-tight text-white md:text-4xl md:leading-[1.25]">
+            {post.title}
+          </h1>
+        </div>
       </div>
 
       {/* Content */}
@@ -54,14 +57,10 @@ export default async function PostPage({
           ← 返回首页
         </Link>
 
-        {/* Title */}
-        <h1 className="font-serif text-3xl font-bold leading-tight text-zinc-900">
-          {post.title}
-        </h1>
-
         {/* Meta */}
-        <div className="mt-4 flex items-center gap-3 text-sm text-zinc-500">
-          <time>{post.date}</time>
+        <div className="flex items-center gap-3 text-sm text-zinc-500">
+          <time className="font-mono tabular-nums">{post.date}</time>
+          <span className="text-zinc-300">·</span>
           {post.tags.map((tag) => (
             <span key={tag} className="text-zinc-400">
               #{tag}
