@@ -1,0 +1,61 @@
+1:"$Sreact.fragment"
+2:I[911,["500","static/chunks/500-b13bb91f5a6311b6.js","858","static/chunks/app/posts/%5Bslug%5D/page-64c25e823580bbca.js"],"default"]
+3:I[5744,["500","static/chunks/500-b13bb91f5a6311b6.js","858","static/chunks/app/posts/%5Bslug%5D/page-64c25e823580bbca.js"],"default"]
+4:T587,font-serif text-[18px] leading-[1.95] text-zinc-700
+
+            [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:text-zinc-900
+
+            [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-zinc-900
+
+            [&_p]:mb-6 [&_p]:text-zinc-600
+
+            [&_p:first-of-type]:text-[20px] [&_p:first-of-type]:leading-[1.8] [&_p:first-of-type]:text-zinc-700
+
+            [&_ul]:mb-6 [&_ul]:ml-1
+
+            [&_ul]:list-none
+
+            [&_li]:relative [&_li]:mb-3 [&_li]:pl-6 [&_li]:text-zinc-600
+
+            [&_li::before]:absolute [&_li::before]:left-0 [&_li::before]:top-[0.7em] [&_li::before]:h-1.5 [&_li::before]:w-1.5 [&_li::before]:rounded-full [&_li::before]:bg-zinc-300
+
+            [&_blockquote]:relative [&_blockquote]:my-8 [&_blockquote]:border-0 [&_blockquote]:pl-8
+
+            [&_blockquote::before]:absolute [&_blockquote::before]:left-0 [&_blockquote::before]:top-0 [&_blockquote::before]:h-full [&_blockquote::before]:w-1 [&_blockquote::before]:rounded-full [&_blockquote::before]:bg-zinc-300
+
+            [&_blockquote]:text-xl [&_blockquote]:font-medium [&_blockquote]:italic [&_blockquote]:leading-[1.7] [&_blockquote]:text-zinc-500
+
+            [&_a]:text-zinc-900 [&_a]:underline [&_a]:decoration-zinc-300 [&_a]:underline-offset-4
+
+            [&_strong]:font-bold [&_strong]:text-zinc-900
+
+            [&_em]:italic8:X
+d:X
+d:C
+0:{"buildId":"q32iIEke8O9Pmj89CayJh","data":[{"rsc":["$","$1","c",{"children":[["$","article",null,{"className":"min-h-screen bg-[#fbfaf7]","children":[["$","$L2",null,{}],["$","div",null,{"className":"relative flex h-[60vh] w-full items-end overflow-hidden","style":{"background":"linear-gradient(135deg,"},"children":[["$","$L3",null,{"accent":"#7dd3fc"}],["$","div",null,{"className":"pointer-events-none absolute inset-0 opacity-[0.04]","style":{"backgroundImage":"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E\")"}}],["$","div",null,{"className":"pointer-events-none absolute right-6 top-1/2 -translate-y-[55%] select-none text-[14rem] font-bold leading-none opacity-[0.06] md:text-[22rem]","style":{"color":"#7dd3fc"},"children":"图"}],["$","div",null,{"className":"relative z-10 w-full px-6 pb-14 md:px-12 md:pb-20","children":["$","div",null,{"className":"mx-auto max-w-2xl","children":[["$","div",null,{"className":"mb-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em]","style":{"color":"#7dd3fc"},"children":[["$","span",null,{"className":"h-px w-6","style":{"background":"#7dd3fc"}}],["$","span",null,{"children":"2025-08-10"}]]}],["$","h1",null,{"className":"font-serif text-3xl font-bold leading-[1.2] tracking-wide text-white md:text-[2.75rem] md:leading-[1.18]","children":"图片流：以视觉叙事"}],["$","p",null,{"className":"mt-5 font-serif text-[15px] leading-relaxed text-white/70","children":"文字是线性的，图片是瞬间的。当图片成流，叙事便可以脱离语法存在。"}]]}]}]]}],["$","div",null,{"className":"mx-auto max-w-2xl px-6 py-20 md:py-28","children":[["$","div",null,{"className":"mb-12 flex flex-wrap items-center gap-3","children":[["$","span","摄影",{"className":"rounded-full bg-zinc-900/5 px-3 py-1 text-xs tracking-wide text-zinc-500","children":["#","摄影"]}],["$","span","叙事",{"className":"rounded-full bg-zinc-900/5 px-3 py-1 text-xs tracking-wide text-zinc-500","children":["#","叙事"]}],["$","span","图片流",{"className":"rounded-full bg-zinc-900/5 px-3 py-1 text-xs tracking-wide text-zinc-500","children":["#","图片流"]}]]}],["$","div",null,{"className":"$4","dangerouslySetInnerHTML":{"__html":"<h2>图片流的逻辑</h2>\n<p>不是相册。不是画廊。是\"流\"——一张图接一张图，像水一样，带着观者从上游到下游。</p>\n<h3>顺序即叙事</h3>\n<p>一张好的开头图定调，一张好的结尾图收束，中间的排列决定了节奏。</p>\n<h3>留白的另一种用法</h3>\n<p>图与图之间不需要文字。距离本身就是停顿和过渡。</p>\n<h3>当图片自己说话</h3>\n<p>最好的图片流不需要标题。每张图都是一句话，连起来就是一篇文章。</p>\n"}}],"$L5"]}]]}],null,"$L6"]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":"$L9","isPartial":"$@a","staleTime":"$8","varyParams":null},{"rsc":"$Lb","isPartial":"$@c","staleTime":"$8","varyParams":"$d"},{"rsc":"$Le","isPartial":"$@f","staleTime":"$8","varyParams":"$d"},{"rsc":"$L10","isPartial":"$@11","staleTime":"$8","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@12","rootVaryParams":null,"needsRuntimeRequest":"$@13"}
+14:I[8500,["500","static/chunks/500-b13bb91f5a6311b6.js","858","static/chunks/app/posts/%5Bslug%5D/page-64c25e823580bbca.js"],""]
+15:I[484,[],"OutletBoundary"]
+16:"$Sreact.suspense"
+18:I[484,[],"ViewportBoundary"]
+19:I[484,[],"MetadataBoundary"]
+1a:I[6869,[],"IconMark"]
+1b:I[7121,[],""]
+1c:I[4581,[],""]
+:HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
+:HL["/gan/_next/static/css/85191de415694141.css","style"]
+5:["$","div",null,{"className":"mt-20 border-t border-zinc-200 pt-8","children":["$","div",null,{"className":"flex items-center justify-between","children":[["$","$L14",null,{"href":"/","className":"group inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-900","children":[["$","span",null,{"className":"transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-x-1","children":"←"}],"返回首页"]}],["$","$L14",null,{"href":"/gallery","className":"group inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-900","children":["图片流",["$","span",null,{"className":"transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1","children":"→"}]]}]]}]}]
+6:["$","$L15",null,{"children":["$","$16",null,{"name":"Next.MetadataOutlet","children":"$@17"}]}]
+9:["$","$1","h",{"children":[null,["$","$L18",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L19",null,{"children":["$","$16",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"图片流：以视觉叙事 · Notes"}],["$","meta","1",{"name":"description","content":"文字是线性的，图片是瞬间的。当图片成流，叙事便可以脱离语法存在。"}],["$","link","2",{"rel":"icon","href":"/gan/favicon.ico?603d046c9a6fdfbb","type":"image/x-icon","sizes":"16x16"}],["$","$L1a","3",{}]]}]}]}],null]}]
+b:["$","$1","c",{"children":[null,["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}]}]]}]
+e:["$","$1","c",{"children":[null,["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}]}]]}]
+10:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/gan/_next/static/css/0634c25f18e3e31c.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/gan/_next/static/css/85191de415694141.css","precedence":"next"}]],["$","html",null,{"lang":"zh-CN","className":"__variable_074a08 h-full antialiased","children":["$","body",null,{"className":"flex min-h-full flex-col","children":[["$","header",null,{"className":"sticky top-0 z-50 border-b border-zinc-200/70 bg-[#fafafa]/85 backdrop-blur","children":["$","nav",null,{"className":"mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-6","children":[["$","$L14",null,{"href":"/","className":"text-[15px] font-bold tracking-[0.2em] text-zinc-900 transition-colors hover:text-zinc-500","children":"NOTES"}],["$","div",null,{"className":"flex items-center gap-7 text-sm text-zinc-500","children":[["$","$L14","/",{"href":"/","className":"transition-colors hover:text-zinc-900","children":"首页"}],["$","$L14","/gallery",{"href":"/gallery","className":"transition-colors hover:text-zinc-900","children":"图片流"}],["$","$L14","/components/",{"href":"/components/","className":"transition-colors hover:text-zinc-900","children":"组件"}]]}]]}]}],["$","main",null,{"className":"flex-1","children":["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}],["$","footer",null,{"className":"border-t border-zinc-200/70","children":["$","div",null,{"className":"mx-auto flex w-full max-w-3xl items-center justify-between px-6 py-8 text-xs text-zinc-400","children":[["$","span",null,{"children":"© 2026 Notes"}],["$","span",null,{"className":"font-mono","children":"Next.js"}]]}]}]]}]}]]}]
+17:null
+13:true
+8:300
+8:C
+12:0
+a:"$undefined"
+c:"$undefined"
+f:"$undefined"
+11:"$undefined"
+7:"$undefined"
