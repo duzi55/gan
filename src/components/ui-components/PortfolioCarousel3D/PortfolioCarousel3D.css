@@ -1,15 +1,11 @@
 /* ============================================
-   Portfolio Folder - 卡片在文件夹内部，hover 展开
+   Portfolio Folder - 卡片在文件夹内部，hover / tap 展开
    （组件专属样式，仅作用于 PortfolioCarousel3D）
    ============================================ */
 
 .portfolio-folder {
-  /* 文件夹整体在页面中的垂直偏移（正值 = 向下） */
   --folder-shift-y: 80px;
-  /* 卡片展开后的整体上移量（负值 = 向上抬升，值越负卡片离文件夹越高）
-     最终垂直位置 = 卡片 openY + --cards-open-drop */
   --cards-open-drop: -112px;
-  /* 展开后卡片的水平间隔系数（>1 = 卡片之间左右间距变大，中心锚点不变） */
   --open-x-scale: 1.25;
 
   --folder-front-rest: translateX(-50%) translateY(0) rotateX(0deg) scale(0.96);
@@ -24,9 +20,10 @@
   outline: 0;
   transform: translateY(var(--folder-shift-y));
   transform-style: preserve-3d;
+  cursor: pointer;
 }
 
-/* ---- 文件夹背面（青色标签背板） ---- */
+/* ---- 文件夹背面 ---- */
 .folder-back {
   position: absolute;
   bottom: 72px;
@@ -60,20 +57,19 @@
   background: linear-gradient(180deg, #3ed0f7 0%, #22bdee 100%);
 }
 
-/* ---- 卡片容器（相对定位，在文件夹内部） ---- */
+/* ---- 卡片容器 ---- */
 .folder-card-stack {
   position: absolute;
-  bottom: 200px;          /* 文件夹开口处 */
+  bottom: 200px;
   left: 50%;
   transform: translateX(-50%);
   width: 340px;
   height: 200px;
   z-index: 8;
   pointer-events: none;
-  /* border: 1px dashed red;  debug */
 }
 
-/* ---- 卡片（相对 folder-card-stack 绝对定位） ---- */
+/* ---- 卡片 ---- */
 .folder-card {
   position: absolute;
   left: 50%;
@@ -89,17 +85,17 @@
   will-change: transform;
 }
 
-/* 展开：层级与收拢保持一致（card-z + 20，相对顺序不变），整体抬升到文件夹正面(16)之上
-   位置公式：水平 = -50% + openX * open-x-scale；垂直 = openY + cards-open-drop；旋转 = openR；缩放 = openScale */
+/* 展开状态 — hover + is-expanded 都触发 */
 .portfolio-folder:hover .folder-card,
-.portfolio-folder:focus-within .folder-card {
+.portfolio-folder:focus-within .folder-card,
+.portfolio-folder.is-expanded .folder-card {
   transform: translate(calc(-50% + var(--open-x) * var(--open-x-scale)), calc(var(--open-y) + var(--cards-open-drop))) rotate(var(--open-r)) scale(var(--card-hover-scale, var(--open-scale, 1)));
   z-index: calc(var(--card-z, 1) + 20);
 }
 
-/* 展开状态下 hover 的卡片：层级置顶由 CSS 控制（z-index: 30），放大由 JS 的 hovering() 通过内联 --open-scale 控制 */
 .portfolio-folder:hover .folder-card.is-hovered,
-.portfolio-folder:focus-within .folder-card.is-hovered {
+.portfolio-folder:focus-within .folder-card.is-hovered,
+.portfolio-folder.is-expanded .folder-card.is-hovered {
   z-index: 30;
   transition-delay: 0ms;
 }
@@ -153,7 +149,7 @@
   letter-spacing: 0.04em;
 }
 
-/* ---- 文件夹正面（液态玻璃，盖在卡片上方） ---- */
+/* ---- 文件夹正面（液态玻璃） ---- */
 .folder-front {
   position: absolute;
   bottom: 48px;
@@ -187,7 +183,6 @@
     box-shadow 380ms ease;
 }
 
-/* 正面顶部开口高光线（液态玻璃边缘） */
 .folder-front::before {
   content: "";
   position: absolute;
@@ -200,7 +195,8 @@
 }
 
 .portfolio-folder:hover .folder-front,
-.portfolio-folder:focus-within .folder-front {
+.portfolio-folder:focus-within .folder-front,
+.portfolio-folder.is-expanded .folder-front {
   transform: var(--folder-front-open);
   opacity: 0.85;
   box-shadow:
@@ -210,23 +206,66 @@
 }
 
 .portfolio-folder:hover .folder-back,
-.portfolio-folder:focus-within .folder-back {
+.portfolio-folder:focus-within .folder-back,
+.portfolio-folder.is-expanded .folder-back {
   transform: var(--folder-back-open);
 }
 
 /* ============================================
-   3D Portfolio Carousel - Float Animation
+   Float Animation
    ============================================ */
 
 @keyframes float-slow {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
 }
 
 .animate-float-slow {
   animation: float-slow 4s ease-in-out infinite;
+}
+
+/* ============================================
+   Mobile nav buttons
+   ============================================ */
+
+.carousel-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 200ms ease;
+  color: #475569;
+}
+
+.carousel-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  color: #1e293b;
+}
+
+.carousel-nav-btn:active {
+  transform: translateY(-50%) scale(0.92);
+}
+
+.carousel-nav-btn.left { left: 8px; }
+.carousel-nav-btn.right { right: 8px; }
+
+/* Show nav buttons always on touch devices, on hover for desktop */
+@media (hover: none) {
+  .carousel-nav-btn { opacity: 1; }
+}
+@media (hover: hover) {
+  .carousel-nav-btn { opacity: 0; transition: opacity 200ms ease; }
+  .carousel-container:hover .carousel-nav-btn { opacity: 1; }
 }
