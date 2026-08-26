@@ -1,19 +1,16 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { posts } from '@/data/posts';
+import { getAllSlugs, getPost, getPostMeta } from '@/lib/posts';
 
 export function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }));
+  return getAllSlugs().map((slug) => ({ slug }));
 }
 
 export function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   return params.then((p) => {
-    const post = posts.find((x) => x.slug === p.slug);
-    if (!post) return {};
-    return {
-      title: post.title,
-      description: post.excerpt,
-    };
+    const meta = getPostMeta(p.slug);
+    if (!meta) return {};
+    return { title: meta.title, description: meta.excerpt };
   });
 }
 
@@ -23,7 +20,7 @@ export default async function PostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
+  const post = await getPost(slug);
   if (!post) notFound();
 
   return (
@@ -33,7 +30,6 @@ export default async function PostPage({
         className="relative flex h-[45vh] w-full items-end overflow-hidden px-6 pb-10 md:px-12 md:pb-14"
         style={{ background: post.gradient }}
       >
-        {/* Decorative typography */}
         <div
           className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 select-none text-[12rem] font-bold leading-none opacity-[0.08] md:text-[18rem]"
           style={{ color: post.accent }}
@@ -68,50 +64,11 @@ export default async function PostPage({
           ))}
         </div>
 
-        {/* Body */}
-        <div className="mt-10 space-y-6 font-serif text-[17px] leading-[1.9] text-zinc-800">
-          {post.content.split('\n').map((line, i) => {
-            if (line.startsWith('## '))
-              return (
-                <h2
-                  key={i}
-                  className="pt-6 text-xl font-bold text-zinc-900"
-                >
-                  {line.slice(3)}
-                </h2>
-              );
-            if (line.startsWith('### '))
-              return (
-                <h3
-                  key={i}
-                  className="pt-4 text-lg font-semibold text-zinc-900"
-                >
-                  {line.slice(4)}
-                </h3>
-              );
-            if (line.startsWith('> '))
-              return (
-                <blockquote
-                  key={i}
-                  className="border-l-2 border-zinc-300 pl-4 italic text-zinc-600"
-                >
-                  {line.slice(2)}
-                </blockquote>
-              );
-            if (line.startsWith('- '))
-              return (
-                <li key={i} className="ml-4 list-disc">
-                  {line.slice(2)}
-                </li>
-              );
-            if (line.trim() === '') return <div key={i} className="h-2" />;
-            return (
-              <p key={i} className="text-zinc-700">
-                {line}
-              </p>
-            );
-          })}
-        </div>
+        {/* Rendered markdown */}
+        <div
+          className="mt-10 font-serif text-[17px] leading-[1.9] text-zinc-800 [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-zinc-900 [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-zinc-900 [&_p]:mb-4 [&_p]:text-zinc-700 [&_ul]:mb-4 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:space-y-1 [&_blockquote]:border-l-2 [&_blockquote]:border-zinc-300 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-zinc-600"
+          dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+        />
       </div>
     </article>
   );

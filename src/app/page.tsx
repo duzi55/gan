@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { posts } from "@/data/posts";
+import { getAllPosts } from "@/lib/posts";
 
 export default function Home() {
+  const posts = getAllPosts();
+
   return (
     <div className="mx-auto w-full max-w-3xl px-6 pb-24">
       {/* Hero */}
