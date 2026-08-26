@@ -5,6 +5,7 @@ import { StatsCard } from "@/components/ui-components/StatsCard";
 import { LiveWeatherCard } from "@/components/ui-components/WeatherCard";
 import { MusicPlayer } from "@/components/ui-components/MusicPlayer";
 import { ProfileCard } from "@/components/ui-components/ProfileCard";
+import { ArticleCard } from "@/components/ArticleCard";
 import { GalleryImage } from "@/components/GalleryImage";
 
 const galleryItems = [
@@ -16,53 +17,51 @@ const galleryItems = [
   { title: "Ocean", seed: "ocean-deep-06", gradient: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)" },
 ];
 
+/** override min-w/max-w of child component to fill grid cell */
+const fill = "[&>div]:!min-w-0 [&>div]:!max-w-none [&>div]:w-full";
+
 export default function Home() {
   const posts = getAllPosts();
-  const allTags = new Set(posts.flatMap(p => p.tags));
+  const allTags = new Set(posts.flatMap((p) => p.tags));
   const now = new Date();
   const hour = now.getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
   const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
+  const p = (i: number) => posts[i];
+
   return (
     <div className="min-h-screen bg-[#fbfaf7]">
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden">
+      {/* ── Hero + 3D Carousel integrated ── */}
+      <section className="relative overflow-hidden" style={{ isolation: "isolate" }}>
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)" }} />
         <div className="pointer-events-none absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E\")" }} />
         <div className="pointer-events-none absolute -left-32 top-20 h-64 w-64 rounded-full bg-purple-500/20 blur-[80px]" />
         <div className="pointer-events-none absolute -right-32 bottom-10 h-72 w-72 rounded-full bg-cyan-500/20 blur-[100px]" />
 
-        <div className="relative z-10 mx-auto max-w-5xl px-6 py-24 text-center md:py-32">
+        <div className="relative z-10 mx-auto max-w-5xl px-6 pt-20 pb-2 text-center md:pt-28">
           <div className="mb-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-white/40">
             <span className="h-px w-8 bg-white/30" />
             <span>Notes · {now.getFullYear()}</span>
             <span className="h-px w-8 bg-white/30" />
           </div>
-          <h1 className="font-serif text-4xl font-bold leading-[1.15] tracking-wide text-white md:text-6xl md:leading-[1.1]">
-            设计、代码与
-            <br />
-            界面的碎片
+          <h1 className="font-serif text-3xl font-bold leading-[1.15] tracking-wide text-white md:text-5xl">
+            设计、代码与界面的碎片
           </h1>
-          <p className="mx-auto mt-6 max-w-md font-serif text-base leading-relaxed text-white/50">
+          <p className="mx-auto mt-4 max-w-md font-serif text-sm leading-relaxed text-white/50">
             一个关于设计美学、前端工程与极简界面的个人博客。
-            <br />
-            每一篇文章都是一次探索。
           </p>
         </div>
-      </section>
 
-      {/* ── 3D Portfolio Carousel ── */}
-      <section className="relative">
-        <div className="mx-auto max-w-5xl px-6 pt-4 pb-2 text-center">
-          <h2 className="mb-1 text-xs font-semibold uppercase tracking-[0.25em] text-zinc-400">Portfolio Showcase</h2>
+        {/* 3D carousel — inside hero, double isolation to prevent overflow */}
+        <div className="relative overflow-hidden" style={{ isolation: "isolate" }}>
+          <PortfolioCarousel3D />
         </div>
-        <PortfolioCarousel3D />
       </section>
 
-      {/* ── Articles + Sidebar ── */}
-      <section className="mx-auto max-w-5xl px-6 py-20">
-        <div className="mb-12 flex items-end justify-between">
+      {/* ── Magazine Flow: articles + components mixed ── */}
+      <section className="mx-auto max-w-5xl px-6 py-16">
+        <div className="mb-10 flex items-end justify-between">
           <div>
             <h2 className="font-serif text-2xl font-bold tracking-wide text-zinc-900 md:text-3xl">文章</h2>
             <p className="mt-1 text-sm text-zinc-400">设计思考与前端实践</p>
@@ -70,47 +69,70 @@ export default function Home() {
           <span className="text-sm text-zinc-300">{posts.length} 篇</span>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {/* Article List */}
-          <div className="space-y-5 lg:col-span-2">
-            {posts.map((post, idx) => (
-              <Link key={post.slug} href={`/posts/${post.slug}`} className="group block">
-                <article className="relative flex overflow-hidden rounded-2xl border border-zinc-200/60 bg-white/60 shadow-sm transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:shadow-lg hover:shadow-zinc-200/60">
-                  <div className="relative w-28 flex-shrink-0 overflow-hidden" style={{ background: post.gradient }}>
-                    <span className="absolute bottom-3 left-3 right-3 font-serif text-[3rem] font-bold leading-none text-white/15">{String(idx + 1).padStart(2, "0")}</span>
-                  </div>
-                  <div className="flex flex-1 flex-col justify-center px-6 py-5">
-                    <div className="mb-2 flex items-center gap-3 text-xs text-zinc-400">
-                      <span>{post.date}</span>
-                      <span className="h-px w-3 bg-zinc-300" />
-                      <span className="flex gap-2">{post.tags.slice(0, 2).map((tag) => (<span key={tag}>#{tag}</span>))}</span>
-                    </div>
-                    <h3 className="mb-2 font-serif text-lg font-bold leading-snug text-zinc-900 transition-colors group-hover:text-zinc-600 md:text-xl">{post.title}</h3>
-                    <p className="line-clamp-2 text-sm leading-relaxed text-zinc-500">{post.excerpt}</p>
-                  </div>
-                  <div className="flex items-center pr-6">
-                    <span className="text-2xl text-zinc-300 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1 group-hover:text-zinc-500">→</span>
-                  </div>
-                </article>
-              </Link>
-            ))}
+        <div className="space-y-6">
+          {/* Row 1: Featured article (wide) + Weather */}
+          {posts.length > 0 && (
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+              <div className="lg:col-span-2">
+                {p(0) && <ArticleCard {...p(0)} index={0} />}
+              </div>
+              <div className={fill}>
+                <LiveWeatherCard />
+              </div>
+            </div>
+          )}
+
+          {/* Row 2: Two articles side by side */}
+          {posts.length > 2 && (
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              {p(1) && <ArticleCard {...p(1)} index={1} />}
+              {p(2) && <ArticleCard {...p(2)} index={2} />}
+            </div>
+          )}
+
+          {/* Row 3: Music player + Article */}
+          {posts.length > 3 ? (
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <div className={fill}>
+                <MusicPlayer albumTitle="Lo-fi Beats" artist="Chillhop Music" year={2026} songCount={5} />
+              </div>
+              {p(3) && <ArticleCard {...p(3)} index={3} />}
+            </div>
+          ) : (
+            <div className={fill}>
+              <MusicPlayer albumTitle="Lo-fi Beats" artist="Chillhop Music" year={2026} songCount={5} />
+            </div>
+          )}
+
+          {/* Row 4: Stats + Profile + Article (3-col) */}
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            <div className={fill}>
+              <StatsCard greeting={greeting} date={dateStr} userName="Reader" />
+            </div>
+            <div className={fill}>
+              <ProfileCard name="Yang" role="Designer & Developer" tags={["UI/UX", "Frontend", "3D"]} rating={4.9} earned="¥12k+" rate="98%" />
+            </div>
+            {p(4) ? (
+              <ArticleCard {...p(4)} index={4} variant="vertical" />
+            ) : (
+              <div className="flex items-center justify-center rounded-2xl border border-dashed border-zinc-200 bg-white/40 p-8 text-sm text-zinc-300">
+                More coming soon
+              </div>
+            )}
           </div>
 
-          {/* Sidebar — Real functional components */}
-          <aside className="space-y-6 lg:sticky lg:top-20 lg:self-start">
-            <StatsCard
-              greeting={greeting}
-              date={dateStr}
-              userName="Reader"
-            />
-            <LiveWeatherCard />
-            <MusicPlayer albumTitle="Lo-fi Beats" artist="Chillhop Music" year={2026} songCount={5} />
-            <ProfileCard name="Yang" role="Designer & Developer" tags={["UI/UX", "Frontend", "3D"]} rating={4.9} earned="¥12k+" rate="98%" />
-          </aside>
+          {/* Remaining articles — flowing list */}
+          {posts.length > 5 && (
+            <div className="space-y-4 pt-2">
+              {posts.slice(5).map((post, i) => (
+                <ArticleCard key={post.slug} {...post} index={i + 5} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* ── Gallery Preview — Real images from Picsum ── */}
+      {/* ── Gallery — Real photos from Picsum ── */}
       <section className="border-t border-zinc-200/60 bg-[#f5f3ee] py-20">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mb-10 flex items-end justify-between">
@@ -127,9 +149,7 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
             {galleryItems.map((g) => (
               <Link key={g.title} href="/gallery" className="group relative aspect-[4/5] overflow-hidden rounded-2xl">
-                {/* Gradient fallback */}
                 <div className="absolute inset-0" style={{ background: g.gradient }} />
-                {/* Real image from Picsum API */}
                 <GalleryImage src={`https://picsum.photos/seed/${g.seed}/400/500`} alt={g.title} gradient={g.gradient} />
                 <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
                 <div className="absolute bottom-4 left-4">
