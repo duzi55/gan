@@ -1,29 +1,61 @@
 1:"$Sreact.fragment"
-2:I[8500,["500","static/chunks/500-b13bb91f5a6311b6.js","858","static/chunks/app/posts/%5Bslug%5D/page-e880fa85dbf3867f.js"],""]
-3:I[484,[],"OutletBoundary"]
-4:"$Sreact.suspense"
-8:I[484,[],"ViewportBoundary"]
-9:I[484,[],"MetadataBoundary"]
-a:I[6869,[],"IconMark"]
-c:I[7121,[],""]
-d:I[4581,[],""]
+2:I[911,["500","static/chunks/500-b13bb91f5a6311b6.js","858","static/chunks/app/posts/%5Bslug%5D/page-64c25e823580bbca.js"],"default"]
+3:I[5744,["500","static/chunks/500-b13bb91f5a6311b6.js","858","static/chunks/app/posts/%5Bslug%5D/page-64c25e823580bbca.js"],"default"]
+4:T587,font-serif text-[18px] leading-[1.95] text-zinc-700
+
+            [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:text-zinc-900
+
+            [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-zinc-900
+
+            [&_p]:mb-6 [&_p]:text-zinc-600
+
+            [&_p:first-of-type]:text-[20px] [&_p:first-of-type]:leading-[1.8] [&_p:first-of-type]:text-zinc-700
+
+            [&_ul]:mb-6 [&_ul]:ml-1
+
+            [&_ul]:list-none
+
+            [&_li]:relative [&_li]:mb-3 [&_li]:pl-6 [&_li]:text-zinc-600
+
+            [&_li::before]:absolute [&_li::before]:left-0 [&_li::before]:top-[0.7em] [&_li::before]:h-1.5 [&_li::before]:w-1.5 [&_li::before]:rounded-full [&_li::before]:bg-zinc-300
+
+            [&_blockquote]:relative [&_blockquote]:my-8 [&_blockquote]:border-0 [&_blockquote]:pl-8
+
+            [&_blockquote::before]:absolute [&_blockquote::before]:left-0 [&_blockquote::before]:top-0 [&_blockquote::before]:h-full [&_blockquote::before]:w-1 [&_blockquote::before]:rounded-full [&_blockquote::before]:bg-zinc-300
+
+            [&_blockquote]:text-xl [&_blockquote]:font-medium [&_blockquote]:italic [&_blockquote]:leading-[1.7] [&_blockquote]:text-zinc-500
+
+            [&_a]:text-zinc-900 [&_a]:underline [&_a]:decoration-zinc-300 [&_a]:underline-offset-4
+
+            [&_strong]:font-bold [&_strong]:text-zinc-900
+
+            [&_em]:italic8:X
+d:X
+d:C
+0:{"buildId":"shGuUls0uugdFYzsxFoMz","data":[{"rsc":["$","$1","c",{"children":[["$","article",null,{"className":"min-h-screen bg-[#fbfaf7]","children":[["$","$L2",null,{}],["$","div",null,{"className":"relative flex h-[60vh] w-full items-end overflow-hidden","style":{"background":"linear-gradient(135deg,"},"children":[["$","$L3",null,{"accent":"#525252"}],["$","div",null,{"className":"pointer-events-none absolute inset-0 opacity-[0.04]","style":{"backgroundImage":"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E\")"}}],["$","div",null,{"className":"pointer-events-none absolute right-6 top-1/2 -translate-y-[55%] select-none text-[14rem] font-bold leading-none opacity-[0.06] md:text-[22rem]","style":{"color":"#525252"},"children":"极"}],["$","div",null,{"className":"relative z-10 w-full px-6 pb-14 md:px-12 md:pb-20","children":["$","div",null,{"className":"mx-auto max-w-2xl","children":[["$","div",null,{"className":"mb-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em]","style":{"color":"#525252"},"children":[["$","span",null,{"className":"h-px w-6","style":{"background":"#525252"}}],["$","span",null,{"children":"2025-08-15"}]]}],["$","h1",null,{"className":"font-serif text-3xl font-bold leading-[1.2] tracking-wide text-white md:text-[2.75rem] md:leading-[1.18]","children":"极简不是少，而是刚好"}],["$","p",null,{"className":"mt-5 font-serif text-[15px] leading-relaxed text-white/70","children":"极简主义设计的核心不是\"去掉东西\"，而是\"每一样留下来的东西都有理由\"。"}]]}]}]]}],["$","div",null,{"className":"mx-auto max-w-2xl px-6 py-20 md:py-28","children":[["$","div",null,{"className":"mb-12 flex flex-wrap items-center gap-3","children":[["$","span","设计",{"className":"rounded-full bg-zinc-900/5 px-3 py-1 text-xs tracking-wide text-zinc-500","children":["#","设计"]}],["$","span","极简",{"className":"rounded-full bg-zinc-900/5 px-3 py-1 text-xs tracking-wide text-zinc-500","children":["#","极简"]}],["$","span","Web",{"className":"rounded-full bg-zinc-900/5 px-3 py-1 text-xs tracking-wide text-zinc-500","children":["#","Web"]}]]}],["$","div",null,{"className":"$4","dangerouslySetInnerHTML":{"__html":"<h2>克制的力量</h2>\n<p>当你能在三秒内理解一个页面要说什么，设计师已经成功了大半。</p>\n<h3>留白</h3>\n<p>留白不是空。留白是空间，是呼吸，是让重要的事物有地方\"站\"。</p>\n<ul>\n<li>留白引导视线</li>\n<li>留白建立层级</li>\n<li>留白制造节奏</li>\n</ul>\n<h3>色彩</h3>\n<p>一页用一种颜色，比用五种更难。但你能做到的时候，它就是风格。</p>\n<h3>字体</h3>\n<p>两种字族以内。一个用于标题，一个用于正文。够了。</p>\n"}}],"$L5"]}]]}],null,"$L6"]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":"$L9","isPartial":"$@a","staleTime":"$8","varyParams":null},{"rsc":"$Lb","isPartial":"$@c","staleTime":"$8","varyParams":"$d"},{"rsc":"$Le","isPartial":"$@f","staleTime":"$8","varyParams":"$d"},{"rsc":"$L10","isPartial":"$@11","staleTime":"$8","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@12","rootVaryParams":null,"needsRuntimeRequest":"$@13"}
+14:I[8500,["500","static/chunks/500-b13bb91f5a6311b6.js","858","static/chunks/app/posts/%5Bslug%5D/page-64c25e823580bbca.js"],""]
+15:I[484,[],"OutletBoundary"]
+16:"$Sreact.suspense"
+18:I[484,[],"ViewportBoundary"]
+19:I[484,[],"MetadataBoundary"]
+1a:I[6869,[],"IconMark"]
+1b:I[7121,[],""]
+1c:I[4581,[],""]
 :HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
-:HL["/gan/_next/static/css/fe191c548e5e78c7.css","style"]
-7:X
-f:X
-f:C
-0:{"buildId":"HTOucSFf045ykAECQJ_7W","data":[{"rsc":["$","$1","c",{"children":[["$","article",null,{"className":"min-h-screen bg-zinc-50","children":[["$","div",null,{"className":"relative flex h-[45vh] w-full items-end overflow-hidden px-6 pb-10 md:px-12 md:pb-14","style":{"background":"linear-gradient(135deg,"},"children":[["$","div",null,{"className":"pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 select-none text-[12rem] font-bold leading-none opacity-[0.08] md:text-[18rem]","style":{"color":"#525252"},"children":"极"}],["$","div",null,{"className":"relative z-10","children":["$","h1",null,{"className":"max-w-2xl text-2xl font-bold leading-tight text-white md:text-4xl md:leading-[1.25]","children":"极简不是少，而是刚好"}]}]]}],["$","div",null,{"className":"mx-auto max-w-2xl px-6 py-16","children":[["$","$L2",null,{"href":"/","className":"mb-8 inline-block text-sm text-zinc-500 hover:text-zinc-900","children":"← 返回首页"}],["$","div",null,{"className":"flex items-center gap-3 text-sm text-zinc-500","children":[["$","time",null,{"className":"font-mono tabular-nums","children":"Fri Aug 15 2025 08:00:00 GMT+0800 (中国标准时间)"}],["$","span",null,{"className":"text-zinc-300","children":"·"}],[["$","span","设计",{"className":"text-zinc-400","children":["#","设计"]}],["$","span","极简",{"className":"text-zinc-400","children":["#","极简"]}],["$","span","Web",{"className":"text-zinc-400","children":["#","Web"]}]]]}],["$","div",null,{"className":"mt-10 font-serif text-[17px] leading-[1.9] text-zinc-800 [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-zinc-900 [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-zinc-900 [&_p]:mb-4 [&_p]:text-zinc-700 [&_ul]:mb-4 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:space-y-1 [&_blockquote]:border-l-2 [&_blockquote]:border-zinc-300 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-zinc-600","dangerouslySetInnerHTML":{"__html":"<h2>克制的力量</h2>\n<p>当你能在三秒内理解一个页面要说什么，设计师已经成功了大半。</p>\n<h3>留白</h3>\n<p>留白不是空。留白是空间，是呼吸，是让重要的事物有地方\"站\"。</p>\n<ul>\n<li>留白引导视线</li>\n<li>留白建立层级</li>\n<li>留白制造节奏</li>\n</ul>\n<h3>色彩</h3>\n<p>一页用一种颜色，比用五种更难。但你能做到的时候，它就是风格。</p>\n<h3>字体</h3>\n<p>两种字族以内。一个用于标题，一个用于正文。够了。</p>\n"}}]]}]]}],null,["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":"$@6","staleTime":"$7","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$L8",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L9",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"极简不是少，而是刚好 · Notes"}],["$","meta","1",{"name":"description","content":"极简主义设计的核心不是\"去掉东西\"，而是\"每一样留下来的东西都有理由\"。"}],["$","link","2",{"rel":"icon","href":"/gan/favicon.ico?603d046c9a6fdfbb","type":"image/x-icon","sizes":"16x16"}],["$","$La","3",{}]]}]}]}],null]}],"isPartial":"$@b","staleTime":"$7","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$Lc",null,{"parallelRouterKey":"children","template":["$","$Ld",null,{}]}]]}],"isPartial":"$@e","staleTime":"$7","varyParams":"$f"},{"rsc":["$","$1","c",{"children":[null,["$","$Lc",null,{"parallelRouterKey":"children","template":["$","$Ld",null,{}]}]]}],"isPartial":"$@10","staleTime":"$7","varyParams":"$f"},{"rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/gan/_next/static/css/0634c25f18e3e31c.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/gan/_next/static/css/fe191c548e5e78c7.css","precedence":"next"}]],["$","html",null,{"lang":"zh-CN","className":"__variable_074a08 h-full antialiased","children":["$","body",null,{"className":"flex min-h-full flex-col","children":[["$","header",null,{"className":"sticky top-0 z-50 border-b border-zinc-200/70 bg-[#fafafa]/85 backdrop-blur","children":["$","nav",null,{"className":"mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-6","children":[["$","$L2",null,{"href":"/","className":"text-[15px] font-bold tracking-[0.2em] text-zinc-900 transition-colors hover:text-zinc-500","children":"NOTES"}],["$","div",null,{"className":"flex items-center gap-7 text-sm text-zinc-500","children":[["$","$L2","/",{"href":"/","className":"transition-colors hover:text-zinc-900","children":"首页"}],"$L11","$L12"]}]]}]}],"$L13","$L14"]}]}]]}],"isPartial":"$@15","staleTime":"$7","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@16","rootVaryParams":null,"needsRuntimeRequest":"$@17"}
-5:null
-11:["$","$L2","/gallery",{"href":"/gallery","className":"transition-colors hover:text-zinc-900","children":"图片流"}]
-12:["$","$L2","/components/",{"href":"/components/","className":"transition-colors hover:text-zinc-900","children":"组件"}]
-13:["$","main",null,{"className":"flex-1","children":["$","$Lc",null,{"parallelRouterKey":"children","template":["$","$Ld",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}]
-14:["$","footer",null,{"className":"border-t border-zinc-200/70","children":["$","div",null,{"className":"mx-auto flex w-full max-w-3xl items-center justify-between px-6 py-8 text-xs text-zinc-400","children":[["$","span",null,{"children":"© 2026 Notes"}],["$","span",null,{"className":"font-mono","children":"Next.js"}]]}]}]
-7:300
-17:true
-7:C
-16:0
-b:"$undefined"
-e:"$undefined"
-10:"$undefined"
-15:"$undefined"
-6:"$undefined"
+:HL["/gan/_next/static/css/b3c147ef5403ef57.css","style"]
+5:["$","div",null,{"className":"mt-20 border-t border-zinc-200 pt-8","children":["$","div",null,{"className":"flex items-center justify-between","children":[["$","$L14",null,{"href":"/","className":"group inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-900","children":[["$","span",null,{"className":"transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-x-1","children":"←"}],"返回首页"]}],["$","$L14",null,{"href":"/gallery","className":"group inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-900","children":["图片流",["$","span",null,{"className":"transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1","children":"→"}]]}]]}]}]
+6:["$","$L15",null,{"children":["$","$16",null,{"name":"Next.MetadataOutlet","children":"$@17"}]}]
+9:["$","$1","h",{"children":[null,["$","$L18",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L19",null,{"children":["$","$16",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"极简不是少，而是刚好 · Notes"}],["$","meta","1",{"name":"description","content":"极简主义设计的核心不是\"去掉东西\"，而是\"每一样留下来的东西都有理由\"。"}],["$","link","2",{"rel":"icon","href":"/gan/favicon.ico?603d046c9a6fdfbb","type":"image/x-icon","sizes":"16x16"}],["$","$L1a","3",{}]]}]}]}],null]}]
+b:["$","$1","c",{"children":[null,["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}]}]]}]
+e:["$","$1","c",{"children":[null,["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}]}]]}]
+10:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/gan/_next/static/css/0634c25f18e3e31c.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/gan/_next/static/css/b3c147ef5403ef57.css","precedence":"next"}]],["$","html",null,{"lang":"zh-CN","className":"__variable_074a08 h-full antialiased","children":["$","body",null,{"className":"flex min-h-full flex-col","children":[["$","header",null,{"className":"sticky top-0 z-50 border-b border-zinc-200/70 bg-[#fafafa]/85 backdrop-blur","children":["$","nav",null,{"className":"mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-6","children":[["$","$L14",null,{"href":"/","className":"text-[15px] font-bold tracking-[0.2em] text-zinc-900 transition-colors hover:text-zinc-500","children":"NOTES"}],["$","div",null,{"className":"flex items-center gap-7 text-sm text-zinc-500","children":[["$","$L14","/",{"href":"/","className":"transition-colors hover:text-zinc-900","children":"首页"}],["$","$L14","/gallery",{"href":"/gallery","className":"transition-colors hover:text-zinc-900","children":"图片流"}],["$","$L14","/components/",{"href":"/components/","className":"transition-colors hover:text-zinc-900","children":"组件"}]]}]]}]}],["$","main",null,{"className":"flex-1","children":["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}],["$","footer",null,{"className":"border-t border-zinc-200/70","children":["$","div",null,{"className":"mx-auto flex w-full max-w-3xl items-center justify-between px-6 py-8 text-xs text-zinc-400","children":[["$","span",null,{"children":"© 2026 Notes"}],["$","span",null,{"className":"font-mono","children":"Next.js"}]]}]}]]}]}]]}]
+17:null
+13:true
+8:300
+8:C
+12:0
+a:"$undefined"
+c:"$undefined"
+f:"$undefined"
+11:"$undefined"
+7:"$undefined"

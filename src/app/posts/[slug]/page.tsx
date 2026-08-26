@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getAllSlugs, getPost, getPostMeta } from '@/lib/posts';
+import ArticleCanvas from '@/components/ArticleCanvas';
+import ReadingProgress from '@/components/ReadingProgress';
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -24,51 +26,111 @@ export default async function PostPage({
   if (!post) notFound();
 
   return (
-    <article className="min-h-screen bg-zinc-50">
-      {/* Cover — CSS gradient, zero network */}
+    <article className="min-h-screen bg-[#fbfaf7]">
+      <ReadingProgress />
+
+      {/* ── Hero with Canvas ── */}
       <div
-        className="relative flex h-[45vh] w-full items-end overflow-hidden px-6 pb-10 md:px-12 md:pb-14"
+        className="relative flex h-[60vh] w-full items-end overflow-hidden"
         style={{ background: post.gradient }}
       >
+        {/* Canvas animation layer */}
+        <ArticleCanvas accent={post.accent} />
+
+        {/* Grain overlay */}
         <div
-          className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 select-none text-[12rem] font-bold leading-none opacity-[0.08] md:text-[18rem]"
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E\")",
+          }}
+        />
+
+        {/* Large decorative first character */}
+        <div
+          className="pointer-events-none absolute right-6 top-1/2 -translate-y-[55%] select-none text-[14rem] font-bold leading-none opacity-[0.06] md:text-[22rem]"
           style={{ color: post.accent }}
         >
           {post.title.charAt(0)}
         </div>
-        <div className="relative z-10">
-          <h1 className="max-w-2xl text-2xl font-bold leading-tight text-white md:text-4xl md:leading-[1.25]">
-            {post.title}
-          </h1>
+
+        {/* Title block */}
+        <div className="relative z-10 w-full px-6 pb-14 md:px-12 md:pb-20">
+          <div className="mx-auto max-w-2xl">
+            <div
+              className="mb-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em]"
+              style={{ color: post.accent }}
+            >
+              <span className="h-px w-6" style={{ background: post.accent }} />
+              <span>{post.date}</span>
+            </div>
+            <h1 className="font-serif text-3xl font-bold leading-[1.2] tracking-wide text-white md:text-[2.75rem] md:leading-[1.18]">
+              {post.title}
+            </h1>
+            <p className="mt-5 font-serif text-[15px] leading-relaxed text-white/70">
+              {post.excerpt}
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="mx-auto max-w-2xl px-6 py-16">
-        {/* Back */}
-        <Link
-          href="/"
-          className="mb-8 inline-block text-sm text-zinc-500 hover:text-zinc-900"
-        >
-          ← 返回首页
-        </Link>
-
-        {/* Meta */}
-        <div className="flex items-center gap-3 text-sm text-zinc-500">
-          <time className="font-mono tabular-nums">{post.date}</time>
-          <span className="text-zinc-300">·</span>
+      {/* ── Article Body ── */}
+      <div className="mx-auto max-w-2xl px-6 py-20 md:py-28">
+        {/* Tags row */}
+        <div className="mb-12 flex flex-wrap items-center gap-3">
           {post.tags.map((tag) => (
-            <span key={tag} className="text-zinc-400">
+            <span
+              key={tag}
+              className="rounded-full bg-zinc-900/5 px-3 py-1 text-xs tracking-wide text-zinc-500"
+            >
               #{tag}
             </span>
           ))}
         </div>
 
-        {/* Rendered markdown */}
+        {/* Rendered Markdown — rich typographic styling */}
         <div
-          className="mt-10 font-serif text-[17px] leading-[1.9] text-zinc-800 [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-zinc-900 [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-zinc-900 [&_p]:mb-4 [&_p]:text-zinc-700 [&_ul]:mb-4 [&_ul]:ml-5 [&_ul]:list-disc [&_ul]:space-y-1 [&_blockquote]:border-l-2 [&_blockquote]:border-zinc-300 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-zinc-600"
+          className="font-serif text-[18px] leading-[1.95] text-zinc-700
+            [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:text-zinc-900
+            [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-zinc-900
+            [&_p]:mb-6 [&_p]:text-zinc-600
+            [&_p:first-of-type]:text-[20px] [&_p:first-of-type]:leading-[1.8] [&_p:first-of-type]:text-zinc-700
+            [&_ul]:mb-6 [&_ul]:ml-1
+            [&_ul]:list-none
+            [&_li]:relative [&_li]:mb-3 [&_li]:pl-6 [&_li]:text-zinc-600
+            [&_li::before]:absolute [&_li::before]:left-0 [&_li::before]:top-[0.7em] [&_li::before]:h-1.5 [&_li::before]:w-1.5 [&_li::before]:rounded-full [&_li::before]:bg-zinc-300
+            [&_blockquote]:relative [&_blockquote]:my-8 [&_blockquote]:border-0 [&_blockquote]:pl-8
+            [&_blockquote::before]:absolute [&_blockquote::before]:left-0 [&_blockquote::before]:top-0 [&_blockquote::before]:h-full [&_blockquote::before]:w-1 [&_blockquote::before]:rounded-full [&_blockquote::before]:bg-zinc-300
+            [&_blockquote]:text-xl [&_blockquote]:font-medium [&_blockquote]:italic [&_blockquote]:leading-[1.7] [&_blockquote]:text-zinc-500
+            [&_a]:text-zinc-900 [&_a]:underline [&_a]:decoration-zinc-300 [&_a]:underline-offset-4
+            [&_strong]:font-bold [&_strong]:text-zinc-900
+            [&_em]:italic"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
+
+        {/* ── Article Footer ── */}
+        <div className="mt-20 border-t border-zinc-200 pt-8">
+          <div className="flex items-center justify-between">
+            <Link
+              href="/"
+              className="group inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+            >
+              <span className="transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-x-1">
+                ←
+              </span>
+              返回首页
+            </Link>
+            <Link
+              href="/gallery"
+              className="group inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+            >
+              图片流
+              <span className="transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1">
+                →
+              </span>
+            </Link>
+          </div>
+        </div>
       </div>
     </article>
   );

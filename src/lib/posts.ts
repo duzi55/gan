@@ -20,6 +20,18 @@ export interface Post extends PostMeta {
 
 const postsDir = path.join(process.cwd(), 'content', 'posts');
 
+/** Format any date value (Date object or string) as YYYY-MM-DD. */
+function formatDate(date: unknown): string {
+  if (date instanceof Date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  if (typeof date === 'string') return date.slice(0, 10);
+  return new Date().toISOString().slice(0, 10);
+}
+
 /** Get all post metadata, sorted by date (newest first). */
 export function getAllPosts(): PostMeta[] {
   const files = fs.readdirSync(postsDir).filter(
@@ -33,7 +45,7 @@ export function getAllPosts(): PostMeta[] {
     return {
       slug,
       title: data.title ?? slug,
-      date: (data.date ?? new Date().toISOString().slice(0, 10)).toString(),
+      date: formatDate(data.date),
       excerpt: data.excerpt ?? '',
       tags: Array.isArray(data.tags) ? data.tags : [],
       gradient: data.gradient ?? 'linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%)',
@@ -58,7 +70,7 @@ export async function getPost(slug: string): Promise<Post | null> {
   return {
     slug,
     title: data.title ?? slug,
-    date: (data.date ?? new Date().toISOString().slice(0, 10)).toString(),
+    date: formatDate(data.date),
     excerpt: data.excerpt ?? '',
     tags: Array.isArray(data.tags) ? data.tags : [],
     gradient: data.gradient ?? 'linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%)',
@@ -81,7 +93,7 @@ export function getPostMeta(slug: string): PostMeta | null {
   return {
     slug,
     title: (data.title ?? slug) as string,
-    date: (data.date ?? new Date().toISOString().slice(0, 10)).toString(),
+    date: formatDate(data.date),
     excerpt: (data.excerpt ?? '') as string,
     tags: Array.isArray(data.tags) ? data.tags : [],
     gradient: (data.gradient ?? 'linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%)') as string,
