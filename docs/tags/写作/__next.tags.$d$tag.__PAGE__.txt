@@ -1,0 +1,33 @@
+1:"$Sreact.fragment"
+2:I[8500,["500","static/chunks/500-b13bb91f5a6311b6.js","755","static/chunks/app/tags/%5Btag%5D/page-debe5b4485b36b91.js"],""]
+3:I[9442,["500","static/chunks/500-b13bb91f5a6311b6.js","755","static/chunks/app/tags/%5Btag%5D/page-debe5b4485b36b91.js"],"TagCloud"]
+4:I[484,[],"OutletBoundary"]
+5:"$Sreact.suspense"
+9:I[484,[],"ViewportBoundary"]
+a:I[484,[],"MetadataBoundary"]
+b:I[6869,[],"IconMark"]
+d:I[7121,[],""]
+e:I[4581,[],""]
+12:I[1580,["500","static/chunks/500-b13bb91f5a6311b6.js","177","static/chunks/app/layout-f60368fde3a5cacf.js"],"Navigation"]
+:HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
+:HL["/gan/_next/static/css/8c14927d374b0481.css","style"]
+8:X
+10:X
+10:C
+0:{"buildId":"1Cr89BvcpDZ_ZAxeeyweb","data":[{"rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen bg-zinc-950 text-zinc-100","children":[["$","section",null,{"className":"relative overflow-hidden","children":[["$","div",null,{"className":"pointer-events-none absolute -left-32 top-20 h-64 w-64 rounded-full bg-purple-500/10 blur-[100px]"}],["$","div",null,{"className":"pointer-events-none absolute -right-32 bottom-10 h-72 w-72 rounded-full bg-cyan-500/10 blur-[120px]"}],["$","div",null,{"className":"relative z-10 mx-auto max-w-6xl px-6 pt-20 pb-12 md:pt-28","children":[["$","div",null,{"className":"mb-6 flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-zinc-600","children":[["$","span",null,{"className":"h-px w-8 bg-zinc-700"}],["$","span",null,{"children":"Tags"}]]}],["$","h1",null,{"className":"flex items-center gap-4 font-serif text-3xl font-bold text-zinc-50 md:text-5xl","children":[["$","span",null,{"className":"font-serif text-2xl text-zinc-500 md:text-3xl","children":"✦"}],"#","写作"]}],["$","p",null,{"className":"mt-4 font-serif text-sm text-zinc-500","children":["收录 ",1," 篇文章"]}]]}]]}],["$","section",null,{"className":"mx-auto max-w-6xl px-6 pb-14","children":["$","div",null,{"className":"space-y-3","children":[["$","$L2","on-writing",{"href":"/posts/on-writing","className":"group grid items-center gap-4 rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 transition-all hover:border-white/10 hover:bg-white/5 md:grid-cols-[auto_1fr_auto]","children":[["$","span",null,{"className":"hidden w-10 font-serif text-sm text-zinc-600 md:block","children":"01"}],["$","div",null,{"className":"min-w-0","children":[["$","h3",null,{"className":"truncate font-serif text-base font-medium text-zinc-100 transition-colors group-hover:text-white","children":"写作这件事"}],["$","div",null,{"className":"mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500","children":[["$","span",null,{"children":"2025-07-28"}],["$","span",null,{"className":"h-px w-3 bg-zinc-700"}],[["$","span","随笔",{"className":"text-zinc-600","children":["#","随笔"]}]]]}]]}],["$","span",null,{"className":"hidden text-zinc-600 transition-all duration-300 group-hover:translate-x-1 group-hover:text-zinc-300 md:block","children":"→"}]]}]]}]}],["$","section",null,{"className":"mx-auto max-w-6xl px-6 pb-24","children":["$","$L3",null,{"tags":["设计","字体","排版","极简","Web","摄影","叙事","图片流","随笔","城市","写作","茶","生活"],"activeTag":"写作"}]}]]}],null,["$","$L4",null,{"children":["$","$5",null,{"name":"Next.MetadataOutlet","children":"$@6"}]}]]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$L9",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$La",null,{"children":["$","$5",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"#写作 · Notes"}],["$","meta","1",{"name":"description","content":"关于「写作」的文章归档"}],["$","link","2",{"rel":"icon","href":"/gan/favicon.ico?603d046c9a6fdfbb","type":"image/x-icon","sizes":"16x16"}],["$","$Lb","3",{}]]}]}]}],null]}],"isPartial":"$@c","staleTime":"$8","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$Ld",null,{"parallelRouterKey":"children","template":["$","$Le",null,{}]}]]}],"isPartial":"$@f","staleTime":"$8","varyParams":"$10"},{"rsc":["$","$1","c",{"children":[null,["$","$Ld",null,{"parallelRouterKey":"children","template":["$","$Le",null,{}]}]]}],"isPartial":"$@11","staleTime":"$8","varyParams":"$10"},{"rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/gan/_next/static/css/0634c25f18e3e31c.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/gan/_next/static/css/8c14927d374b0481.css","precedence":"next"}]],["$","html",null,{"lang":"zh-CN","className":"__variable_074a08 h-full antialiased","children":["$","body",null,{"className":"flex min-h-full flex-col pb-16 md:pb-0","children":[["$","$L12",null,{}],["$","main",null,{"className":"flex-1","children":["$","$Ld",null,{"parallelRouterKey":"children","template":["$","$Le",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":["$L13","$L14","$L15"]}]}]],[]]}]}],"$L16","$L17"]}]}]]}],"isPartial":"$@18","staleTime":"$8","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@19","rootVaryParams":null,"needsRuntimeRequest":"$@1a"}
+1b:I[9610,["500","static/chunks/500-b13bb91f5a6311b6.js","177","static/chunks/app/layout-f60368fde3a5cacf.js"],"MobileNav"]
+6:null
+13:["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}]
+14:["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}]
+15:["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]
+16:["$","$L12",null,{"showFooter":true}]
+17:["$","$L1b",null,{}]
+8:300
+1a:true
+8:C
+19:0
+c:"$undefined"
+f:"$undefined"
+11:"$undefined"
+18:"$undefined"
+7:"$undefined"

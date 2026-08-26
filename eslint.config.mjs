@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // 部署产物（out/ 的副本）
+    "docs/**",
   ]),
 ]);
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import { Navigation } from "@/components/Navigation";
+import { MobileNav } from "@/components/blog/MobileNav";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -22,10 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="zh-CN"
       className={`${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col pb-16 md:pb-0">
         <Navigation />
         <main className="flex-1">{children}</main>
         <Navigation showFooter />
+        <MobileNav />
       </body>
     </html>
   );

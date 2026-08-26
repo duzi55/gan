@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { getAllSlugs, getPost, getPostMeta } from '@/lib/posts';
 import ArticleCanvas from '@/components/ArticleCanvas';
 import ReadingProgress from '@/components/ReadingProgress';
+import { ReadingCompanion } from '@/components/blog/ReadingCompanion';
+import { WeatherMood } from '@/components/blog/WeatherMood';
+import { AuthorBio } from '@/components/blog/AuthorBio';
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -79,12 +82,13 @@ export default async function PostPage({
         {/* Tags row */}
         <div className="mb-12 flex flex-wrap items-center gap-3">
           {post.tags.map((tag) => (
-            <span
+            <Link
               key={tag}
-              className="rounded-full bg-zinc-900/5 px-3 py-1 text-xs tracking-wide text-zinc-500"
+              href={`/tags/${tag}`}
+              className="rounded-full bg-zinc-900/5 px-3 py-1 text-xs tracking-wide text-zinc-500 transition-colors hover:bg-zinc-900/10 hover:text-zinc-800"
             >
               #{tag}
-            </span>
+            </Link>
           ))}
         </div>
 
@@ -108,30 +112,50 @@ export default async function PostPage({
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
 
-        {/* ── Article Footer ── */}
-        <div className="mt-20 border-t border-zinc-200 pt-8">
+      </div>
+
+      {/* ── Post-Reading: 阅读伴侣 + 氛围 ── */}
+      <section className="bg-zinc-950 py-16">
+        <div className="mx-auto max-w-2xl px-6">
+          <div className="mb-8 text-center">
+            <h2 className="font-serif text-lg text-zinc-500">阅读体验</h2>
+            <p className="mt-1 text-xs text-zinc-700">环境音与氛围，为这段阅读留个余韵</p>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2">
+            <ReadingCompanion />
+            <WeatherMood gradient={post.gradient} accent={post.accent} mood={post.tags[0] || '随笔'} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Author Bio ── */}
+      <section className="bg-zinc-950 pb-16">
+        <div className="mx-auto max-w-md px-6">
+          <AuthorBio />
+        </div>
+      </section>
+
+      {/* ── Article Footer ── */}
+      <footer className="bg-zinc-950 border-t border-white/5 py-8">
+        <div className="mx-auto max-w-2xl px-6">
           <div className="flex items-center justify-between">
             <Link
               href="/"
-              className="group inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+              className="group inline-flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-300"
             >
-              <span className="transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-x-1">
-                ←
-              </span>
+              <span className="transition-transform duration-300 group-hover:-translate-x-1">←</span>
               返回首页
             </Link>
             <Link
               href="/gallery"
-              className="group inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+              className="group inline-flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-300"
             >
               图片流
-              <span className="transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1">
-                →
-              </span>
+              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
         </div>
-      </div>
+      </footer>
     </article>
   );
 }
