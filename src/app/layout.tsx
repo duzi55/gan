@@ -15,6 +15,8 @@ export const metadata: Metadata = {
     template: "%s · Notes",
   },
   description: "设计、代码与界面的碎片——一个关于设计、前端工程与极简界面的个人博客。",
+  // 2026-08-27 Claude·站点元信息补充站主身份（应用户要求）
+  authors: [{ name: "duzi55" }],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -10,6 +10,9 @@ import { GlassCard } from '@/components/ui/GlassCard';
  *   未传时该栏位显示 "—"，杜绝 mock 数据。
  * - 头像容器由冷灰渐变圆改为纸面方章（细线框 + 朱砂「记」印），
  *   「关于」按钮 hover 描边统一为朱砂 accent。
+ * 2026-08-27 Claude·站点署名更新（应用户要求）：
+ * - 作者名与身份改为站主本人：duzi55，喜欢前端的小小码农，
+ *   简介 —— 寻找发现设计美学，学习借鉴提升。
  */
 export function AuthorBio({
   compact = false,
@@ -30,8 +33,9 @@ export function AuthorBio({
             <span className="ink-seal">记</span>
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="font-serif text-base font-medium text-foreground">杜子</h3>
-            <p className="mt-0.5 text-xs text-muted">设计师 · 写作者 · 茶人</p>
+            {/* 2026-08-27 Claude·署名改为站主本人 duzi55 */}
+            <h3 className="font-serif text-base font-medium text-foreground">duzi55</h3>
+            <p className="mt-0.5 text-xs text-muted">喜欢前端的小小码农</p>
           </div>
           <Link
             href="/about"

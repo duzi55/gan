@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
+    "dev": "next dev --webpack -p 3030",
     "build": "next build --webpack",
     "postbuild": "node scripts/flatten-rsc.mjs out && node scripts/sync-docs.mjs",
     "prebuild": "node -e \"const fs=require('fs');['.next','.next-build','out'].forEach(d=>fs.rmSync(d,{recursive:true,force:true}))\"",

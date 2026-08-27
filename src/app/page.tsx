@@ -76,8 +76,12 @@ export default function Home() {
           <Link href={`/posts/${featured.slug}`} className="group block">
             <GlassCard className="overflow-hidden" hover>
               <div className="grid min-h-[300px] md:grid-cols-[5fr_7fr]">
-                {/* 封面条：取文章自带渐变，叠放首字装饰 */}
-                <div className="relative overflow-hidden" style={{ background: featured.gradient }}>
+                {/* 封面条：取文章自带渐变，叠放首字装饰
+                    2026-08-27 Claude·修复移动端封面条高度塌陷导致装饰大字与
+                    feature 标签重叠被裁（深色模式下尤为明显）：单列布局时
+                    容器内全为绝对定位元素、无静态内容撑高，现改为移动端固定
+                    高度 h-44，桌面端仍由右侧内容列 grid 拉伸撑起 */}
+                <div className="relative h-44 overflow-hidden md:h-full" style={{ background: featured.gradient }}>
                   <span className="pointer-events-none absolute -bottom-10 left-4 select-none font-display text-[9rem] leading-none text-white/15">
                     {featured.title.charAt(0)}
                   </span>

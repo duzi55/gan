@@ -55,8 +55,9 @@ export function Navigation({ showFooter = false }: { showFooter?: boolean }) {
                 </Link>
               ))}
             </div>
+            {/* 2026-08-27 Claude·页脚落款改为站主 duzi55（应用户要求） */}
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-faint">
-              © {new Date().getFullYear()} Notes · 设计、代码与界面的碎片
+              © {new Date().getFullYear()} duzi55 · Notes
             </p>
           </div>
         </div>
