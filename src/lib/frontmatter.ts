@@ -109,22 +109,33 @@ function findClosingDelimiter(raw: string): number {
  * 序列化 → 完整 md 文本（frontmatter + 正文）
  * 与 _template.md 的书写格式保持一致，保证后台保存的文章
  * 在构建期被 posts.ts / gray-matter 正确解析。
+ *
+ * 2026-08-27 Claude·修复纯数字标题引发的预渲染崩溃：
+ *   《666》《11》这类纯数字值不加引号时，YAML 会解析为 number
+ *   （date 同理会被解析为 Date 对象），站点渲染层调用 title.charAt
+ *   等字符串方法即崩。现所有字段一律以单引号输出（YAML 单引号
+ *   转义 = 双写 ''），保证 gray-matter 读到的恒为 string。
  */
 export function serializeFrontmatter(meta: AdminPostMeta, body: string): string {
   const lines = [
     '---',
-    `title: ${meta.title}`,
-    `date: ${meta.date}`,
-    `excerpt: ${meta.excerpt}`,
+    `title: ${yamlQuote(meta.title)}`,
+    `date: ${yamlQuote(meta.date)}`,
+    `excerpt: ${yamlQuote(meta.excerpt)}`,
   ];
   if (meta.tags.length > 0) {
     lines.push('tags:');
-    for (const t of meta.tags) lines.push(`  - ${t}`);
+    for (const t of meta.tags) lines.push(`  - ${yamlQuote(t)}`);
   }
-  lines.push(`gradient: ${meta.gradient}`);
-  lines.push(`accent: '${meta.accent}'`);
+  lines.push(`gradient: ${yamlQuote(meta.gradient)}`);
+  lines.push(`accent: ${yamlQuote(meta.accent)}`);
   lines.push('---', '');
   return lines.join('\n') + body;
+}
+
+/** YAML 单引号包裹：内部单引号按规范双写转义，任何输入都保持 string 类型 */
+function yamlQuote(s: string): string {
+  return `'${String(s).replace(/'/g, "''")}'`;
 }
 
 /** 去除 YAML 风格包裹引号 */

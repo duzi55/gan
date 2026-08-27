@@ -118,7 +118,7 @@ export function PostEditor({ token, entry, onSaved, onBack }: Props) {
         title: form.title.trim(),
         date: form.date,
         excerpt: form.excerpt.trim(),
-        tags: form.tagsInput.split(/[,，]/).map(s => s.trim()).filter(Boolean),
+        tags: form.tagsInput.split(/[,，、]/).map(s => s.trim()).filter(Boolean), // 支持英文/中文逗号与顿号分隔
         gradient: form.gradient.trim() || DEFAULT_GRADIENT,
         accent: form.accent.trim() || DEFAULT_ACCENT,
       };
