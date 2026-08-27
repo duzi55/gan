@@ -26,6 +26,43 @@ export interface PostMeta {
 
 export interface Post extends PostMeta {
   contentHtml: string;
+  /** 文章目录（h2/h3 提取，构建期生成） */
+  headings: Heading[];
+}
+
+/** 目录条目：depth 仅支持 2/3 级标题 */
+export interface Heading {
+  depth: 2 | 3;
+  /** 锚点 id（同时注入到 contentHtml 的对应标题上） */
+  slug: string;
+  text: string;
+}
+
+/**
+ * 从 remark 渲染后的 HTML 中提取 h2/h3 并注入 id 锚点。
+ * 2026-08-27 Claude·借鉴 4real.ltd 博客的文章目录交互（PC 侧栏 TOC +
+ * 移动端悬浮目录），数据在构建期一次生成，运行时零开销。
+ * slug 直接使用标题纯文本（中文锚点浏览器原生支持，与静态导出兼容）。
+ */
+export function extractHeadings(html: string): { html: string; headings: Heading[] } {
+  const headings: Heading[] = [];
+  const seen = new Map<string, number>(); // 同名标题去重：追加 -2/-3 …
+
+  const out = html.replace(
+    /<h([23])>([\s\S]*?)<\/h\1>/g,
+    (_m, depthRaw: string, inner: string) => {
+      const depth = Number(depthRaw) as 2 | 3;
+      const text = inner.replace(/<[^>]+>/g, '').trim();
+      const base = text || 'section';
+      const n = (seen.get(base) ?? 0) + 1;
+      seen.set(base, n);
+      const slug = n === 1 ? base : `${base}-${n}`;
+      headings.push({ depth, slug, text });
+      return `<h${depth} id="${slug}">${inner}</h${depth}>`;
+    }
+  );
+
+  return { html: out, headings };
 }
 
 const postsDir = path.join(process.cwd(), 'content', 'posts');
@@ -114,7 +151,8 @@ export async function getPost(slug: string): Promise<Post | null> {
   const { data, content } = matter(raw);
 
   const processed = await remark().use(remarkHtml).process(content);
-  const contentHtml = processed.toString();
+  // 2026-08-27 Claude·提取目录并注入标题锚点（供 TOC 组件使用）
+  const { html: contentHtml, headings } = extractHeadings(processed.toString());
 
   return {
     slug,
@@ -126,6 +164,7 @@ export async function getPost(slug: string): Promise<Post | null> {
     accent: data.accent ?? '#e2b4bd',
     words: countWords(content),
     contentHtml,
+    headings,
   };
 }
 

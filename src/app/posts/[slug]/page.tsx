@@ -5,6 +5,9 @@ import ReadingProgress from '@/components/ReadingProgress';
 import { ReadingCompanion } from '@/components/blog/ReadingCompanion';
 import { WeatherMood } from '@/components/blog/WeatherMood';
 import { AuthorBio } from '@/components/blog/AuthorBio';
+import TocAside from '@/components/blog/TocAside';
+import MobileToc from '@/components/blog/MobileToc';
+import PostNav from '@/components/blog/PostNav';
 import { InkField } from '@/components/three';
 
 /**
@@ -15,6 +18,10 @@ import { InkField } from '@/components/three';
  *   - 标题启用展示字体（ink-display），水印首字以文章 accent 压印纸面；
  *   - 引用条与列表点改为朱砂色，呼应印章视觉；
  *   - AuthorBio 改传真实统计（总篇数 / 总字数，构建期计算）。
+ * 2026-08-27 Claude·阅读体验增强（借鉴 4real.ltd 博客细节）：
+ *   - 新增桌面端目录侧栏 TocAside 与移动端目录悬浮球 MobileToc；
+ *   - 文末新增上一篇 / 下一篇导航 PostNav；
+ *   - 正文标题注入 id 锚点并加 scroll-mt，锚点跳转不被顶部遮挡。
  */
 
 export function generateStaticParams() {
@@ -43,9 +50,21 @@ export default async function PostPage({
   const postCount = allPosts.length;
   const totalWords = getTotalWords(allPosts);
 
+  /* 2026-08-27 Claude·按日期序列计算上一篇（更新）/ 下一篇（更早） */
+  const idx = allPosts.findIndex((p) => p.slug === slug);
+  const prev = idx > 0 ? { slug: allPosts[idx - 1].slug, title: allPosts[idx - 1].title } : undefined;
+  const next =
+    idx >= 0 && idx < allPosts.length - 1
+      ? { slug: allPosts[idx + 1].slug, title: allPosts[idx + 1].title }
+      : undefined;
+
   return (
     <article className="min-h-screen bg-background text-foreground">
       <ReadingProgress />
+
+      {/* 2026-08-27 Claude·文章目录：桌面侧栏 + 移动端悬浮球（xl 断点切换） */}
+      <TocAside headings={post.headings} />
+      <MobileToc headings={post.headings} />
 
       {/* ═══════════════ Hero · 墨场 ═══════════════ */}
       <div className="relative flex min-h-[72svh] w-full items-end overflow-hidden bg-background">
@@ -103,11 +122,12 @@ export default async function PostPage({
 
       {/* ═══════════════ 正文 ═══════════════ */}
       <div className="mx-auto max-w-2xl px-6 py-20 md:py-28">
-        {/* Markdown 渲染 —— 衬线长文排式；引用条与列表圆点使用朱砂呼应印章 */}
+        {/* Markdown 渲染 —— 衬线长文排式；引用条与列表圆点使用朱砂呼应印章
+            2026-08-27 Claude·h2/h3 增加 scroll-mt，锚点跳转时留出呼吸空间 */}
         <div
           className="font-serif text-[18px] leading-[1.95] text-foreground/80
-            [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:text-foreground
-            [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-foreground
+            [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:scroll-mt-24 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:text-foreground
+            [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:scroll-mt-24 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-foreground
             [&_p]:mb-6 [&_p]:text-muted
             [&_p:first-of-type]:text-[20px] [&_p:first-of-type]:leading-[1.8] [&_p:first-of-type]:text-foreground/85
             [&_ul]:mb-6 [&_ul]:ml-1
@@ -122,6 +142,11 @@ export default async function PostPage({
             [&_em]:italic"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
+      </div>
+
+      {/* 2026-08-27 Claude·文末上一篇 / 下一篇导航（借鉴 4real.ltd） */}
+      <div className="mx-auto max-w-2xl px-6">
+        <PostNav prev={prev} next={next} />
       </div>
 
       {/* ═══════════════ 阅读体验：伴侣 + 氛围 ═══════════════ */}
