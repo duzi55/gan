@@ -19,8 +19,8 @@ export function WeatherMood({
   return (
     <GlassCard className="p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-serif text-sm font-medium text-zinc-100">氛围</h3>
-        <span className="text-xs text-zinc-500">{mood}</span>
+        <h3 className="font-serif text-sm font-medium text-foreground">氛围</h3>
+        <span className="text-xs text-muted">{mood}</span>
       </div>
 
       {/* 迷你天气场景 */}
@@ -51,17 +51,17 @@ export function WeatherMood({
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3 text-center">
-        <div className="rounded-lg bg-white/5 p-3">
-          <div className="font-serif text-lg text-zinc-100">
+        <div className="rounded-lg bg-foreground/5 p-3">
+          <div className="font-serif text-lg text-foreground">
             {accent}
           </div>
-          <div className="mt-0.5 text-xs text-zinc-500">主色调</div>
+          <div className="mt-0.5 text-xs text-muted">主色调</div>
         </div>
-        <div className="rounded-lg bg-white/5 p-3">
-          <div className="font-serif text-lg text-zinc-100">
+        <div className="rounded-lg bg-foreground/5 p-3">
+          <div className="font-serif text-lg text-foreground">
             {mood}
           </div>
-          <div className="mt-0.5 text-xs text-zinc-500">情绪</div>
+          <div className="mt-0.5 text-xs text-muted">情绪</div>
         </div>
       </div>
     </GlassCard>

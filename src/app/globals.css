@@ -1,18 +1,55 @@
+/* ============================================================
+   「墨境 Ink Field」设计系统
+   2026-08-27 Claude·视觉重设计：以「宣纸 × 松烟墨 × 朱砂印」
+   替代此前的「液态玻璃 + 光晕」体系。所有卡片类均为细线框
+   编辑式风格；朱砂色仅作点睛，不做大面积使用。
+   ============================================================ */
+
 @import "tailwindcss";
 @import "@fontsource/zcool-xiaowei/index.css";
 @import "@fontsource/noto-serif-sc/400.css";
 @import "@fontsource/noto-serif-sc/700.css";
 
+/* 明暗主题: class 策略 —— <html class="dark"> 时启用深色变量 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #fafafa;
-  --foreground: #1c1917;
+  /* 浅色：宣纸与松烟墨 */
+  --background: #f7f4ee;        /* 宣纸 */
+  --background-raised: #fdfcf9; /* 抬升面（卡片） */
+  --foreground: #1a1815;        /* 松烟墨 */
+  --muted: #5c554b;             /* 淡墨（次要文字） */
+  --faint: #a39a8c;             /* 枯墨（弱化文字） */
+  --accent: #b3432b;            /* 朱砂 —— 点睛专用 */
+  --border: rgba(26, 24, 21, 0.1);
+  --selection-bg: #b3432b;
+  --selection-fg: #fdfcf9;
+}
+
+.dark {
+  /* 深色：夜纸与月尘 */
+  --background: #141210;
+  --background-raised: #1b1917;
+  --foreground: #ece6da;
+  --muted: #a89e8e;
+  --faint: #6b6355;
+  --accent: #d46a4a;
+  --border: rgba(236, 230, 218, 0.09);
+  --selection-bg: #d46a4a;
+  --selection-fg: #141210;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-raised: var(--background-raised);
   --color-foreground: var(--foreground);
-  --font-sans: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --font-sans: "Noto Serif SC", "Songti SC", "STSong", serif;
   --font-mono: var(--font-geist-mono);
+  /* 展示字体：书卷气大标题专用，正文不用 */
   --font-display: "ZCOOL XiaoWei", "Noto Serif SC", "Kaiti SC", "STKaiti", "KaiTi", serif;
   --font-serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
 }
@@ -21,164 +58,154 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-serif), "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", serif;
+  /* 纸张纤维质感：极低对比噪点，一张图铺全站（零请求 SVG data URI） */
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
 }
 
 ::selection {
-  background: #1c1917;
-  color: #fafafa;
+  background: var(--selection-bg);
+  color: var(--selection-fg);
 }
 
 /* ============================================
-   液态玻璃 (Liquid Glass) 效果
+   纸卡 Paper Card —— 细线框编辑式容器
+   （沿用 liquid-glass-card 类名以兼容旧调用方，
+    视觉已由玻璃拟态重构为纸感细线框）
    ============================================ */
 
-/* 基础液态玻璃卡片 */
 .liquid-glass-card {
   position: relative;
   isolation: isolate;
-  border-radius: 24px;
-  
-  /* 多层背景 */
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.2) 100%);
-  
-  /* 毛玻璃模糊 */
-  backdrop-filter: blur(20px) saturate(180%) brightness(1.02);
-  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.02);
-  
-  /* 边框 */
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  
-  /* 阴影 - 多层营造立体感 */
+  border-radius: 16px;
+
+  background: var(--background-raised);
+
+  /* 细线框 + 极轻投影：像压在桌面上的一页纸 */
+  border: 1px solid var(--border);
   box-shadow:
-    /* 外部阴影 */
-    0 8px 32px rgba(0, 0, 0, 0.06),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    /* 内部高光 */
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+    0 1px 2px rgba(26, 24, 21, 0.04),
+    0 8px 28px -12px rgba(26, 24, 21, 0.1);
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
-/* 液态玻璃卡片的顶部高光 */
-.liquid-glass-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  border-radius: 24px 24px 0 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.1) 100%
-  );
-  pointer-events: none;
-  z-index: -1;
+.dark .liquid-glass-card {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 10px 32px -14px rgba(0, 0, 0, 0.55);
 }
 
-/* 液态玻璃卡片的边缘光 */
+.liquid-glass-card::before,
 .liquid-glass-card::after {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: 23px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  pointer-events: none;
-  z-index: 1;
+  content: none;
 }
 
-/* 带渐变的液态玻璃卡片 */
+/* 沿用的次级面板类：等同纸卡的浅面板 */
 .liquid-glass-gradient {
   position: relative;
   isolation: isolate;
-  border-radius: 24px;
-  
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 100%);
-  
-  backdrop-filter: blur(24px) saturate(200%) brightness(1.05);
-  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.05);
-  
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.08),
-    0 4px 12px rgba(0, 0, 0, 0.04),
-    inset 0 2px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -2px 0 rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--foreground) 3%, transparent);
+  border: 1px solid var(--border);
 }
 
-/* 深色液态玻璃卡片 — 用于深色表面（首页 / 归档 / 关于） */
-.liquid-glass-card-dark {
-  position: relative;
-  isolation: isolate;
-  border-radius: 24px;
+/* ============================================
+   编辑式排版辅助（新体系的公共样式）
+   ============================================ */
 
-  /* 多层背景：微弱的白色渐变叠在深色半透明上 */
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.03) 100%),
-    linear-gradient(180deg, rgba(24, 24, 27, 0.55) 0%, rgba(24, 24, 27, 0.35) 100%);
-
-  /* 毛玻璃模糊 */
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
-
-  /* 细边框 */
-  border: 1px solid rgba(255, 255, 255, 0.08);
-
-  /* 阴影：外深内浅，保持层次 */
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+/* 眉题 eyebrow：等宽小字距排布，前置短横线 */
+.ink-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--faint);
 }
 
-/* 深色液态玻璃的顶部高光 */
-.liquid-glass-card-dark::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  border-radius: 24px 24px 0 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  pointer-events: none;
-  z-index: -1;
+/* 展示级大标题：ZCOOL XiaoWei 书卷气 */
+.ink-display {
+  font-family: var(--font-display), "Noto Serif SC", serif;
+  letter-spacing: 0.06em;
 }
 
-/* 深色液态玻璃的边缘光 */
-.liquid-glass-card-dark::after {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: 23px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  pointer-events: none;
-  z-index: 1;
+/* 编号序数：等宽朱砂 */
+.ink-index {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+}
+
+/* 朱砂印章印记：方形圆角小块，仅装饰用 */
+.ink-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: var(--accent);
+  color: var(--selection-fg);
+  font-size: 13px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* 悬停下划线绘制（标题链接用） */
+.ink-underline {
+  background-image: linear-gradient(var(--foreground), var(--foreground));
+  background-repeat: no-repeat;
+  background-position: 0 calc(100% - 1px);
+  background-size: 0% 1px;
+  transition: background-size 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.group:hover .ink-underline,
+.ink-underline:hover {
+  background-size: 100% 1px;
+}
+
+/* 首屏底部滚动提示线（配合 CSS 动画使用） */
+@keyframes ink-drop {
+  0% { transform: scaleY(0); transform-origin: top; }
+  45% { transform: scaleY(1); transform-origin: top; }
+  55% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+.ink-scroll-line {
+  animation: ink-drop 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-scroll-line {
+    animation: none;
+    transform: none;
+  }
 }
 
 /* 自定义滚动条 */
 ::-webkit-scrollbar {
   width: 6px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(26, 24, 21, 0.14);
   border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(26, 24, 21, 0.28);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(236, 230, 218, 0.15);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 230, 218, 0.3);
 }

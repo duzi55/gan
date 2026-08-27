@@ -1,5 +1,14 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+
+/**
+ * 画廊页 ——「墨境 Ink Field」版式
+ * 2026-08-27 Claude·视觉重设计：
+ *   - 头部接入 ink-eyebrow / ink-display，副题加入"纸上色域"概念；
+ *   - 作品字形（glyph）由粗黑体改为展示字体，白色压字保持不变；
+ *   - 每件作品左上角常驻 mono 编号（n-01…），hover 才显现题名——与全站
+ *     「目录编号 + hover 题注」的语言一致。
+ *   渐变本身是内容作品（写生对象），保留原有色彩不随主题重绘。
+ */
 
 export const metadata: Metadata = {
   title: '图片流',
@@ -32,42 +41,45 @@ const blocks: VisualBlock[] = [
 
 export default function GalleryPage() {
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="mx-auto max-w-5xl px-6 pt-16 pb-8">
-        <Link
-          href="/"
-          className="text-sm text-zinc-500 hover:text-zinc-900"
-        >
-          ← 返回首页
-        </Link>
-        <h1 className="mt-6 font-serif text-3xl font-bold text-zinc-900">
+      <header className="mx-auto max-w-5xl px-6 pt-20 pb-10 md:pt-28">
+        <p className="ink-eyebrow">
+          <span className="h-px w-8 bg-border" />
+          Gallery · 纸上色域
+        </p>
+        <h1 className="ink-display mt-6 text-4xl leading-[1.15] text-foreground md:text-6xl">
           图片流
         </h1>
-        <p className="mt-2 font-serif text-[15px] text-zinc-500">
+        <p className="mt-4 font-serif text-sm leading-loose text-muted md:text-base">
           纯 CSS 色彩构图——零图片请求，瞬时加载。
         </p>
       </header>
 
       {/* Masonry — CSS gradients only, no <img> */}
       <div className="mx-auto max-w-5xl px-6 pb-24">
-        <div className="columns-2 md:columns-3 gap-4 [&>*]:mb-4 [&>*]:break-inside-avoid">
+        <div className="columns-2 gap-4 md:columns-3 [&>*]:mb-4 [&>*]:break-inside-avoid">
           {blocks.map((block, i) => (
             <figure
               key={i}
               className={`group relative overflow-hidden rounded-lg ${block.aspect}`}
               style={{ background: block.gradient }}
             >
-              {/* Large decorative glyph */}
+              {/* 左上角常驻编号：等宽小字号，融入画面 */}
+              <span className="absolute left-3 top-3 z-10 font-mono text-[10px] uppercase tracking-[0.25em] text-white/55 mix-blend-luminosity">
+                n-{String(i + 1).padStart(2, '0')}
+              </span>
+              {/* Large decorative glyph（展示字体压印） */}
               <div
-                className="pointer-events-none absolute inset-0 flex items-center justify-center text-[6rem] font-bold leading-none opacity-20 transition-transform duration-700 group-hover:scale-110 md:text-[8rem]"
-                style={{ color: 'rgba(255,255,255,0.7)' }}
+                className="pointer-events-none absolute inset-0 flex items-center justify-center font-display text-[6rem] leading-none opacity-25 transition-transform duration-700 group-hover:scale-105 md:text-[8rem]"
+                style={{ color: 'rgba(255,255,255,0.85)' }}
+                aria-hidden
               >
                 {block.glyph}
               </div>
               {/* Hover caption */}
-              <figcaption className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent px-4 py-3 text-sm text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                {block.caption}
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent px-4 py-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <span className="text-sm text-white">{block.caption}</span>
               </figcaption>
             </figure>
           ))}

@@ -23,15 +23,15 @@ export function ReadingCompanion() {
   return (
     <GlassCard className="p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="font-serif text-sm font-medium text-zinc-100">阅读伴侣</h3>
-        <span className="text-xs text-zinc-500">{track.ambient}</span>
+        <h3 className="font-serif text-sm font-medium text-foreground">阅读伴侣</h3>
+        <span className="text-xs text-muted">{track.ambient}</span>
       </div>
 
       {/* 进度条 + 封面 */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => setIsPlaying(!isPlaying)}
-          className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-zinc-600 to-zinc-800 text-zinc-100 transition-transform hover:scale-105"
+          className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-foreground text-background transition-transform hover:scale-105"
         >
           {isPlaying ? (
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -45,13 +45,13 @@ export function ReadingCompanion() {
           )}
           {/* 播放波纹 */}
           {isPlaying && (
-            <span className="absolute inset-0 animate-ping rounded-full border border-zinc-400 opacity-30" />
+            <span className="absolute inset-0 animate-ping rounded-full border border-foreground/40 opacity-30" />
           )}
         </button>
 
         <div className="min-w-0 flex-1">
-          <div className="truncate font-serif text-sm text-zinc-200">{track.title}</div>
-          <div className="mt-1 text-xs text-zinc-500">{track.duration}</div>
+          <div className="truncate font-serif text-sm text-foreground">{track.title}</div>
+          <div className="mt-1 text-xs text-muted">{track.duration}</div>
         </div>
       </div>
 
@@ -63,13 +63,13 @@ export function ReadingCompanion() {
             onClick={() => setCurrentTrack(i)}
             className={`flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left text-xs transition-colors ${
               i === currentTrack
-                ? 'bg-white/5 text-zinc-200'
-                : 'text-zinc-500 hover:text-zinc-300'
+                ? 'bg-foreground/5 text-foreground'
+                : 'text-muted hover:text-foreground'
             }`}
           >
-            <span className="font-serif text-zinc-600">{String(i + 1).padStart(2, '0')}</span>
+            <span className="font-serif text-faint">{String(i + 1).padStart(2, '0')}</span>
             <span className="flex-1 truncate">{t.title}</span>
-            <span className="text-zinc-600">{t.duration}</span>
+            <span className="text-faint">{t.duration}</span>
           </button>
         ))}
       </div>

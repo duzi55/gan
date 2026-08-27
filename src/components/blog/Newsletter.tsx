@@ -25,8 +25,8 @@ export function Newsletter() {
   return (
     <GlassCard className="p-6">
       <div className="text-center">
-        <h3 className="font-serif text-lg font-medium text-zinc-100">订阅更新</h3>
-        <p className="mt-2 text-sm text-zinc-400">
+        <h3 className="font-serif text-lg font-medium text-foreground">订阅更新</h3>
+        <p className="mt-2 text-sm text-muted">
           新文章发布时收到邮件通知，不发广告，不卖地址。
         </p>
       </div>
@@ -37,12 +37,12 @@ export function Newsletter() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="your@email.com"
-          className="min-w-0 flex-1 rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-zinc-200 placeholder:text-zinc-600 focus:border-white/30 focus:outline-none"
+          className="min-w-0 flex-1 rounded-full border border-border bg-foreground/5 px-4 py-2.5 text-sm text-foreground placeholder:text-faint focus:border-accent/50 focus:outline-none"
         />
         <button
           type="submit"
           disabled={submitted}
-          className="shrink-0 rounded-full bg-zinc-100 px-5 py-2.5 text-sm font-medium text-zinc-900 transition-colors hover:bg-white disabled:opacity-50"
+          className="shrink-0 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-80 disabled:opacity-50"
         >
           {submitted ? '已订阅' : '订阅'}
         </button>

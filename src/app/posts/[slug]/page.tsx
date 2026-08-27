@@ -1,11 +1,21 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getAllSlugs, getPost, getPostMeta } from '@/lib/posts';
-import ArticleCanvas from '@/components/ArticleCanvas';
+import { getAllSlugs, getPost, getPostMeta, getAllPosts, getTotalWords } from '@/lib/posts';
 import ReadingProgress from '@/components/ReadingProgress';
 import { ReadingCompanion } from '@/components/blog/ReadingCompanion';
 import { WeatherMood } from '@/components/blog/WeatherMood';
 import { AuthorBio } from '@/components/blog/AuthorBio';
+import { InkField } from '@/components/three';
+
+/**
+ * 文章详情页 ——「墨境 Ink Field」版式
+ * 2026-08-27 Claude·视觉重设计：
+ *   - Hero 由「ArticleCanvas 渐变洗底」改为「宣纸基底 + InkField 墨尘粒子」；
+ *     文章自带渐变仅保留为顶部细色带，作为全页唯一颜色指涉；
+ *   - 标题启用展示字体（ink-display），水印首字以文章 accent 压印纸面；
+ *   - 引用条与列表点改为朱砂色，呼应印章视觉；
+ *   - AuthorBio 改传真实统计（总篇数 / 总字数，构建期计算）。
+ */
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -28,98 +38,98 @@ export default async function PostPage({
   const post = await getPost(slug);
   if (!post) notFound();
 
+  /* 全站真实统计（构建期由 markdown 计算，无 mock） */
+  const allPosts = getAllPosts();
+  const postCount = allPosts.length;
+  const totalWords = getTotalWords(allPosts);
+
   return (
-    <article className="min-h-screen bg-[#fbfaf7]">
+    <article className="min-h-screen bg-background text-foreground">
       <ReadingProgress />
 
-      {/* ── Hero with Canvas ── */}
-      <div
-        className="relative flex h-[60vh] w-full items-end overflow-hidden"
-        style={{ background: post.gradient }}
-      >
-        {/* Canvas animation layer */}
-        <ArticleCanvas accent={post.accent} />
+      {/* ═══════════════ Hero · 墨场 ═══════════════ */}
+      <div className="relative flex min-h-[72svh] w-full items-end overflow-hidden bg-background">
+        {/* 顶部细色带：文章专属渐变，降级为一道"题签线" */}
+        <div className="absolute inset-x-0 top-0 z-20 h-1" style={{ background: post.gradient }} aria-hidden />
 
-        {/* Grain overlay */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E\")",
-          }}
-        />
+        {/* three.js 墨尘粒子层：SSR 安全容器、主题感知、reduced-motion 静帧 */}
+        <InkField className="absolute inset-0 h-full w-full" density={0.7} />
 
-        {/* Large decorative first character */}
-        <div
-          className="pointer-events-none absolute right-6 top-1/2 -translate-y-[55%] select-none text-[14rem] font-bold leading-none opacity-[0.06] md:text-[22rem]"
+        {/* 右上巨大水印首字：以文章 accent 淡淡压印在纸面上 */}
+        <span
+          className="pointer-events-none absolute right-4 top-14 select-none font-display text-[11rem] leading-none opacity-[0.07] md:right-10 md:top-24 md:text-[19rem]"
           style={{ color: post.accent }}
+          aria-hidden
         >
           {post.title.charAt(0)}
-        </div>
+        </span>
 
-        {/* Title block */}
+        {/* 标题块：日期/accent 眉题 → 展示体大标 → 衬线摘要 */}
         <div className="relative z-10 w-full px-6 pb-14 md:px-12 md:pb-20">
           <div className="mx-auto max-w-2xl">
             <div
-              className="mb-4 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em]"
+              className="mb-5 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.3em]"
               style={{ color: post.accent }}
             >
-              <span className="h-px w-6" style={{ background: post.accent }} />
+              <span className="h-px w-8" style={{ background: post.accent }} />
               <span>{post.date}</span>
+              <span className="h-px w-8" style={{ background: post.accent }} />
+              <span>{post.words} 字</span>
             </div>
-            <h1 className="font-serif text-3xl font-bold leading-[1.2] tracking-wide text-white md:text-[2.75rem] md:leading-[1.18]">
+
+            <h1 className="ink-display max-w-2xl text-4xl leading-[1.18] text-foreground md:text-6xl">
               {post.title}
             </h1>
-            <p className="mt-5 font-serif text-[15px] leading-relaxed text-white/70">
+
+            <p className="mt-6 max-w-xl font-serif text-sm leading-loose text-muted md:text-base">
               {post.excerpt}
             </p>
+
+            {/* 标签行：移动到 Hero 内，正文区更干净 */}
+            <div className="mt-7 flex flex-wrap items-center gap-2.5">
+              {post.tags.map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/tags/${tag}`}
+                  className="rounded-full border border-border px-3 py-1 font-mono text-xs tracking-wide text-muted transition-colors hover:border-accent/50 hover:text-foreground"
+                >
+                  #{tag}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ── Article Body ── */}
+      {/* ═══════════════ 正文 ═══════════════ */}
       <div className="mx-auto max-w-2xl px-6 py-20 md:py-28">
-        {/* Tags row */}
-        <div className="mb-12 flex flex-wrap items-center gap-3">
-          {post.tags.map((tag) => (
-            <Link
-              key={tag}
-              href={`/tags/${tag}`}
-              className="rounded-full bg-zinc-900/5 px-3 py-1 text-xs tracking-wide text-zinc-500 transition-colors hover:bg-zinc-900/10 hover:text-zinc-800"
-            >
-              #{tag}
-            </Link>
-          ))}
-        </div>
-
-        {/* Rendered Markdown — rich typographic styling */}
+        {/* Markdown 渲染 —— 衬线长文排式；引用条与列表圆点使用朱砂呼应印章 */}
         <div
-          className="font-serif text-[18px] leading-[1.95] text-zinc-700
-            [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:text-zinc-900
-            [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-zinc-900
-            [&_p]:mb-6 [&_p]:text-zinc-600
-            [&_p:first-of-type]:text-[20px] [&_p:first-of-type]:leading-[1.8] [&_p:first-of-type]:text-zinc-700
+          className="font-serif text-[18px] leading-[1.95] text-foreground/80
+            [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:text-foreground
+            [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-foreground
+            [&_p]:mb-6 [&_p]:text-muted
+            [&_p:first-of-type]:text-[20px] [&_p:first-of-type]:leading-[1.8] [&_p:first-of-type]:text-foreground/85
             [&_ul]:mb-6 [&_ul]:ml-1
             [&_ul]:list-none
-            [&_li]:relative [&_li]:mb-3 [&_li]:pl-6 [&_li]:text-zinc-600
-            [&_li::before]:absolute [&_li::before]:left-0 [&_li::before]:top-[0.7em] [&_li::before]:h-1.5 [&_li::before]:w-1.5 [&_li::before]:rounded-full [&_li::before]:bg-zinc-300
+            [&_li]:relative [&_li]:mb-3 [&_li]:pl-6 [&_li]:text-muted
+            [&_li::before]:absolute [&_li::before]:left-0 [&_li::before]:top-[0.7em] [&_li::before]:h-1.5 [&_li::before]:w-1.5 [&_li::before]:rounded-full [&_li::before]:bg-accent/60
             [&_blockquote]:relative [&_blockquote]:my-8 [&_blockquote]:border-0 [&_blockquote]:pl-8
-            [&_blockquote::before]:absolute [&_blockquote::before]:left-0 [&_blockquote::before]:top-0 [&_blockquote::before]:h-full [&_blockquote::before]:w-1 [&_blockquote::before]:rounded-full [&_blockquote::before]:bg-zinc-300
-            [&_blockquote]:text-xl [&_blockquote]:font-medium [&_blockquote]:italic [&_blockquote]:leading-[1.7] [&_blockquote]:text-zinc-500
-            [&_a]:text-zinc-900 [&_a]:underline [&_a]:decoration-zinc-300 [&_a]:underline-offset-4
-            [&_strong]:font-bold [&_strong]:text-zinc-900
+            [&_blockquote::before]:absolute [&_blockquote::before]:left-0 [&_blockquote::before]:top-0 [&_blockquote::before]:h-full [&_blockquote::before]:w-1 [&_blockquote::before]:rounded-full [&_blockquote::before]:bg-accent/70
+            [&_blockquote]:text-xl [&_blockquote]:font-medium [&_blockquote]:italic [&_blockquote]:leading-[1.7] [&_blockquote]:text-muted
+            [&_a]:text-foreground [&_a]:underline [&_a]:decoration-accent/50 [&_a]:underline-offset-4
+            [&_strong]:font-bold [&_strong]:text-foreground
             [&_em]:italic"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
-
       </div>
 
-      {/* ── Post-Reading: 阅读伴侣 + 氛围 ── */}
-      <section className="bg-zinc-950 py-16">
+      {/* ═══════════════ 阅读体验：伴侣 + 氛围 ═══════════════ */}
+      <section className="border-t border-border py-16">
         <div className="mx-auto max-w-2xl px-6">
           <div className="mb-8 text-center">
-            <h2 className="font-serif text-lg text-zinc-500">阅读体验</h2>
-            <p className="mt-1 text-xs text-zinc-700">环境音与氛围，为这段阅读留个余韵</p>
+            <h2 className="ink-display text-lg text-muted">阅读体验</h2>
+            <p className="mt-1 text-xs text-faint">环境音与氛围，为这段阅读留个余韵</p>
           </div>
           <div className="grid gap-5 md:grid-cols-2">
             <ReadingCompanion />
@@ -128,27 +138,27 @@ export default async function PostPage({
         </div>
       </section>
 
-      {/* ── Author Bio ── */}
-      <section className="bg-zinc-950 pb-16">
+      {/* ═══════════════ 作者名片（真实统计） ═══════════════ */}
+      <section className="pb-16">
         <div className="mx-auto max-w-md px-6">
-          <AuthorBio />
+          <AuthorBio postCount={postCount} totalWords={totalWords} />
         </div>
       </section>
 
-      {/* ── Article Footer ── */}
-      <footer className="bg-zinc-950 border-t border-white/5 py-8">
+      {/* ═══════════════ 页脚导航 ═══════════════ */}
+      <footer className="border-t border-border py-8">
         <div className="mx-auto max-w-2xl px-6">
           <div className="flex items-center justify-between">
             <Link
               href="/"
-              className="group inline-flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-300"
+              className="group inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-foreground"
             >
               <span className="transition-transform duration-300 group-hover:-translate-x-1">←</span>
               返回首页
             </Link>
             <Link
               href="/gallery"
-              className="group inline-flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-300"
+              className="group inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-foreground"
             >
               图片流
               <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>

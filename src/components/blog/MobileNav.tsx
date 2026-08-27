@@ -18,7 +18,7 @@ export function MobileNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-zinc-950/80 backdrop-blur-xl md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/85 backdrop-blur-xl md:hidden">
       <div className="flex items-center justify-around px-2 py-2">
         {items.map((item) => {
           const active = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
@@ -27,7 +27,7 @@ export function MobileNav() {
               key={item.href}
               href={item.href}
               className={`flex flex-1 flex-col items-center gap-1 py-2 transition-colors ${
-                active ? 'text-zinc-100' : 'text-zinc-500'
+                active ? 'text-foreground' : 'text-muted'
               }`}
             >
               <svg

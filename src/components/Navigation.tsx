@@ -3,25 +3,21 @@
 import { useState, type KeyboardEvent } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 /**
  * Navigation — 站点导航（头部 + 页脚双形态）
- * 设计系统表面划分：
- *   - 深色表面（探索/浏览）：首页 / 文章归档 / 标签 / 关于
- *   - 浅色表面（沉浸阅读）：文章详情 / 画廊
- * 头部集成搜索入口，页脚作为全站统一 footer。
+ * 全站统一明暗自适应：文字/描边跟随主题变量，不再按路径切表面。
+ *
+ * 2026-08-27 Claude·视觉重设计「墨境」：
+ *   - Logo 改为「朱砂印章 记 + 衬线字标」，弱化加粗大写字；
+ *   - hover 描边统一为朱砂 accent 细线；搜索框 focus 同步；
+ *   - 页脚引言前置印章元素，收束整体文人手记气质。
  */
 export function Navigation({ showFooter = false }: { showFooter?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
-
-  // 深色表面集合（与各页面 bg 保持一致）
-  const isDark =
-    pathname === '/' ||
-    pathname === '/posts' ||
-    pathname === '/about' ||
-    pathname.startsWith('/tags');
 
   const links = [
     { href: '/', label: '首页' },
@@ -40,34 +36,26 @@ export function Navigation({ showFooter = false }: { showFooter?: boolean }) {
   /* ─────────── Footer 形态 ─────────── */
   if (showFooter) {
     return (
-      <footer
-        className={`border-t ${
-          isDark ? 'border-white/5 bg-zinc-950' : 'border-zinc-200/70 bg-[#fbfaf7]'
-        }`}
-      >
+      <footer className="border-t border-border bg-background">
         <div className="mx-auto max-w-6xl px-6 py-14">
-          <div className="flex flex-col items-center gap-5 text-center">
-            <p className={`font-serif text-sm ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>
+          <div className="flex flex-col items-center gap-6 text-center">
+            {/* 朱砂印章：站点身份落款 */}
+            <span className="ink-seal !h-9 !w-9 !rounded-md !text-base" aria-hidden>记</span>
+            <p className="max-w-xs font-serif text-sm leading-loose text-faint">
               &ldquo;好的设计不是做加法，而是做减法。&rdquo;
             </p>
-            <div
-              className={`flex gap-6 text-xs ${
-                isDark ? 'text-zinc-500' : 'text-zinc-500'
-              }`}
-            >
+            <div className="flex gap-7 text-xs text-muted">
               {links.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`transition-colors ${
-                    isDark ? 'hover:text-zinc-300' : 'hover:text-zinc-900'
-                  }`}
+                  className="transition-colors hover:text-foreground"
                 >
                   {link.label}
                 </Link>
               ))}
             </div>
-            <p className={`text-xs ${isDark ? 'text-zinc-700' : 'text-zinc-400'}`}>
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-faint">
               © {new Date().getFullYear()} Notes · 设计、代码与界面的碎片
             </p>
           </div>
@@ -78,30 +66,16 @@ export function Navigation({ showFooter = false }: { showFooter?: boolean }) {
 
   /* ─────────── Header 形态 ─────────── */
   return (
-    <header
-      className={`sticky top-0 z-50 border-b backdrop-blur-xl ${
-        isDark
-          ? 'border-white/5 bg-zinc-950/70'
-          : 'border-zinc-200/70 bg-[#fbfaf7]/80'
-      }`}
-    >
+    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
       <nav className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-6">
-        {/* Logo */}
-        <Link
-          href="/"
-          className={`text-[15px] font-bold tracking-[0.2em] transition-colors ${
-            isDark ? 'text-zinc-100 hover:text-white' : 'text-zinc-900 hover:text-zinc-500'
-          }`}
-        >
-          NOTES
+        {/* Logo：印章 + 衬线字标 */}
+        <Link href="/" className="group flex items-center gap-2.5">
+          <span className="ink-seal transition-transform duration-300 group-hover:-rotate-6">记</span>
+          <span className="font-display text-lg tracking-[0.35em] text-foreground">Notes</span>
         </Link>
 
         {/* Nav Links */}
-        <div
-          className={`hidden items-center gap-7 text-sm md:flex ${
-            isDark ? 'text-zinc-400' : 'text-zinc-500'
-          }`}
-        >
+        <div className="hidden items-center gap-7 text-sm text-muted md:flex">
           {links.map((link) => {
             const active =
               pathname === link.href ||
@@ -110,29 +84,25 @@ export function Navigation({ showFooter = false }: { showFooter?: boolean }) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`transition-colors ${
-                  active
-                    ? isDark
-                      ? 'text-zinc-100'
-                      : 'text-zinc-900'
-                    : isDark
-                      ? 'hover:text-zinc-100'
-                      : 'hover:text-zinc-900'
+                className={`relative transition-colors ${
+                  active ? 'text-foreground' : 'hover:text-foreground'
                 }`}
               >
                 {link.label}
+                {/* 当前项下缘朱砂短线 */}
+                {active && (
+                  <span aria-hidden className="absolute -bottom-1.5 left-0 h-0.5 w-full rounded-full bg-accent" />
+                )}
               </Link>
             );
           })}
 
+          <ThemeToggle />
+
           {/* 搜索按钮 */}
           <button
             onClick={() => setSearchOpen(!searchOpen)}
-            className={`flex items-center gap-2 rounded-full border px-3 py-1 text-xs transition-all ${
-              isDark
-                ? 'border-white/10 text-zinc-500 hover:border-white/30 hover:text-zinc-300'
-                : 'border-zinc-200 text-zinc-400 hover:border-zinc-400 hover:text-zinc-600'
-            }`}
+            className="flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs text-muted transition-all hover:border-accent/50 hover:text-foreground"
           >
             <svg
               className="h-3.5 w-3.5"
@@ -148,13 +118,13 @@ export function Navigation({ showFooter = false }: { showFooter?: boolean }) {
           </button>
         </div>
 
-        {/* 移动端搜索按钮 */}
-        <div
-          className={`flex items-center gap-4 text-sm md:hidden ${
-            isDark ? 'text-zinc-400' : 'text-zinc-500'
-          }`}
-        >
-          <button onClick={() => setSearchOpen(!searchOpen)} className="transition-colors">
+        {/* 移动端:主题切换 + 搜索 */}
+        <div className="flex items-center gap-4 text-sm text-muted md:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setSearchOpen(!searchOpen)}
+            className="transition-colors hover:text-foreground"
+          >
             <svg
               className="h-4 w-4"
               viewBox="0 0 24 24"
@@ -171,21 +141,13 @@ export function Navigation({ showFooter = false }: { showFooter?: boolean }) {
 
       {/* 搜索展开 */}
       {searchOpen && (
-        <div
-          className={`border-t px-6 py-4 ${
-            isDark ? 'border-white/5 bg-zinc-950/95' : 'border-zinc-200/70 bg-[#fbfaf7]/95'
-          }`}
-        >
+        <div className="border-t border-border bg-background/95 px-6 py-4">
           <div className="mx-auto max-w-2xl">
             <input
               type="text"
               autoFocus
               placeholder="搜索文章…"
-              className={`w-full rounded-xl border px-4 py-3 text-sm outline-none ${
-                isDark
-                  ? 'border-white/10 bg-white/5 text-zinc-200 placeholder:text-zinc-600 focus:border-white/30'
-                  : 'border-zinc-200 bg-white text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-400'
-              }`}
+              className="w-full rounded-xl border border-border bg-foreground/5 px-4 py-3 text-sm text-foreground outline-none placeholder:text-faint focus:border-accent/50"
               onKeyDown={handleSearchKeyDown}
             />
           </div>

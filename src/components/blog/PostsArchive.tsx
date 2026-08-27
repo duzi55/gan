@@ -10,6 +10,11 @@ import type { PostMeta } from '@/lib/posts';
  * PostsArchive — 文章归档
  * 以 window.location.search 为唯一数据源（useSyncExternalStore 订阅）：
  * ?q=（搜索）、?tag=（标签）。数据由服务端父页面传入（避免在客户端引入 fs）。
+ *
+ * 2026-08-27 Claude·视觉重设计「墨境」：
+ *   - 移除紫/青光晕装饰，头部改用 ink-eyebrow / ink-display 体系；
+ *   - 序号统一为朱砂等宽 ink-index；行 hover 描边由冷灰 zinc 换为朱砂 accent；
+ *   - 搜索面板沿用细线框纸卡（liquid-glass-card 已在 globals.css 重构）。
  */
 
 // 订阅 URL 变化：popstate 与本组件手动派发的 notes:urlchange
@@ -63,31 +68,32 @@ export function PostsArchive({ posts }: { posts: PostMeta[] }) {
     });
   }, [posts, query, tag]);
 
+  /* 标签筛选 chip：选中=墨底纸字，未选中=纸底细线框 + 朱砂 hover */
   const chipClass = (active: boolean) =>
     `rounded-full border px-3 py-1.5 text-xs transition-all ${
       active
-        ? 'border-zinc-100 bg-zinc-100 text-zinc-900'
-        : 'border-white/10 text-zinc-400 hover:border-white/30 hover:text-zinc-100'
+        ? 'border-foreground bg-foreground text-background'
+        : 'border-border text-muted hover:border-accent/50 hover:text-foreground'
     }`;
 
+  /* 归档列表行：编号目录式，跨页（tags/[tag]）保持同一视觉语言 */
+  const rowClass =
+    'group grid items-center gap-4 rounded-xl border border-transparent px-5 py-4 transition-all hover:border-accent/30 hover:bg-foreground/[0.03] md:grid-cols-[auto_1fr_auto]';
+
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-background text-foreground">
       {/* ═══ 头部 ═══ */}
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute -left-32 top-20 h-64 w-64 rounded-full bg-purple-500/10 blur-[100px]" />
-        <div className="pointer-events-none absolute -right-32 bottom-10 h-72 w-72 rounded-full bg-cyan-500/10 blur-[120px]" />
-        <div className="relative z-10 mx-auto max-w-6xl px-6 pt-20 pb-12 md:pt-28">
-          <div className="mb-6 flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-zinc-600">
-            <span className="h-px w-8 bg-zinc-700" />
-            <span>Archive · {new Date().getFullYear()}</span>
-          </div>
-          <h1 className="font-serif text-3xl font-bold leading-[1.15] tracking-wide text-zinc-50 md:text-5xl">
-            全部文章
-          </h1>
-          <p className="mt-4 max-w-lg font-serif text-sm leading-relaxed text-zinc-500">
-            {posts.length} 篇笔记，关于设计美学、前端工程与极简界面。
-          </p>
-        </div>
+      <section className="mx-auto max-w-6xl px-6 pt-20 pb-12 md:pt-28">
+        <p className="ink-eyebrow">
+          <span className="h-px w-8 bg-border" />
+          Archive · 全部手记
+        </p>
+        <h1 className="ink-display mt-6 text-4xl leading-[1.15] text-foreground md:text-6xl">
+          文章总目
+        </h1>
+        <p className="mt-4 max-w-lg font-serif text-sm leading-loose text-muted md:text-base">
+          {posts.length} 篇笔记，关于设计美学、前端工程与极简界面。
+        </p>
       </section>
 
       {/* ═══ 搜索 + 标签筛选 ═══ */}
@@ -95,7 +101,7 @@ export function PostsArchive({ posts }: { posts: PostMeta[] }) {
         <GlassCard className="p-5 md:p-6">
           <div className="flex items-center gap-3">
             <svg
-              className="h-4 w-4 shrink-0 text-zinc-600"
+              className="h-4 w-4 shrink-0 text-faint"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -109,19 +115,19 @@ export function PostsArchive({ posts }: { posts: PostMeta[] }) {
               value={query}
               onChange={(e) => updateUrl(e.target.value, tag)}
               placeholder="搜索标题、摘要或标签…"
-              className="w-full bg-transparent text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none"
+              className="w-full bg-transparent text-sm text-foreground placeholder:text-faint focus:outline-none"
             />
             {query && (
               <button
                 onClick={() => updateUrl('', tag)}
-                className="shrink-0 text-xs text-zinc-500 transition-colors hover:text-zinc-300"
+                className="shrink-0 text-xs text-muted transition-colors hover:text-foreground"
               >
                 清除
               </button>
             )}
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2 border-t border-white/5 pt-4">
+          <div className="mt-4 flex flex-wrap gap-2 border-t border-border pt-4">
             <button
               onClick={() => updateUrl(query, '')}
               className={chipClass(!tag)}
@@ -148,44 +154,38 @@ export function PostsArchive({ posts }: { posts: PostMeta[] }) {
       {/* ═══ 文章列表 ═══ */}
       <section className="mx-auto max-w-6xl px-6 pb-24">
         {isHydrated && filtered.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-white/10 py-20 text-center">
-            <p className="font-serif text-zinc-500">没有找到匹配的文章</p>
+          <div className="rounded-2xl border border-dashed border-border py-20 text-center">
+            <p className="font-serif text-muted">没有找到匹配的文章</p>
             <button
               onClick={() => updateUrl('', '')}
-              className="mt-4 text-xs text-zinc-400 underline-offset-4 hover:underline"
+              className="mt-4 text-xs text-muted underline-offset-4 hover:underline"
             >
               清除筛选条件
             </button>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="divide-y divide-border">
             {filtered.map((post, i) => (
-              <Link
-                key={post.slug}
-                href={`/posts/${post.slug}`}
-                className="group grid items-center gap-4 rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 transition-all hover:border-white/10 hover:bg-white/5 md:grid-cols-[auto_1fr_auto]"
-              >
-                <span className="hidden w-10 font-serif text-sm text-zinc-600 md:block">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+              <Link key={post.slug} href={`/posts/${post.slug}`} className={rowClass}>
+                <span className="ink-index hidden md:block">{String(i + 1).padStart(2, '0')}</span>
                 <div className="min-w-0">
-                  <h3 className="truncate font-serif text-base font-medium text-zinc-100 transition-colors group-hover:text-white">
-                    {post.title}
+                  <h3 className="font-serif text-base font-medium leading-snug text-foreground">
+                    <span className="ink-underline">{post.title}</span>
                   </h3>
-                  <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500">
+                  <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
                     <span>{post.date}</span>
-                    <span className="h-px w-3 bg-zinc-700" />
+                    <span className="h-px w-3 bg-border" />
                     {post.tags.map((t) => (
                       <span
                         key={t}
-                        className="text-zinc-600 transition-colors group-hover:text-zinc-400"
+                        className="text-faint transition-colors group-hover:text-muted"
                       >
                         #{t}
                       </span>
                     ))}
                   </div>
                 </div>
-                <span className="hidden text-zinc-600 transition-all duration-300 group-hover:translate-x-1 group-hover:text-zinc-300 md:block">
+                <span className="hidden text-faint transition-all duration-300 group-hover:translate-x-1 group-hover:text-accent md:block">
                   →
                 </span>
               </Link>
