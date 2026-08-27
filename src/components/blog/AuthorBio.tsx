@@ -55,11 +55,11 @@ export function AuthorBio({
         <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-border bg-foreground/[0.04]">
           <span className="ink-seal !h-9 !w-9 !rounded-md !text-xl">记</span>
         </div>
-        <h3 className="ink-display mt-4 text-xl text-foreground">杜子</h3>
-        <p className="mt-1 text-sm text-muted">设计师 · 写作者 · 茶人</p>
+        {/* 2026-08-27 Claude·完整版名片署名同步改为站主本人 duzi55（上轮仅改了 compact 版，遗漏此处） */}
+        <h3 className="ink-display mt-4 text-xl text-foreground">duzi55</h3>
+        <p className="mt-1 text-sm text-muted">喜欢前端的小小码农</p>
         <p className="mt-3 text-sm leading-relaxed text-muted">
-          在代码与茶汤之间寻找平衡。相信好的设计像好茶——
-          不抢戏，但让体验完整。
+          寻找发现设计美学，学习借鉴提升。
         </p>
         <div className="mt-5 flex gap-6 text-center">
           <div>
