@@ -1,0 +1,69 @@
+# =====================================================================
+# 云端构建剧本（Cloud Build）
+# 2026-08-27 Claude·静态博客在线后台方案的一部分：
+#   - 任何 push 到 main（且改动不只有 docs/）都会触发本剧本；
+#     包括本机 git push、github.dev 网页编辑、/admin 后台保存文章。
+#   - 构建产物 out/ 由 postbuild 脚本镜像到 docs/，
+#     GitHub Pages 从 main 分支 /docs 目录读取，因此提交 docs/ 即完成发布。
+#   - GITHUB_TOKEN 推送 + [skip ci] 双保险：机器人自己推 docs/ 不再触发
+#     本剧本，避免「构建→推送→再构建」死循环。
+#   - workflow_dispatch 允许在仓库 Actions 页手动点按钮补跑一次构建
+#     （例如 Pages 出问题时无需改代码即可重发）。
+# 手动触发入口：仓库页 → Actions 标签 → Cloud Build → Run workflow
+# =====================================================================
+name: Cloud Build
+
+on:
+  push:
+    branches: [main]
+    # 本机构建后同步的 docs/ 变更不需要云端重复构建；docs/.nojekyll 是空文件镜像时一起变动
+    paths-ignore:
+      - 'docs/**'
+  workflow_dispatch: {} # 手动触发按钮
+
+# 只授予写仓库内容权限（推 docs 用），最小化令牌能力
+permissions:
+  contents: write
+
+# 同一分支同时来了多个 push 时，只跑最新一个，旧的自动取消，节省排队时间
+concurrency:
+  group: cloud-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # 官方托管的免费 Ubuntu 跑机
+    steps:
+      # 1. 拉取代码
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. 安装 Node 20 并缓存 npm 依赖（按 package-lock.json 命中缓存）
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # 3. 按锁定文件精确安装依赖（与 package-lock.json 一致）
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. 构建 = next build + flatten-rsc + sync-docs（postbuild 已把 out/ 镜像进 docs/）
+      - name: Build static site
+        run: npm run build
+
+      # 5. 以官方机器人身份提交构建产物
+      - name: Commit docs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          # [skip ci] 防止本次推送再次触发本剧本造成死循环
+          git commit -m "[skip ci] build: 云端构建同步 docs" || echo "没有可提交的变更"
+
+      # 6. rebase 远端最新（防后台保存与本机构建并发冲突），再推送发布
+      - name: Push to main
+        run: |
+          git pull --rebase origin main
+          git push origin main
