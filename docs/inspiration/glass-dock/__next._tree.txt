@@ -1,5 +1,0 @@
-:HL["/gan/_next/static/media/7d4881bb7e1bf84d-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
-:HL["/gan/_next/static/css/6f274c054e32606f.css","style"]
-:HL["/gan/_next/static/css/51e6be388f22a7b3.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"inspiration","param":null,"prefetchHints":4192,"slots":{"children":{"name":"slug","param":{"type":"d","key":"glass-dock","siblings":[]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}}}},"staleTime":300,"buildId":"ezRw3sXZEqarux1LGFa_4"}

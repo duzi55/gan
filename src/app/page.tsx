@@ -177,28 +177,31 @@ export default function Home() {
           action={{ href: '/inspiration', label: '全部' }}
         />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          {INSPIRATIONS.slice(0, 3).map((item) => (
-            <Link
-              key={item.slug}
-              href={`/inspiration/${item.slug}/`}
-              className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10"
-            >
-              {/* 深空微缩舞台：专属光斑背景 + 等比微缩图 */}
-              <div
-                className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                style={{ background: item.stage }}
+          {/* 跨灵感扁平原型序列（灵感→原型两级），取前 3 件；链接指向所属灵感详情页 */}
+          {INSPIRATIONS.flatMap((e) => e.prototypes.map((p) => ({ entry: e, proto: p })))
+            .slice(0, 3)
+            .map(({ entry, proto }) => (
+              <Link
+                key={proto.slug}
+                href={`/inspiration/${entry.slug}/`}
+                className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10"
               >
-                <div className="flex h-full w-full scale-[0.52] items-center justify-center sm:scale-[0.58]">
-                  <item.Mini />
+                {/* 深空微缩舞台：专属光斑背景 + 等比微缩图 */}
+                <div
+                  className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                  style={{ background: proto.stage }}
+                >
+                  <div className="flex h-full w-full scale-[0.52] items-center justify-center sm:scale-[0.58]">
+                    <proto.Mini />
+                  </div>
                 </div>
-              </div>
-              {/* 底部信息条：中文题 + LG 编号 */}
-              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/55 to-transparent px-4 pb-3 pt-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="text-sm text-white drop-shadow">{item.title}</span>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-white/70">LG-{item.no}</span>
-              </div>
-            </Link>
-          ))}
+                {/* 底部信息条：中文题 + LG 编号 */}
+                <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/55 to-transparent px-4 pb-3 pt-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <span className="text-sm text-white drop-shadow">{proto.title}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-white/70">LG-{proto.no}</span>
+                </div>
+              </Link>
+            ))}
         </div>
       </section>
 
