@@ -31,24 +31,54 @@ export default function TocAside({ headings }: { headings: Heading[] }) {
   }, [activeSlug]);
 
   useEffect(() => {
-    function onScroll() {
-      /* 阅读进度：与顶部细条同口径（滚动距离 / 可滚动高度） */
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(docHeight > 0 ? Math.min(window.scrollY / docHeight, 1) : 0);
-
-      /* 滚动 spy：取最后一条越过激活线的标题 */
-      const line = window.innerHeight * ACTIVE_LINE_RATIO;
-      let current = '';
-      for (const h of headings) {
+    /* 2026-08-27 Claude·性能修复：滚动卡顿治理
+       1) 标题位置静态缓存：文章正文为静态 HTML，挂载/resize 时一次性
+          测量各标题距文档顶部的偏移；滚动期间只做数值比较，不再逐帧
+          getBoundingClientRect（强制同步 layout 是卡顿元凶）。
+       2) rAF 节流：同一帧内的多次 scroll 事件合并为一次计算。
+       3) 进度离散化：整数百分比未变化时跳过 setState，重渲染从
+          每帧一次降到每滚过 1% 一次。 */
+    let raf = 0;
+    let tops: number[] = [];
+    const measure = () => {
+      tops = headings.map((h) => {
         const el = document.getElementById(h.slug);
-        if (el && el.getBoundingClientRect().top <= line) current = h.slug;
-      }
-      setActiveSlug(current);
+        return el ? el.getBoundingClientRect().top + window.scrollY : Infinity;
+      });
+    };
+    measure();
+
+    function onScroll() {
+      if (raf) return; // 一帧内只计算一次
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const scrollY = window.scrollY;
+
+        /* 阅读进度：与顶部细条同口径（滚动距离 / 可滚动高度） */
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0;
+        setProgress((prev) =>
+          Math.round(prev * 100) === Math.round(pct * 100) ? prev : pct
+        );
+
+        /* 滚动 spy：与缓存的文档偏移直接比较（激活线 = 视口 35%） */
+        const line = scrollY + window.innerHeight * ACTIVE_LINE_RATIO;
+        let current = '';
+        for (let i = 0; i < headings.length; i++) {
+          if (tops[i] <= line) current = headings[i].slug;
+        }
+        setActiveSlug(current);
+      });
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure);
     onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', measure);
+    };
   }, [headings]);
 
   if (headings.length === 0) return null;

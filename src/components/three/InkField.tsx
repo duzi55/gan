@@ -204,8 +204,20 @@ export function InkField({ density = 1, className = '', accentColor }: InkFieldP
 
     /* ───────── 渲染循环 ───────── */
     let raf = 0;
+    /* 2026-08-27 Claude·性能修复：滚出视口即暂停 WebGL 渲染
+       之前仅有「标签页隐藏」暂停——文章页滚到正文深处时 hero 里的
+       粒子场仍每帧绘制，持续抢占 GPU，是滚动偶发卡顿的主因。
+       现叠加 IntersectionObserver：hero 离开视口（含 100px 余量）
+       即停止 render，回到视口再恢复。 */
     let running = true;
+    let pageVisible = true;
+    let inView = true;
     const clock = new THREE.Clock();
+    const updateRunning = () => {
+      const next = pageVisible && inView;
+      if (next && !running) clock.start();
+      running = next;
+    };
 
     const tick = () => {
       raf = requestAnimationFrame(tick);
@@ -229,10 +241,20 @@ export function InkField({ density = 1, className = '', accentColor }: InkFieldP
 
     // 标签页隐藏时暂停，恢复时继续（避免后台白白耗电）
     const onVisibility = () => {
-      running = document.visibilityState === 'visible';
-      if (running) clock.start();
+      pageVisible = document.visibilityState === 'visible';
+      updateRunning();
     };
     document.addEventListener('visibilitychange', onVisibility);
+
+    // 滚出视口时暂停渲染（rootMargin 提前 100px 唤醒，避免回滚瞬间空白）
+    const io = new IntersectionObserver(
+      (entries) => {
+        inView = entries[0]?.isIntersecting ?? true;
+        updateRunning();
+      },
+      { rootMargin: '100px' }
+    );
+    io.observe(container);
 
     if (prefersReducedMotion) {
       // reduced-motion：单帧静态呈现，不启动循环
@@ -244,6 +266,7 @@ export function InkField({ density = 1, className = '', accentColor }: InkFieldP
     /* ───────── 卸载清理 ───────── */
     return () => {
       cancelAnimationFrame(raf);
+      io.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('pointermove', onPointerMove);
       themeObserver.disconnect();

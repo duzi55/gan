@@ -24,21 +24,47 @@ export default function MobileToc({ headings }: { headings: Heading[] }) {
   const [activeSlug, setActiveSlug] = useState('');
 
   useEffect(() => {
-    function onScroll() {
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(docHeight > 0 ? Math.min(window.scrollY / docHeight, 1) : 0);
-
-      const line = window.innerHeight * ACTIVE_LINE_RATIO;
-      let current = '';
-      for (const h of headings) {
+    /* 2026-08-27 Claude·性能修复（与 TocAside 同口径）：
+       标题位置静态缓存 + rAF 节流 + 进度整数百分比离散化，
+       滚动期间不再逐帧 getBoundingClientRect 强制重排。 */
+    let raf = 0;
+    let tops: number[] = [];
+    const measure = () => {
+      tops = headings.map((h) => {
         const el = document.getElementById(h.slug);
-        if (el && el.getBoundingClientRect().top <= line) current = h.slug;
-      }
-      setActiveSlug(current);
+        return el ? el.getBoundingClientRect().top + window.scrollY : Infinity;
+      });
+    };
+    measure();
+
+    function onScroll() {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const scrollY = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0;
+        setProgress((prev) =>
+          Math.round(prev * 100) === Math.round(pct * 100) ? prev : pct
+        );
+
+        const line = scrollY + window.innerHeight * ACTIVE_LINE_RATIO;
+        let current = '';
+        for (let i = 0; i < headings.length; i++) {
+          if (tops[i] <= line) current = headings[i].slug;
+        }
+        setActiveSlug(current);
+      });
     }
+
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure);
     onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', measure);
+    };
   }, [headings]);
 
   /* 面板打开时锁定背景滚动 */

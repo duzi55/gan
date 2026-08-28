@@ -123,7 +123,9 @@ export default async function PostPage({
       {/* ═══════════════ 正文 ═══════════════ */}
       <div className="mx-auto max-w-2xl px-6 py-20 md:py-28">
         {/* Markdown 渲染 —— 衬线长文排式；引用条与列表圆点使用朱砂呼应印章
-            2026-08-27 Claude·h2/h3 增加 scroll-mt，锚点跳转时留出呼吸空间 */}
+            2026-08-27 Claude·h2/h3 增加 scroll-mt，锚点跳转时留出呼吸空间
+            2026-08-27 Claude·代码块改为黑色 terminal 风格（mac 三灯 + GitHub Dark 配色），
+              行内 code 保留纸面淡底； [&_pre::before] 用 box-shadow 一次画出三枚指示灯 */}
         <div
           className="font-serif text-[18px] leading-[1.95] text-foreground/80
             [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:scroll-mt-24 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:text-foreground
@@ -139,7 +141,12 @@ export default async function PostPage({
             [&_blockquote]:text-xl [&_blockquote]:font-medium [&_blockquote]:italic [&_blockquote]:leading-[1.7] [&_blockquote]:text-muted
             [&_a]:text-foreground [&_a]:underline [&_a]:decoration-accent/50 [&_a]:underline-offset-4
             [&_strong]:font-bold [&_strong]:text-foreground
-            [&_em]:italic"
+            [&_em]:italic
+            [&_pre]:relative [&_pre]:my-8 [&_pre]:overflow-x-auto [&_pre]:rounded-xl [&_pre]:border [&_pre]:border-white/10 [&_pre]:bg-[#0d1117] [&_pre]:px-5 [&_pre]:pb-5 [&_pre]:pt-12 [&_pre]:shadow-lg [&_pre]:shadow-black/20
+            [&_pre]:font-mono [&_pre]:text-[13px] [&_pre]:leading-[1.7] [&_pre]:text-[#e6edf3]
+            [&_pre::before]:absolute [&_pre::before]:left-5 [&_pre::before]:top-[18px] [&_pre::before]:h-3 [&_pre::before]:w-3 [&_pre::before]:rounded-full [&_pre::before]:bg-[#ff5f56] [&_pre::before]:shadow-[14px_0_0_#ffbd2e,28px_0_0_#27c93f] [&_pre::before]:content-['']
+            [&_pre_code]:block [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:font-mono [&_pre_code]:text-inherit
+            [&_code]:rounded [&_code]:bg-foreground/5 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
       </div>
