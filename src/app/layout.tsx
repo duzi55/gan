@@ -33,6 +33,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"){document.documentElement.classList.add("dark")}}catch(e){}})();`,
           }}
         />
+        {/*
+          2026-08-28 Claude·兼容补丁：为老内核浏览器补 ReadableStream 异步迭代协议
+          根因：Next 16 Segment Cache 预取时直接调 stream[Symbol.asyncIterator]()，
+          Chrome<124 / Safari<17.4 及国产壳浏览器无此协议方法，报
+          "TypeError: t[Symbol.asyncIterator] is not a function"（Uncaught in promise）。
+          此处按 W3C Streams 规范补齐，现代浏览器命中 if 直接跳过，零副作用。
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){if(typeof ReadableStream==="undefined"||ReadableStream.prototype[Symbol.asyncIterator])return;ReadableStream.prototype[Symbol.asyncIterator]=function(){var r=this.getReader();return{next:function(){return r.read()},throw:function(e){return Promise.reject(e)},return:function(){try{r.releaseLock()}catch(e){}return Promise.resolve({done:true})},[Symbol.asyncIterator]:function(){return this}}}})();`,
+          }}
+        />
       </head>
       <body className="flex min-h-full flex-col pb-16 md:pb-0">
         <Navigation />

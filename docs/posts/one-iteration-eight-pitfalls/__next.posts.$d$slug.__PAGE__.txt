@@ -42,78 +42,77 @@
 
             [&_pre_code]:block [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:font-mono [&_pre_code]:text-inherit
 
-            [&_code]:rounded [&_code]:bg-foreground/5 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]8:T1b01,<p>这篇文章是一次「翻车实录」。墨境刚结束一轮迭代：修 CI、修卡顿、改代码框、换画廊。过程中踩了八个坑，每个都算不上高深，但都足够典型——事后我把根因和修复全部记录在案，一来给未来的自己，二来给未来协助开发的 AI：<strong>错误信息是路标，别绕开它，顺着走</strong>。</p>
-<h2 id="坑一：TypeError: c.title.charAt is not a function">坑一：TypeError: c.title.charAt is not a function</h2>
-<p>CI 日志里最刺眼的一行：</p>
-<pre><code class="language-text">TypeError: c.title.charAt is not a function
-Export encountered an error on /posts/11
-</code></pre>
-<p>根因不在 JS，在 YAML。我在后台发了一篇标题为《666》的文章，序列化 frontmatter 时纯数字没加引号，gray-matter 按照 YAML 规范把它解析成了 <code>number</code>。渲染层调 <code>.charAt()</code>，数字没有这个方法，构建当场爆炸。</p>
-<p>修复是釜底抽薪：序列化函数对所有字段统一加引号，内部单引号双写转义：</p>
+            [&_code]:rounded [&_code]:bg-foreground/5 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]8:T259b,<p>墨境上线后的这几轮迭代，全部由站长的报障和提问驱动。这篇文章换个写法：<strong>按问题组织</strong>，每个问题还原四段——站长原话、探讨（当时怎么想的）、解决方案、避坑要点。给未来的自己，也给未来协助排障的 AI：报障原话是第一现场，别急着改代码，先顺着原话走一遍。</p>
+<h2 id="问题一：「没有触发啊，你是不是搞错了」">问题一：「没有触发啊，你是不是搞错了」</h2>
+<p><strong>探讨</strong>：站长推送 workflow 文件后盯着 Actions 页等了半天。其实这里叠了三层规则：推送 workflow 的那次 push 不触发它自身（GitHub 设计）；真正触发构建的是后台保存文章那一次；云端回写 docs 用 <code>GITHUB_TOKEN</code> 推送，按规则不再触发 workflow，配合 <code>[skip ci]</code> 双保险，防止「构建→提交→再构建」死循环。</p>
+<p><strong>方案</strong>：不改代码，改认知。判断「为什么没触发」前先分清：push 不触发自身、token 推送不触发、<code>[skip ci]</code> 显式跳过——三者都是设计不是故障。</p>
+<p><strong>避坑</strong>：CI 排障先画触发链路图，再谈「是不是搞错了」。</p>
+<h2 id="问题二：CI 报错 TypeError: c.title.charAt is not a function">问题二：CI 报错 <code>TypeError: c.title.charAt is not a function</code></h2>
+<p><strong>探讨</strong>：站长贴来完整日志，报错落在 <code>/posts/11</code>——正是他后台发的《666》。根因在 YAML：序列化 frontmatter 时纯数字标题没加引号，gray-matter 按 YAML 规范解析成 <code>number</code>，渲染层 <code>.charAt()</code> 当场爆炸。<strong>错误信息里的方法名是路标</strong>：「charAt 不是函数」= 有个该是字符串的东西不是字符串。</p>
+<p><strong>方案</strong>：序列化函数全字段加引号，内部单引号双写转义：</p>
 <pre><code class="language-ts">function yamlQuote(s: string): string {
   return `'${String(s).replace(/'/g, "''")}'`;
 }
 </code></pre>
-<p><strong>教训</strong>：凡是要经过 YAML 中转的字符串，出口处一律加引号，不要信任「用户大概会输入正常文本」。</p>
-<h2 id="坑二：Actions 为什么不触发">坑二：Actions 为什么不触发</h2>
-<p>两个现象叠加造成的误会：推送 workflow 文件的那次 push 不触发自身（GitHub 规则）；真正触发构建的是后台保存文章那一次，但它挂在构建步骤上。另外本站的云端回写 docs 用 <code>GITHUB_TOKEN</code> 推送，按规则不会再触发一次 workflow，配合 commit message 里的 <code>[skip ci]</code>，构成双保险，防止「构建→提交→再构建」的死循环。</p>
-<p><strong>教训</strong>：判断「为什么没触发」之前，先分清三件事——push 不触发自身、token 推送不触发、<code>[skip ci]</code> 显式跳过。三者都是设计，不是故障。</p>
-<h2 id="坑三：滚动卡顿的三元凶">坑三：滚动卡顿的三元凶</h2>
-<p>「浏览文章偶尔掉帧」，排查出三个叠加来源：</p>
-<ol>
-<li><strong>WebGL 不睡觉</strong>。three.js 墨尘粒子场滚出视口后仍在每帧渲染，白白抢占 GPU。修复：IntersectionObserver 监听容器，滚出视口（留 100px 余量）就暂停渲染循环，回来再恢复；</li>
-<li><strong>scroll 里强制重排</strong>。目录高亮组件每次 scroll 都对每个标题调 <code>getBoundingClientRect()</code>，一帧内十几次同步布局。修复：挂载时测量一次缓存文档偏移，resize 才重测；scroll 回调里直接和缓存比较；</li>
-<li><strong>每帧 setState</strong>。阅读进度条把连续小数灌进 React，一帧一次重渲染。修复：rAF 节流合并同帧事件，进度离散化到整数百分比才更新。</li>
-</ol>
-<p><strong>教训</strong>：滚动性能三板斧——<code>requestAnimationFrame</code> 节流、布局位置静态缓存、setState 离散化。三条一起上，掉帧才真的消失。</p>
-<h2 id="坑四：className 里写注释">坑四：className 里写注释</h2>
-<p>给代码块加 terminal 样式时，我把「修改时间·功能」注释顺手写进了模板字符串里——Tailwind 把它当成一个类名，静默忽略，不报错。注释必须写在 JSX 注释区，类名字符串里只能有类。</p>
-<p><strong>教训</strong>：模板字符串里的任何非类名内容都是隐患，而且这种错不报错，只能靠肉眼。</p>
-<h2 id="坑五：terminal 三灯的正确画法">坑五：terminal 三灯的正确画法</h2>
-<p>正文代码块要黑色终端风。mac 三灯如果老老实实画三个 <code>&#x3C;span></code>，得侵入 HTML 生成层；其实一个伪元素加 box-shadow 就够：</p>
-<pre><code class="language-css">pre::before {
-  content: '';
-  position: absolute; left: 20px; top: 18px;
-  width: 12px; height: 12px; border-radius: 50%;
-  background: #ff5f56;                         /* 红灯本体 */
-  box-shadow: 14px 0 0 #ffbd2e, 28px 0 0 #27c93f; /* 黄灯绿灯偏移 */
+<p><strong>避坑</strong>：凡经 YAML 中转的字符串，出口一律加引号；不要信任「用户大概会输入正常文本」。</p>
+<h2 id="问题三：「我在国内授权网站跳转不过去啊」">问题三：「我在国内授权网站跳转不过去啊」</h2>
+<p><strong>探讨</strong>：GitHub OAuth 授权页（github.com）、<code>api.github.com</code>、Workers 网关（workers.dev）在国内网络三重受阻。手机端没有代理环境时这是死结，不是代码问题。</p>
+<p><strong>方案</strong>：两条路——自定义域名 + Worker 反代（彻底绕开被墙域），或设备装代理。站长选择「算了」，此题挂起待办。</p>
+<p><strong>避坑</strong>：涉及 GitHub 全家桶的功能，先确认目标用户的网络可达性，再写代码。</p>
+<h2 id="问题四：「有没有免费图床？建个仓库存图会不会加载更快？」">问题四：「有没有免费图床？建个仓库存图会不会加载更快？」</h2>
+<p><strong>探讨</strong>：直觉是「把图片挪出去=给主站减负」，实际上另开仓库反而更慢：独立仓库的图片走 <code>raw.githubusercontent.com</code>（国内污染严重）或 jsDelivr（连通率波动），跨域握手、缓存策略还都不受控。同仓库 <code>public/images/posts/</code> 与站点同域名同 CDN，首访即随站点缓存。</p>
+<p><strong>方案</strong>：图片放本项目 <code>public/images/posts/</code>，配图规范落成一篇文章；画廊 8 幅图也走同一路线。</p>
+<p><strong>避坑</strong>：「图片放外面」是私有服务时代的经验；静态托管站点的最优解是图片与站点同源。</p>
+<h2 id="问题五：「浏览文章的时候滚动会很卡顿（偶尔会触发）」">问题五：「浏览文章的时候滚动会很卡顿（偶尔会触发）」</h2>
+<p><strong>探讨</strong>：「偶尔」说明不是渲染负担恒定，而是特定条件叠加。排查出三元凶：WebGL 墨尘滚出视口仍每帧渲染（GPU 抢占）；目录组件每次 scroll 循环调 <code>getBoundingClientRect</code>（强制同步布局）；阅读进度条每帧 setState（React 重渲染）。</p>
+<p><strong>方案</strong>：滚动性能三板斧——</p>
+<pre><code class="language-ts">// 1. rAF 节流：一帧内多次 scroll 合并为一次计算
+function onScroll() {
+  if (raf) return;
+  raf = requestAnimationFrame(() => { raf = 0; /* 计算+更新 */ });
+}
+// 2. 布局位置静态缓存：挂载时测一次，scroll 只比对缓存
+// 3. setState 离散化：整数百分比变化才更新
+</code></pre>
+<p>外加 IntersectionObserver 让 WebGL 滚出视口即暂停、回滚前 100px 提前唤醒。</p>
+<p><strong>避坑</strong>：scroll 回调里禁止出现任何会触发重排的 API；「偶尔卡顿」多半是多个每帧开销的叠加，逐个消掉。</p>
+<h2 id="问题六：「代码想放进黑色 terminal 框」「画廊用外链？但我不知道放什么图」">问题六：「代码想放进黑色 terminal 框」「画廊用外链？但我不知道放什么图」</h2>
+<p><strong>探讨</strong>：前者纯 CSS：<code>pre::before</code> 一个伪元素，<code>box-shadow: 14px 0 0 #ffbd2e, 28px 0 0 #27c93f</code> 一次画出 mac 三灯，零 JS、不侵入 HTML 生成层。后者是「选题」问题而非「技术」问题——站长真正需要的不是外链，是<strong>风格统一的图源</strong>。最终用文生图 API 产出「纸上山水」八幅（与宣纸美学同宗），入库 <code>public/images/gallery/</code>，逐张验文件头 <code>FF D8 FF</code> 才收货。</p>
+<p><strong>避坑</strong>：外部来源的二进制入库前验魔数；画廊这类「内容无解」的需求，先解决风格统一，加载速度自然随之解决。</p>
+<h2 id="问题七：「Pages 网站控制台一堆报错」（最新一案）">问题七：「Pages 网站控制台一堆报错」（最新一案）</h2>
+<p>站长贴来三组控制台信息，逐个过堂：</p>
+<p><strong>① <code>TypeError: t[Symbol.asyncIterator] is not a function</code>（Uncaught in promise）</strong></p>
+<p>探讨：先在构建产物里按 chunk 哈希定位报错函数，上下文全是 <code>STATIC_STALETIME_MS</code>、<code>segmentCacheMap</code>、<code>createFromNextReadableStream</code>——<strong>不在业务代码里，是 Next 16 Segment Cache（路由预取缓存）的内部实现</strong>。再排除法：预取产物 <code>.txt</code> 在服务端齐全、路径扁平化无误，那 <code>t</code> 为什么不可迭代？答案：<code>t</code> 是 RSC 响应流，Next 直接调 <code>stream[Symbol.asyncIterator]()</code>——这是 ReadableStream 的<strong>异步迭代协议方法</strong>，Chrome 124 / Safari 17.4 才原生支持。老内核浏览器（以及大量国产壳浏览器）没有它，预取必炸。</p>
+<p>方案：根布局 <code>&#x3C;head></code> 里塞一段按 W3C Streams 规范写的 polyfill，现代浏览器命中卫语句直接跳过，零副作用：</p>
+<pre><code class="language-js">if (typeof ReadableStream !== "undefined"
+    &#x26;&#x26; !ReadableStream.prototype[Symbol.asyncIterator]) {
+  ReadableStream.prototype[Symbol.asyncIterator] = function () {
+    var r = this.getReader();
+    return { next: () => r.read(), /* return/throw 略 */ };
+  };
 }
 </code></pre>
-<p>配合 <code>[&#x26;_pre]</code> 系列 Tailwind 任意值类挂在正文容器上，纯 CSS，零 JS。</p>
-<h2 id="坑六：PowerShell 里没有 heredoc">坑六：PowerShell 里没有 heredoc</h2>
-<p>提交长 commit message 时照搬 Bash 的 <code>git commit -m "$(cat &#x3C;&#x3C;'EOF' ... EOF)"</code>，PowerShell 直接语法错误。它的对应物是 here-string：</p>
-<pre><code class="language-powershell">$msg = @'
-多行提交说明
-'@; git commit -m $msg
-</code></pre>
-<p><strong>教训</strong>：shell 惯用法不能跨 shell 搬运，尤其是引号和重定向。</p>
-<h2 id="坑七：docs 构建产物的 rebase 冲突">坑七：docs 构建产物的 rebase 冲突</h2>
-<p>本地提交晚于云端 bot 的 docs 回写，<code>pull --rebase</code> 又因工作区脏而失败，推送被拒；强行 rebase 后在 docs 的哈希 chunk 文件上炸出一堆 add/add、delete/delete 冲突。最终解法干净利落：</p>
-<pre><code class="language-text">git rebase --abort        ← 放弃纠缠
-git fetch origin
-git reset --soft origin/main   ← 分支指到远端，工作区保持本次新构建
-git add docs src public
-git commit &#x26;&#x26; git push
-</code></pre>
-<p>构建产物没有「合并」的价值，只有「以最新一次构建为准」这一种正确状态。</p>
-<p><strong>教训</strong>：对生成物目录（docs、dist、out）永远不要做精细合并，软重置后整体覆盖提交。</p>
-<h2 id="坑八：AI 生成图的格式校验">坑八：AI 生成图的格式校验</h2>
-<p>画廊的八幅水墨图由文生图 API 生成，落盘前逐张验文件头：<code>FF D8 FF</code> 才是 JPEG，扩展名 <code>.jpg</code> 本身不可信。八张全部校验通过再入库，总重约 1.7MB，单张 160–265KB。</p>
-<p><strong>教训</strong>：外部来源的二进制，入库前用魔数校验真实格式，这是对下载行为最基本的确认。</p>
-<h2 id="给未来 AI（和人）的清单">给未来 AI（和人）的清单</h2>
+<p>避坑：<strong>「Symbol.asyncIterator is not a function」出现在处理流/响应的库代码里，第一嫌疑是浏览器内核版本，不是数据结构写错了</strong>。线上报障先问浏览器型号。</p>
+<p><strong>② 图片 preload 警告</strong>（<code>g-shanshui.jpg was preloaded but not used</code>）</p>
+<p>探讨：业务代码没有任何 preload 调用。真凶是 React 19 的预取语义：路由预取 /gallery 的 RSC 载荷时，载荷里的图片被顺带 <code>preload</code> 进请求队列；站长没点进画廊，浏览器几秒后提醒「预加载没用上」。这是预取机制的副作用，无害。</p>
+<p><strong>③ <code>Cannot read properties of undefined (reading 'startTime')</code></strong></p>
+<p>探讨：调用栈在 <code>reportAllChanges</code> / <code>requestIdleCallback</code>——Next 内置的 web-vitals（INP 指标）上报代码，是上游库在指标条目缺失时的已知边角问题，与站点代码无关，可安全忽略。</p>
+<p>避坑：控制台报错要「分诊」——业务错误必须修，框架内部错误查 issue，浏览器提示性警告看一眼即可。全都要「清零」是强迫症，不是工程。</p>
+<h2 id="给未来 AI 的分诊清单">给未来 AI 的分诊清单</h2>
 <ul>
-<li>YAML 出口全字段加引号，不信任输入类型</li>
-<li>scroll 监听三件套：rAF 节流 / 静态缓存 / 离散化 setState</li>
-<li>视口外的 WebGL 必须暂停，IntersectionObserver + rootMargin 留余量</li>
-<li>Tailwind 任意值伪元素 + box-shadow 可以画出很讲究的 UI，不进 HTML 生成层</li>
-<li>构建产物冲突：<code>reset --soft</code> 到远端后整体覆盖，绝不精细合并</li>
-<li>二进制入库前验魔数；跨 shell 的脚本语法要重写而不是翻译</li>
+<li>CI 报错先看<strong>方法名</strong>：<code>charAt/replace is not a function</code> = 类型混入，查 YAML/JSON 序列化出口</li>
+<li>「没触发」先查触发规则（自身 push 不触发、token 不触发、<code>[skip ci]</code>）</li>
+<li>滚动卡顿三板斧：rAF 节流、布局缓存、离散化 setState；视口外 WebGL 必须暂停</li>
+<li>压缩产物排障：按 chunk 哈希找文件，搜报错符号上下文里的常量名反查框架模块</li>
+<li><code>Symbol.asyncIterator</code> 报错 = 老内核浏览器，head 里补 polyfill</li>
+<li>静态站图片与站点同源；二进制入库前验魔数</li>
+<li>构建产物冲突不合并，<code>reset --soft</code> 到远端后整体覆盖提交</li>
 </ul>
-<p>这一轮迭代的所有改动都已随站点上线。坑常踩常新，记下来，下次绕行。</p>
+<p>七问七答，全部闭环。报障不怕多，怕的是记不下来。</p>
 f:X
 14:X
 14:C
-0:{"buildId":"lVwiPJmWrSm1XMUwgDwZN","data":[{"rsc":["$","$1","c",{"children":[["$","article",null,{"className":"min-h-screen bg-background text-foreground","children":[["$","$L2",null,{}],["$","$L3",null,{"headings":[{"depth":2,"slug":"坑一：TypeError: c.title.charAt is not a function","text":"坑一：TypeError: c.title.charAt is not a function"},{"depth":2,"slug":"坑二：Actions 为什么不触发","text":"坑二：Actions 为什么不触发"},{"depth":2,"slug":"坑三：滚动卡顿的三元凶","text":"坑三：滚动卡顿的三元凶"},{"depth":2,"slug":"坑四：className 里写注释","text":"坑四：className 里写注释"},{"depth":2,"slug":"坑五：terminal 三灯的正确画法","text":"坑五：terminal 三灯的正确画法"},{"depth":2,"slug":"坑六：PowerShell 里没有 heredoc","text":"坑六：PowerShell 里没有 heredoc"},{"depth":2,"slug":"坑七：docs 构建产物的 rebase 冲突","text":"坑七：docs 构建产物的 rebase 冲突"},{"depth":2,"slug":"坑八：AI 生成图的格式校验","text":"坑八：AI 生成图的格式校验"},{"depth":2,"slug":"给未来 AI（和人）的清单","text":"给未来 AI（和人）的清单"}]}],["$","$L4",null,{"headings":"$0:data:0:rsc:props:children:0:props:children:1:props:headings"}],["$","div",null,{"className":"relative flex min-h-[72svh] w-full items-end overflow-hidden bg-background","children":[["$","div",null,{"className":"absolute inset-x-0 top-0 z-20 h-1","style":{"background":"linear-gradient(135deg,"},"aria-hidden":true}],["$","$L5",null,{"className":"absolute inset-0 h-full w-full","density":0.7}],["$","span",null,{"className":"pointer-events-none absolute right-4 top-14 select-none font-display text-[11rem] leading-none opacity-[0.07] md:right-10 md:top-24 md:text-[19rem]","style":{"color":"#b3432b"},"aria-hidden":true,"children":"一"}],["$","div",null,{"className":"relative z-10 w-full px-6 pb-14 md:px-12 md:pb-20","children":["$","div",null,{"className":"mx-auto max-w-2xl","children":[["$","div",null,{"className":"mb-5 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.3em]","style":{"color":"#b3432b"},"children":[["$","span",null,{"className":"h-px w-8","style":{"background":"#b3432b"}}],["$","span",null,{"children":"2026-08-28"}],["$","span",null,{"className":"h-px w-8","style":{"background":"#b3432b"}}],["$","span",null,{"children":[1251," 字"]}]]}],["$","h1",null,{"className":"ink-display max-w-2xl text-4xl leading-[1.18] text-foreground md:text-6xl","children":"一轮迭代里的八个坑：从 YAML 类型陷阱到滚动掉帧"}],["$","p",null,{"className":"mt-6 max-w-xl font-serif text-sm leading-loose text-muted md:text-base","children":"把这轮博客迭代的翻车现场全部摊开——CI 报错、Actions 不触发、滚动卡顿、rebase 冲突，每个坑都附根因与修复，供人与 AI 共同引用"}],["$","div",null,{"className":"mt-7 flex flex-wrap items-center gap-2.5","children":[["$","$L6","架构",{"href":"/tags/架构","className":"rounded-full border border-border px-3 py-1 font-mono text-xs tracking-wide text-muted transition-colors hover:border-accent/50 hover:text-foreground","children":["#","架构"]}],["$","$L6","Web",{"href":"/tags/Web","className":"rounded-full border border-border px-3 py-1 font-mono text-xs tracking-wide text-muted transition-colors hover:border-accent/50 hover:text-foreground","children":["#","Web"]}]]}]]}]}]]}],["$","div",null,{"className":"mx-auto max-w-2xl px-6 py-20 md:py-28","children":["$","div",null,{"className":"$7","dangerouslySetInnerHTML":{"__html":"$8"}}]}],"$L9","$La","$Lb","$Lc"]}],null,"$Ld"]}],"isPartial":"$@e","staleTime":"$f","varyParams":null},{"rsc":"$L10","isPartial":"$@11","staleTime":"$f","varyParams":null},{"rsc":"$L12","isPartial":"$@13","staleTime":"$f","varyParams":"$14"},{"rsc":"$L15","isPartial":"$@16","staleTime":"$f","varyParams":"$14"},{"rsc":"$L17","isPartial":"$@18","staleTime":"$f","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@19","rootVaryParams":null,"needsRuntimeRequest":"$@1a"}
+0:{"buildId":"5EcpcD8C0pMRJEyBH9Pqz","data":[{"rsc":["$","$1","c",{"children":[["$","article",null,{"className":"min-h-screen bg-background text-foreground","children":[["$","$L2",null,{}],["$","$L3",null,{"headings":[{"depth":2,"slug":"问题一：「没有触发啊，你是不是搞错了」","text":"问题一：「没有触发啊，你是不是搞错了」"},{"depth":2,"slug":"问题二：CI 报错 TypeError: c.title.charAt is not a function","text":"问题二：CI 报错 TypeError: c.title.charAt is not a function"},{"depth":2,"slug":"问题三：「我在国内授权网站跳转不过去啊」","text":"问题三：「我在国内授权网站跳转不过去啊」"},{"depth":2,"slug":"问题四：「有没有免费图床？建个仓库存图会不会加载更快？」","text":"问题四：「有没有免费图床？建个仓库存图会不会加载更快？」"},{"depth":2,"slug":"问题五：「浏览文章的时候滚动会很卡顿（偶尔会触发）」","text":"问题五：「浏览文章的时候滚动会很卡顿（偶尔会触发）」"},{"depth":2,"slug":"问题六：「代码想放进黑色 terminal 框」「画廊用外链？但我不知道放什么图」","text":"问题六：「代码想放进黑色 terminal 框」「画廊用外链？但我不知道放什么图」"},{"depth":2,"slug":"问题七：「Pages 网站控制台一堆报错」（最新一案）","text":"问题七：「Pages 网站控制台一堆报错」（最新一案）"},{"depth":2,"slug":"给未来 AI 的分诊清单","text":"给未来 AI 的分诊清单"}]}],["$","$L4",null,{"headings":"$0:data:0:rsc:props:children:0:props:children:1:props:headings"}],["$","div",null,{"className":"relative flex min-h-[72svh] w-full items-end overflow-hidden bg-background","children":[["$","div",null,{"className":"absolute inset-x-0 top-0 z-20 h-1","style":{"background":"linear-gradient(135deg,"},"aria-hidden":true}],["$","$L5",null,{"className":"absolute inset-0 h-full w-full","density":0.7}],["$","span",null,{"className":"pointer-events-none absolute right-4 top-14 select-none font-display text-[11rem] leading-none opacity-[0.07] md:right-10 md:top-24 md:text-[19rem]","style":{"color":"#b3432b"},"aria-hidden":true,"children":"站"}],["$","div",null,{"className":"relative z-10 w-full px-6 pb-14 md:px-12 md:pb-20","children":["$","div",null,{"className":"mx-auto max-w-2xl","children":[["$","div",null,{"className":"mb-5 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.3em]","style":{"color":"#b3432b"},"children":[["$","span",null,{"className":"h-px w-8","style":{"background":"#b3432b"}}],["$","span",null,{"children":"2026-08-28"}],["$","span",null,{"className":"h-px w-8","style":{"background":"#b3432b"}}],["$","span",null,{"children":[1661," 字"]}]]}],["$","h1",null,{"className":"ink-display max-w-2xl text-4xl leading-[1.18] text-foreground md:text-6xl","children":"站长报障实录：一个博客的七次提问与七次修复"}],["$","p",null,{"className":"mt-6 max-w-xl font-serif text-sm leading-loose text-muted md:text-base","children":"从「Actions 怎么没触发」到「控制台一堆报错」——把站长报过的每个问题按 原话→探讨→方案→避坑 记录在案，供人与 AI 对照引用"}],["$","div",null,{"className":"mt-7 flex flex-wrap items-center gap-2.5","children":[["$","$L6","架构",{"href":"/tags/架构","className":"rounded-full border border-border px-3 py-1 font-mono text-xs tracking-wide text-muted transition-colors hover:border-accent/50 hover:text-foreground","children":["#","架构"]}],["$","$L6","Web",{"href":"/tags/Web","className":"rounded-full border border-border px-3 py-1 font-mono text-xs tracking-wide text-muted transition-colors hover:border-accent/50 hover:text-foreground","children":["#","Web"]}]]}]]}]}]]}],["$","div",null,{"className":"mx-auto max-w-2xl px-6 py-20 md:py-28","children":["$","div",null,{"className":"$7","dangerouslySetInnerHTML":{"__html":"$8"}}]}],"$L9","$La","$Lb","$Lc"]}],null,"$Ld"]}],"isPartial":"$@e","staleTime":"$f","varyParams":null},{"rsc":"$L10","isPartial":"$@11","staleTime":"$f","varyParams":null},{"rsc":"$L12","isPartial":"$@13","staleTime":"$f","varyParams":"$14"},{"rsc":"$L15","isPartial":"$@16","staleTime":"$f","varyParams":"$14"},{"rsc":"$L17","isPartial":"$@18","staleTime":"$f","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@19","rootVaryParams":null,"needsRuntimeRequest":"$@1a"}
 1b:I[119,["831","static/chunks/bd904a5c-b86f01df6dc7b1a3.js","367","static/chunks/b536a0f1-f7dace469d34b160.js","500","static/chunks/500-b13bb91f5a6311b6.js","858","static/chunks/app/posts/%5Bslug%5D/page-34b4afd813e1ab8e.js"],"ReadingCompanion"]
 1c:I[2742,["831","static/chunks/bd904a5c-b86f01df6dc7b1a3.js","367","static/chunks/b536a0f1-f7dace469d34b160.js","500","static/chunks/500-b13bb91f5a6311b6.js","858","static/chunks/app/posts/%5Bslug%5D/page-34b4afd813e1ab8e.js"],"WeatherMood"]
 1d:I[8434,["831","static/chunks/bd904a5c-b86f01df6dc7b1a3.js","367","static/chunks/b536a0f1-f7dace469d34b160.js","500","static/chunks/500-b13bb91f5a6311b6.js","858","static/chunks/app/posts/%5Bslug%5D/page-34b4afd813e1ab8e.js"],"AuthorBio"]
@@ -130,13 +129,13 @@ f:X
 :HL["/gan/_next/static/css/0be43b9ac9be1379.css","style"]
 9:["$","div",null,{"className":"mx-auto max-w-2xl px-6","children":["$","nav",null,{"className":"mt-16 grid grid-cols-2 gap-6 border-t border-border pt-8","children":[["$","span",null,{"aria-hidden":true}],["$","$L6",null,{"href":"/posts/static-blog-admin-solution","className":"group flex flex-col items-end gap-2 text-right","children":[["$","span",null,{"className":"font-mono text-[11px] tracking-[0.08em] text-faint","children":"下一篇 →"}],["$","span",null,{"className":"text-[13.5px] font-medium leading-[1.4] text-foreground transition-colors group-hover:text-accent","children":"给静态博客装上在线后台"}]]}]]}]}]
 a:["$","section",null,{"className":"border-t border-border py-16","children":["$","div",null,{"className":"mx-auto max-w-2xl px-6","children":[["$","div",null,{"className":"mb-8 text-center","children":[["$","h2",null,{"className":"ink-display text-lg text-muted","children":"阅读体验"}],["$","p",null,{"className":"mt-1 text-xs text-faint","children":"环境音与氛围，为这段阅读留个余韵"}]]}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2","children":[["$","$L1b",null,{}],["$","$L1c",null,{"gradient":"linear-gradient(135deg,","accent":"#b3432b","mood":"架构"}]]}]]}]}]
-b:["$","section",null,{"className":"pb-16","children":["$","div",null,{"className":"mx-auto max-w-md px-6","children":["$","$L1d",null,{"postCount":10,"totalWords":4835}]}]}]
+b:["$","section",null,{"className":"pb-16","children":["$","div",null,{"className":"mx-auto max-w-md px-6","children":["$","$L1d",null,{"postCount":10,"totalWords":5245}]}]}]
 c:["$","footer",null,{"className":"border-t border-border py-8","children":["$","div",null,{"className":"mx-auto max-w-2xl px-6","children":["$","div",null,{"className":"flex items-center justify-between","children":[["$","$L6",null,{"href":"/","className":"group inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-foreground","children":[["$","span",null,{"className":"transition-transform duration-300 group-hover:-translate-x-1","children":"←"}],"返回首页"]}],["$","$L6",null,{"href":"/gallery","className":"group inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-foreground","children":["图片流",["$","span",null,{"className":"transition-transform duration-300 group-hover:translate-x-1","children":"→"}]]}]]}]}]}]
 d:["$","$L1e",null,{"children":["$","$1f",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
-10:["$","$1","h",{"children":[null,["$","$L21",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L22",null,{"children":["$","$1f",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"一轮迭代里的八个坑：从 YAML 类型陷阱到滚动掉帧 · Notes"}],["$","meta","1",{"name":"description","content":"把这轮博客迭代的翻车现场全部摊开——CI 报错、Actions 不触发、滚动卡顿、rebase 冲突，每个坑都附根因与修复，供人与 AI 共同引用"}],["$","meta","2",{"name":"author","content":"duzi55"}],["$","link","3",{"rel":"icon","href":"/gan/favicon.ico?603d046c9a6fdfbb","type":"image/x-icon","sizes":"16x16"}],["$","$L23","4",{}]]}]}]}],null]}]
+10:["$","$1","h",{"children":[null,["$","$L21",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L22",null,{"children":["$","$1f",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"站长报障实录：一个博客的七次提问与七次修复 · Notes"}],["$","meta","1",{"name":"description","content":"从「Actions 怎么没触发」到「控制台一堆报错」——把站长报过的每个问题按 原话→探讨→方案→避坑 记录在案，供人与 AI 对照引用"}],["$","meta","2",{"name":"author","content":"duzi55"}],["$","link","3",{"rel":"icon","href":"/gan/favicon.ico?603d046c9a6fdfbb","type":"image/x-icon","sizes":"16x16"}],["$","$L23","4",{}]]}]}]}],null]}]
 12:["$","$1","c",{"children":[null,["$","$L24",null,{"parallelRouterKey":"children","template":["$","$L25",null,{}]}]]}]
 15:["$","$1","c",{"children":[null,["$","$L24",null,{"parallelRouterKey":"children","template":["$","$L25",null,{}]}]]}]
-17:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/gan/_next/static/css/0634c25f18e3e31c.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/gan/_next/static/css/0be43b9ac9be1379.css","precedence":"next"}]],["$","html",null,{"lang":"zh-CN","className":"__variable_074a08 h-full antialiased","suppressHydrationWarning":true,"children":[["$","head",null,{"children":["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{var t=localStorage.getItem(\"theme\");if(t===\"dark\"){document.documentElement.classList.add(\"dark\")}}catch(e){}})();"}}]}],["$","body",null,{"className":"flex min-h-full flex-col pb-16 md:pb-0","children":[["$","$L26",null,{}],["$","main",null,{"className":"flex-1","children":["$","$L24",null,{"parallelRouterKey":"children","template":["$","$L25",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}],["$","$L26",null,{"showFooter":true}],["$","$L27",null,{}]]}]]}]]}]
+17:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/gan/_next/static/css/0634c25f18e3e31c.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/gan/_next/static/css/0be43b9ac9be1379.css","precedence":"next"}]],["$","html",null,{"lang":"zh-CN","className":"__variable_074a08 h-full antialiased","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{var t=localStorage.getItem(\"theme\");if(t===\"dark\"){document.documentElement.classList.add(\"dark\")}}catch(e){}})();"}}],["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){if(typeof ReadableStream===\"undefined\"||ReadableStream.prototype[Symbol.asyncIterator])return;ReadableStream.prototype[Symbol.asyncIterator]=function(){var r=this.getReader();return{next:function(){return r.read()},throw:function(e){return Promise.reject(e)},return:function(){try{r.releaseLock()}catch(e){}return Promise.resolve({done:true})},[Symbol.asyncIterator]:function(){return this}}}})();"}}]]}],["$","body",null,{"className":"flex min-h-full flex-col pb-16 md:pb-0","children":[["$","$L26",null,{}],["$","main",null,{"className":"flex-1","children":["$","$L24",null,{"parallelRouterKey":"children","template":["$","$L25",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}],["$","$L26",null,{"showFooter":true}],["$","$L27",null,{}]]}]]}]]}]
 20:null
 1a:true
 f:300
