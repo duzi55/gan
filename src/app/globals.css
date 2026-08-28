@@ -189,23 +189,41 @@ body {
   }
 }
 
-/* 自定义滚动条 */
+/* 自定义滚动条
+   2026-08-28 Claude·可见度修复：原墨色 14% 透明度在灵感详情页深空整屏舞台上几乎不可见，
+   用户无法感知剩余内容量；改用中性暖灰，浅色宣纸与深空舞台双底色均可见，
+   并补 Firefox 对应 scrollbar-color；透明描边让滑块悬浮更精致 */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(26, 24, 21, 0.14);
-  border-radius: 3px;
+  background: rgba(128, 118, 106, 0.55);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(26, 24, 21, 0.28);
+  background: rgba(128, 118, 106, 0.85);
+  background-clip: padding-box;
+  border: 2px solid transparent;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: rgba(236, 230, 218, 0.15);
+  background: rgba(236, 230, 218, 0.38);
+  background-clip: padding-box;
+  border: 2px solid transparent;
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: rgba(236, 230, 218, 0.3);
+  background: rgba(236, 230, 218, 0.65);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(128, 118, 106, 0.55) transparent;
+}
+.dark {
+  scrollbar-color: rgba(236, 230, 218, 0.38) transparent;
 }
