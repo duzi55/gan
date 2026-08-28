@@ -13,7 +13,8 @@ export function MobileNav() {
   const items = [
     { href: '/', label: '首页', icon: 'M3 12l9-9 9 9M5 10v10h4v-6h6v6h4V10' },
     { href: '/posts', label: '文章', icon: 'M4 4h16v4H4zM4 12h16v8H4zM4 12h8' },
-    { href: '/gallery', label: '画廊', icon: 'M4 4h16v16H4zM4 9h16M9 4v16' },
+    // 2026-08-28 Claude·画廊由「灵感」页取缔（液态玻璃 UI 复刻）
+    { href: '/inspiration', label: '灵感', icon: 'M4 4h16v16H4zM4 9h16M9 4v16' },
     { href: '/about', label: '关于', icon: 'M12 2a5 5 0 015 5v3a5 5 0 01-10 0V7a5 5 0 015-5zM2 22a10 10 0 0120 0' },
   ];
 

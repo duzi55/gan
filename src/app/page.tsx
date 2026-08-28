@@ -8,6 +8,10 @@ import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { getMonthlyCounts } from '@/lib/posts';
 import { InkField } from '@/components/three';
+// 2026-08-28 Claude·首页 03 区块由「图片流/画廊」取缔为「灵感」液态玻璃复刻预览
+// 微缩图来自 inspiration/registry（纯 CSS 静态 JSX，零客户端 JS、零图片、零动画循环），不产生任何性能开销
+import { INSPIRATIONS } from '@/components/inspiration/registry';
+import '@/components/inspiration/liquid-glass.css';
 
 /**
  * 首页 ——「墨境 Ink Field」三幕式版面
@@ -161,22 +165,37 @@ export default function Home() {
 
       {/* ═══════════════ 第三幕 · 图像与订阅 ═══════════════ */}
 
-      {/* 03 · 图片流 —— 纯 CSS 构图预览 */}
+      {/* 03 · 灵感 —— 液态玻璃复刻微缩预览
+          2026-08-28 Claude·取缔画廊图片流，改为灵感组件预览：
+          列表只渲染 registry 中前 3 个条目的纯 CSS 微缩图（Server Component 直出，
+          不引入任何客户端 JS / 图片请求 / 动画循环），完整组件在灵感详情页按需加载 */}
       <section className="mx-auto max-w-6xl px-6 pt-20 md:pt-28">
         <SectionHeader
           index="03"
-          title="图片流"
-          subtitle="纯 CSS 色彩构图 · 零图片请求"
-          action={{ href: '/gallery', label: '全部' }}
+          title="灵 感"
+          subtitle="液态玻璃 UI 复刻 · 微缩即纯 CSS"
+          action={{ href: '/inspiration', label: '全部' }}
         />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          {galleryPreview.map((g) => (
-            <Link key={g.title} href="/gallery" className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-border">
-              <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]" style={{ background: g.gradient }} />
-              {/* 底部信息条 */}
-              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/45 to-transparent px-4 pb-3 pt-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="text-sm text-white drop-shadow">{g.title}</span>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-white/70">{g.mono}</span>
+          {INSPIRATIONS.slice(0, 3).map((item) => (
+            <Link
+              key={item.slug}
+              href={`/inspiration/${item.slug}/`}
+              className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10"
+            >
+              {/* 深空微缩舞台：专属光斑背景 + 等比微缩图 */}
+              <div
+                className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                style={{ background: item.stage }}
+              >
+                <div className="flex h-full w-full scale-[0.52] items-center justify-center sm:scale-[0.58]">
+                  <item.Mini />
+                </div>
+              </div>
+              {/* 底部信息条：中文题 + LG 编号 */}
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/55 to-transparent px-4 pb-3 pt-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <span className="text-sm text-white drop-shadow">{item.title}</span>
+                <span className="font-mono text-[10px] uppercase tracking-widest text-white/70">LG-{item.no}</span>
               </div>
             </Link>
           ))}
@@ -196,10 +215,5 @@ export default function Home() {
 }
 
 /* ─────────── 首页内部的小型数据与视图辅助 ─────────── */
-
-/** 画廊预览素材：沿用图片流页的 CSS 渐变构图（无网络图片请求） */
-const galleryPreview = [
-  { title: '深夜路灯', mono: 'n-01', gradient: 'radial-gradient(circle at 70% 30%, #fbbf24 0%, #1e1b3a 40%, #0c0a1f 100%)' },
-  { title: '林间光', mono: 'n-02', gradient: 'linear-gradient(180deg, #365314 0%, #84cc16 60%, #d9f99d 100%)' },
-  { title: '湖面', mono: 'n-03', gradient: 'linear-gradient(180deg, #075985 0%, #0e7490 60%, #22d3ee 100%)' },
-];
+/* 2026-08-28 Claude·移除 galleryPreview 数组：画廊已被灵感页取缔，
+   03 区块改用 inspiration/registry 的纯 CSS 微缩图 */

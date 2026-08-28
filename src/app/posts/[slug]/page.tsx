@@ -188,11 +188,12 @@ export default async function PostPage({
               <span className="transition-transform duration-300 group-hover:-translate-x-1">←</span>
               返回首页
             </Link>
+            {/* 2026-08-28 Claude·画廊由「灵感」页取缔，链接随之更新 */}
             <Link
-              href="/gallery"
+              href="/inspiration"
               className="group inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-foreground"
             >
-              图片流
+              灵感
               <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>

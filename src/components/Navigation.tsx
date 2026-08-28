@@ -22,7 +22,8 @@ export function Navigation({ showFooter = false }: { showFooter?: boolean }) {
   const links = [
     { href: '/', label: '首页' },
     { href: '/posts', label: '文章' },
-    { href: '/gallery', label: '画廊' },
+    // 2026-08-28 Claude·画廊由「灵感」页取缔（液态玻璃 UI 复刻）
+    { href: '/inspiration', label: '灵感' },
     { href: '/about', label: '关于' },
   ];
 
