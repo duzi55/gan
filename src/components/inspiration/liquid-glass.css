@@ -89,6 +89,39 @@
   box-shadow: 0 28px 60px -20px rgba(8, 6, 20, 0.6);
 }
 
+/* ─── 滚动显现 Reveal（详情页「向下滚动依次显示」交互）───
+ * 2026-08-28 Claude·灵感系统 v2 新增。
+ * 渐进增强：SSR / 无 JS 时 data-armed 永不为 true，内容直接可见；
+ * 有 JS 时视口外的块先隐藏，进入视口后由 Reveal 组件置 data-shown 显现。 */
+.lg-reveal {
+  transition:
+    opacity 0.7s cubic-bezier(0.32, 0.72, 0, 1),
+    transform 0.7s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.lg-reveal[data-armed='true'][data-shown='false'] {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+/* 详情页 Hero 底部滚动提示（小幅浮动），reduced-motion 降级为静帧 */
+@keyframes lg-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+.lg-bob {
+  animation: lg-bob 2.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-bob {
+    animation: none;
+  }
+}
+
 /* ─── 玻璃滑块（GlassSlider 专用）：液态渐变填充 + 玻璃拇指 ───
  * 填充比例由组件内 --fill 内联变量驱动，无重渲染开销 */
 .lg-range {

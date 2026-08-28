@@ -14,7 +14,8 @@ export default function GlassPlayer() {
   const [playing, setPlaying] = useState(true);
 
   return (
-    <div className="lg-glass w-[320px] p-6" data-component="glass-player">
+    /* 2026-08-28 Claude·双端适配：固定 320px 改 min() 钳制，小屏不溢出 */
+    <div className="lg-glass p-6" style={{ width: 'min(320px, 84vw)' }} data-component="glass-player">
       {/* ④ 颗粒噪点层（平铺 data-URI，零请求） */}
       <span className="lg-noise rounded-[2rem]" aria-hidden />
       {/* ② 液态渐变色晕：藏在玻璃内部，blur 后如液体漫开 */}

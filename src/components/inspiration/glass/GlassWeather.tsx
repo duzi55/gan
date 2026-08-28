@@ -19,7 +19,8 @@ const HOURS = [
 
 export default function GlassWeather() {
   return (
-    <div className="lg-glass w-[320px] p-6">
+    /* 2026-08-28 Claude·双端适配：固定 320px 改 min() 钳制 */
+    <div className="lg-glass p-6" style={{ width: 'min(320px, 84vw)' }}>
       <span className="lg-noise rounded-[2rem]" aria-hidden />
       {/* ② 液态天空：透过玻璃的渐变色晕（⑤ 虚焦） */}
       <span className="lg-liquid pointer-events-none absolute -inset-6 opacity-45 blur-2xl" aria-hidden />

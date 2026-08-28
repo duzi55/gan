@@ -27,7 +27,8 @@ export default function GlassNotification() {
   }
 
   return (
-    <div className="lg-glass w-[340px] p-5">
+    /* 2026-08-28 Claude·双端适配：固定 340px 改 min() 钳制 */
+    <div className="lg-glass p-5" style={{ width: 'min(340px, 84vw)' }}>
       <span className="lg-noise rounded-[2rem]" aria-hidden />
       <div className="relative">
         <div className="flex gap-3.5">

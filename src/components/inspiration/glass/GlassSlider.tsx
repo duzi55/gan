@@ -14,7 +14,8 @@ export default function GlassSlider() {
   const [value, setValue] = useState(64);
 
   return (
-    <div className="lg-glass w-[320px] p-6">
+    /* 2026-08-28 Claude·双端适配：固定 320px 改 min() 钳制 */
+    <div className="lg-glass p-6" style={{ width: 'min(320px, 84vw)' }}>
       <span className="lg-noise rounded-[2rem]" aria-hidden />
       <div className="relative">
         {/* 标题行：mono 小字 + 大数值（⑥ 编辑式排版） */}

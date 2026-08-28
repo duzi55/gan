@@ -13,7 +13,8 @@ export default function GlassToggle() {
   const [on, setOn] = useState(true);
 
   return (
-    <div className="lg-glass flex w-[300px] items-center justify-between p-5">
+    /* 2026-08-28 Claude·双端适配：固定 300px 改 min() 钳制 */
+    <div className="lg-glass flex items-center justify-between p-5" style={{ width: 'min(300px, 84vw)' }}>
       <span className="lg-noise rounded-[2rem]" aria-hidden />
       <div className="relative">
         <p className="text-sm font-semibold text-white">氛围光</p>
