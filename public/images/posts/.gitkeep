@@ -1,0 +1,2 @@
+# 2026-08-27 Claude·占位文件：保证 public/images/posts/ 空目录能入库
+# 博客配图统一存放于此，markdown 中以 /gan/images/posts/<文件名> 引用
