@@ -7,6 +7,7 @@ import { Reveal } from '@/components/inspiration/Reveal';
 import { StageNextButton } from '@/components/inspiration/StageNextButton';
 import { ReadingProgress } from '@/components/inspiration/ReadingProgress';
 import { StageRail } from '@/components/inspiration/StageRail';
+import { SnapController } from '@/components/inspiration/SnapController';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GlassCard } from '@/components/ui/GlassCard';
 import '@/components/inspiration/liquid-glass.css';
@@ -25,10 +26,11 @@ import '@/components/inspiration/liquid-glass.css';
  *     满足「每个灵感必须可溯源」规则；
  *   - 样式隔离：深空底 / 光斑 / 噪点只出现在舞台容器（整屏 section /
  *     变体块）内部，舞台之外全部为系统 ink-* / GlassCard 体系；
- *   - 2026-08-28 Claude·滚动吸附与步进：根滚动器开 scroll-snap（v2 改 mandatory，
- *     proximity 在桌面 Chrome 滚轮下几乎不触发），每块舞台底部放 StageNextButton
- *     点击直达下一视图；顶部 ReadingProgress 进度条 + 右侧 StageRail 屏点导航
- *     回应「不知道还剩多少没滚」；每屏以编号水印 / 要点 chips / desc 增加排版层次。
+ *   - 2026-08-28 Claude·滚动吸附与步进：SnapController（v3）JS 吸附——滚动停止后
+ *     残留 ≤20% 才吸附最近整屏，中间地带不打扰，衍生/原文区永不干预；每块舞台
+ *     底部放 StageNextButton 点击直达下一视图；顶部 ReadingProgress 进度条 +
+ *     右侧 StageRail 屏点导航回应「不知道还剩多少没滚」；每屏以编号水印 /
+ *     要点 chips / desc 增加排版层次。
  */
 
 /* 变体舞台光斑配色（按序轮换，与六要点色系一致） */
@@ -38,14 +40,11 @@ const BLOB_COLORS = ['rgba(56,189,248,0.28)', 'rgba(167,139,250,0.28)', 'rgba(25
 const STAGE_HEIGHT = { height: '100svh' } as const;
 
 /**
- * 2026-08-28 Claude·滚动吸附样式（v2）：
- * 首版 proximity 在桌面 Chrome 滚轮下几乎不触发（阈值保守），用户实测无吸附感；
- * 改为 mandatory：一格滚轮 = 一整屏，对齐精准。舞台之间没有可阅读内容，
- * 不存在「停留被拽走损失」；需要自由停留的变体/原文长列表区不设 snap 点，不受影响。
- * 仍用内联 <style>：随本页卸载从 DOM 移除，吸附只作用于本页，不污染全站；
- * snap 点由各整屏 section 的 snap-start 声明（Tailwind 原子类）。
+ * 2026-08-28 Claude·滚动吸附（v3）：不再使用 CSS scroll-snap（proximity 滚轮无感 /
+ * mandatory 卡死末屏且打断停留），改为 SnapController JS 控制器——
+ * 滚动停止后仅当残留 ≤20% 才吸附最近整屏，其余位置停留权归用户，
+ * 滚入衍生/原文区后永不干预。snap 点即各整屏 section 的 data-snap-stage 标记。
  */
-const SNAP_STYLE = 'html{scroll-snap-type:y mandatory;}';
 
 /**
  * 2026-08-28 Claude·原型要点 chips：舞台上的关键词条（材质 / 渐变 / 噪点…），
@@ -104,15 +103,15 @@ export default async function InspirationDetailPage({
 
   return (
     <div className="text-foreground">
-      {/* 2026-08-28 Claude·滚动吸附开关：内联 style 只在本页存在（卸载即移除，不泄漏全站） */}
-      <style dangerouslySetInnerHTML={{ __html: SNAP_STYLE }} />
+      {/* 2026-08-28 Claude·20% 阈值 JS 吸附（v3）：滚动停止后残留 ≤20% 才吸附，替代 CSS scroll-snap */}
+      <SnapController />
       {/* 2026-08-28 Claude·顶部阅读进度条 + 右侧屏点导航：回应「不知道还剩多少没滚」 */}
       <ReadingProgress />
       <StageRail />
 
       {/* ═══════ 序幕 · 灵感题头 + 第一件原型整屏舞台（深空，仅限本容器） ═══════ */}
       <section
-        className="relative h-screen snap-start overflow-hidden"
+        className="relative h-screen overflow-hidden"
         data-snap-stage
         style={{ ...STAGE_HEIGHT, background: prototypes[0].stage }}
       >
@@ -192,7 +191,7 @@ export default async function InspirationDetailPage({
         return (
           <section
             key={p.slug}
-            className="relative h-screen snap-start overflow-hidden"
+            className="relative h-screen overflow-hidden"
             data-snap-stage
             style={{ ...STAGE_HEIGHT, background: p.stage }}
           >

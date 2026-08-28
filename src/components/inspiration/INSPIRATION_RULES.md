@@ -53,6 +53,12 @@ InspirationEntry（灵感 = 一次复刻来源 = 列表一张卡）
   - 布局用纯 CSS `columns` + `break-inside-avoid`（零 JS masonry），缩略窗比例轮换制造错落；
   - 未来每次复刻新链接，只需在 registry 新增一个 Entry + 对应组件，列表自动多一张卡（数据驱动，不改页面）。
 - 深空只允许以「缩略图小窗」形式内嵌在卡片顶部；组件在列表页只出现纯 CSS 微缩图（minis，零客户端 JS），点击进入详情页才加载可交互本体。
+- **滚动行为（2026-08-28 Claude·固化 v3 方案）**：整屏舞台的吸附由 `SnapController` JS 控制器实现，
+  **禁用 CSS `scroll-snap-type`**（proximity 桌面滚轮无感；mandatory 卡死末屏、打断停留）——
+  滚动停止后仅当残留 ≤20%（阈值常量 `SNAP_THRESHOLD` 可调）才吸附最近整屏，
+  中间地带停留权归用户，滚入衍生/原文纸面区后永不干预；
+  辅助导航：舞台底部 `StageNextButton`（点击直达下一视图）+ 右侧 `StageRail`（屏点导航/当前屏高亮）
+  + 顶部 `ReadingProgress`（全文进度条）；三者与控制器一样只认 `data-snap-stage` / `data-snap-next` 标记。
 
 ## 四、样式隔离铁律
 
