@@ -81,21 +81,15 @@ function onScroll() {
 
 **① `TypeError: t[Symbol.asyncIterator] is not a function`（Uncaught in promise）**
 
-探讨：先在构建产物里按 chunk 哈希定位报错函数，上下文全是 `STATIC_STALETIME_MS`、`segmentCacheMap`、`createFromNextReadableStream`——**不在业务代码里，是 Next 16 Segment Cache（路由预取缓存）的内部实现**。再排除法：预取产物 `.txt` 在服务端齐全、路径扁平化无误，那 `t` 为什么不可迭代？答案：`t` 是 RSC 响应流，Next 直接调 `stream[Symbol.asyncIterator]()`——这是 ReadableStream 的**异步迭代协议方法**，Chrome 124 / Safari 17.4 才原生支持。老内核浏览器（以及大量国产壳浏览器）没有它，预取必炸。
+探讨：先在构建产物里按 chunk 哈希定位报错函数，上下文全是 `STATIC_STALETIME_MS`、`segmentCacheMap`、`createFromNextReadableStream`——**不在业务代码里，是 Next 16 Segment Cache（路由预取缓存）的内部实现**。
 
-方案：根布局 `<head>` 里塞一段按 W3C Streams 规范写的 polyfill，现代浏览器命中卫语句直接跳过，零副作用：
+第一版诊断走的是老路：`Symbol.asyncIterator` 是 ReadableStream 异步迭代协议的方法，老内核浏览器没有，于是往根布局 `<head>` 里塞了个 polyfill，自我感觉闭环。结果 polyfill 上线后报错原样重现，站长还追加了一句要命的反馈——**首页点文章跳不动了**。现代 Chrome 上必炸，老内核解释不通，第一版结论当场翻车。
 
-```js
-if (typeof ReadableStream !== "undefined"
-    && !ReadableStream.prototype[Symbol.asyncIterator]) {
-  ReadableStream.prototype[Symbol.asyncIterator] = function () {
-    var r = this.getReader();
-    return { next: () => r.read(), /* return/throw 略 */ };
-  };
-}
-```
+重新顺藤摸瓜，这次把预取产物 `.txt` 当物证逐字节读：RSC 信封里写着 `"a":"$@19"`，而行 19 的值是 `0`。对照上游源码真相大白——构建端（collect-segment-data）把「此响应没有 shell 分段」编码成**哨兵值 0** 写进信封 `a` 字段（源码注释原文：`a` falls out as the no-shell sentinel, 0）；消费端 `resolveShellStageData` 的守卫却只认 `null`，`0` 一路穿透，被当成「shell 是响应的 0 字节前缀」，拿着空流去做退化解码，产出一个残缺响应；随后 `readFulfilledStaleAt` 对里面的 staleTime 直接调 `t[Symbol.asyncIterator]()`——它压根不是异步可迭代对象，TypeError 当场引爆。更糟的是这异常发生在预取任务的 try/catch 之外，整条预取 Promise rejection、缓存条目永久停在 Pending——**预取炸了，点击导航跟着挂死，两个症状同源**。查了 16.3.3 和 canary 分支，上游守卫原封未动。
 
-避坑：**「Symbol.asyncIterator is not a function」出现在处理流/响应的库代码里，第一嫌疑是浏览器内核版本，不是数据结构写错了**。线上报障先问浏览器型号。
+方案：该特性默认开启且没有配置开关，只能本地打补丁。写了个幂等补丁脚本（`scripts/patch-next-segment-cache.mjs`）下双守卫——零值哨兵与 `null` 同样按「无 shell 阶段」放行，非可迭代 staleTime 回退静态 staleTime——挂进 `postinstall` 与 `prebuild`，装完依赖即自动生效；目标代码匹配不到就报错退出，防止日后升级静默失效。
+
+避坑：**「Symbol.asyncIterator is not a function」先别急着赖浏览器内核——默认开启又没有关闭开关的框架特性出这种错，第一嫌疑是框架实现 bug**。polyfill 上线无效就是翻案信号，敢于推翻自己；修完记得回头改文档，别让错误结论留在博客里误导下一个人。
 
 **② 图片 preload 警告**（`g-shanshui.jpg was preloaded but not used`）
 
@@ -113,7 +107,7 @@ if (typeof ReadableStream !== "undefined"
 - 「没触发」先查触发规则（自身 push 不触发、token 不触发、`[skip ci]`）
 - 滚动卡顿三板斧：rAF 节流、布局缓存、离散化 setState；视口外 WebGL 必须暂停
 - 压缩产物排障：按 chunk 哈希找文件，搜报错符号上下文里的常量名反查框架模块
-- `Symbol.asyncIterator` 报错 = 老内核浏览器，head 里补 polyfill
+- `Symbol.asyncIterator` 报错 ≠ 一定是老内核浏览器：先查框架预取缓存实现 bug（本案：哨兵 0 穿透 null 守卫）；polyfill 无效要敢于翻案
 - 静态站图片与站点同源；二进制入库前验魔数
 - 构建产物冲突不合并，`reset --soft` 到远端后整体覆盖提交
 

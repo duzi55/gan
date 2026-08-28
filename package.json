@@ -6,7 +6,8 @@
     "dev": "next dev --webpack -p 3030",
     "build": "next build --webpack",
     "postbuild": "node scripts/flatten-rsc.mjs out && node scripts/sync-docs.mjs",
-    "prebuild": "node -e \"const fs=require('fs');['.next','.next-build','out'].forEach(d=>fs.rmSync(d,{recursive:true,force:true}))\"",
+    "prebuild": "node scripts/patch-next-segment-cache.mjs && node -e \"const fs=require('fs');['.next','.next-build','out'].forEach(d=>fs.rmSync(d,{recursive:true,force:true}))\"",
+    "postinstall": "node scripts/patch-next-segment-cache.mjs",
     "start": "next start",
     "lint": "eslint",
     "new-post": "node scripts/new-post.js"
