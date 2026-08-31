@@ -6,6 +6,7 @@ import {
   MiniSlider,
   MiniToggle,
   MiniWeather,
+  MiniInvoice,
 } from './minis';
 
 /**
@@ -25,12 +26,18 @@ import {
  *     （详情 hero / 变体块 / 列表缩略窗），样式隔离见规则文件。
  */
 
-/** 灵感来源溯源信息（规则：每个灵感必须可溯源——原链接或图片资源至少其一） */
+/**
+ * 灵感来源溯源信息
+ * 2026-08-31 Claude·url 可选化（IN-02 柔性账单起）：允许登记「用户提供设计图」
+ *   这类无公开原链接的来源——label/via 说明来源身份即可，详情页原文幕按
+ *   url 是否存在条件渲染外跳链接；「不可溯源 = 不可上架」规则不变
+ *   （规则见 INSPIRATION_RULES.md 第二节）。
+ */
 export interface InspirationSource {
-  /** 来源平台与文章名 */
+  /** 来源平台与文章名（无公开链接时写来源身份，如「用户提供灵感图 · …」） */
   label: string;
-  /** 原文链接（详情页「原文」区块展示并外跳） */
-  url: string;
+  /** 原文链接（详情页「原文」区块展示并外跳；无公开原稿时省略） */
+  url?: string;
   /** 原始设计方 / 被复刻对象 */
   via?: string;
   /** 相关图片资源（可选，public 相对路径或外链；当前条目以原文链接溯源） */
@@ -91,6 +98,14 @@ export interface InspirationEntry {
   coverStage: string;
   /** 列表卡缩略窗微缩图（取代表原型 Mini） */
   coverMini: ComponentType;
+  /**
+   * 沉浸首屏开关（可选）
+   * 2026-08-31 Claude·新增（用户口述规范）：immersive 为 true 时，详情页序幕
+   *   只渲染「复刻本体 + 返回键」，灵感题头 / 编号 / 要点 chips / 英文水印 /
+   *   原型标注 / desc / 步进按钮一律不出现，StageRail 屏点导航同时隐藏；
+   *   返回键配色须按舞台明暗适配（浅色舞台用深色字）。缺省 false 走原序幕。
+   */
+  immersive?: boolean;
   /** 该灵感下的复刻原型（≥1 件，详情页每件独占一整屏） */
   prototypes: InspirationPrototype[];
 }
@@ -100,6 +115,25 @@ const XHS_SOURCE: InspirationSource = {
   label: '小红书 · 液态玻璃 UI / Liquid Glass UI 灵感分享',
   url: 'https://xhslink.cn/o/2jqa2rN8gS5',
   via: 'rondesignlab',
+};
+
+/**
+ * IN-02 柔性账单 · 舞台底：柔和粉彩渐变（薄荷 × 薰衣草，浅色舞台）
+ * 2026-08-31 Claude·与深空系（liquid-glass）互斥的浅色舞台语言；
+ *   coverStage 与原型 stage 复用同一份，保证列表卡缩略窗与详情页舞台一致。
+ */
+const SOFT_INVOICE_STAGE =
+  'radial-gradient(80% 80% at 16% 12%, rgba(134,239,172,0.75), transparent 60%), ' +
+  'radial-gradient(85% 85% at 86% 88%, rgba(196,181,253,0.7), transparent 62%), ' +
+  'linear-gradient(160deg, #eaf6ef, #ece9fa)';
+
+/**
+ * IN-02 柔性账单来源：用户提供的设计图（无公开原稿链接，url 可选化的首个用例）
+ * 2026-08-31 Claude·登记来源身份；若日后找到原稿，补 url 即自动出现外跳链接。
+ */
+const USER_IMAGE_SOURCE: InspirationSource = {
+  label: '用户提供灵感图 · Invoice Dashboard 设计稿（粉彩柔性账单工作台）',
+  via: '用户灵感截图（未找到公开原稿）',
 };
 
 export const INSPIRATIONS: InspirationEntry[] = [
@@ -204,6 +238,44 @@ export const INSPIRATIONS: InspirationEntry[] = [
         variants: [
           { id: 'clock', title: '玻璃时钟', titleEn: 'CLOCK', desc: '超大极细数字易主时间，秒针以 1s 低频跳动。' },
           { id: 'air', title: '空气质量', titleEn: 'AIR', desc: '温度数字换成 AQI 环，液态渐变作环形进度。' },
+        ],
+      },
+    ],
+  },
+
+  /**
+   * IN-02 柔性账单 Soft Invoice
+   * 2026-08-31 Claude·新增灵感（用户提供的 Invoice Dashboard 设计图复刻）：
+   *   - immersive: true —— 详情页首屏净化（用户口述规范）：第一个视图只有
+   *     复刻本体与返回键，题头 / 设计理念等元信息不进入首屏；
+   *   - 粉彩浅色舞台（薄荷 × 薰衣草），与 IN-01 深空系形成对照；
+   *   - 1 件原型（发票工作台）+ 2 变体（移动账单 / 支付回执），
+   *     组件与共享数据见 invoice/ 目录（invoiceShared.ts 解耦复用）。
+   */
+  {
+    slug: 'soft-invoice',
+    no: '02',
+    title: '柔性账单',
+    titleEn: 'SOFT INVOICE',
+    desc: '同一张发票的柔性语言——粉彩渐变、超大极细金额、胶囊与分段进度——复刻桌面工作台，并衍生移动账单与支付回执。',
+    date: '2026-08-31',
+    source: USER_IMAGE_SOURCE,
+    immersive: true,
+    coverStage: SOFT_INVOICE_STAGE,
+    coverMini: MiniInvoice,
+    prototypes: [
+      {
+        slug: 'invoice-dashboard',
+        no: '01',
+        title: '发票工作台',
+        titleEn: 'DASHBOARD',
+        desc: '金额海报区、Paid / Credits / Balance 胶囊与分段进度、Activity 事件流、六件商品行——整版复刻。',
+        points: ['柔软体积感', '虚焦景深', '编辑式排版'],
+        stage: SOFT_INVOICE_STAGE,
+        Mini: MiniInvoice,
+        variants: [
+          { id: 'mobile', title: '移动账单', titleEn: 'MOBILE', desc: '同一张账单折进竖屏，金额海报与胶囊重排成单列动线。' },
+          { id: 'receipt', title: '支付回执', titleEn: 'RECEIPT', desc: '结清时刻的凭证形态，余款化作对勾、明细与条码。' },
         ],
       },
     ],

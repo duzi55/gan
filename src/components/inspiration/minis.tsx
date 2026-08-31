@@ -139,3 +139,52 @@ export function MiniWeather() {
     </div>
   );
 }
+
+/**
+ * 07 · 柔性账单微缩图（IN-02，粉彩浅色系快照）
+ * 2026-08-31 Claude·新增：复刻自 invoice/InvoiceDashboard（等比简化）——
+ *   白卡快照：Account + 超大极细金额 + 三胶囊（绿/黄/白）+ 分段进度 +
+ *   紫色 Activity 小卡；零 hooks、零图片、零动画循环（性能铁律），
+ *   与其余微缩图一样只用静态 JSX + 内联色值。
+ */
+export function MiniInvoice() {
+  return (
+    <div
+      className="w-44 rounded-2xl bg-white/85 p-3 text-zinc-800 shadow-xl"
+      style={{ fontFamily: '-apple-system, "Segoe UI", Roboto, sans-serif' }}
+      aria-hidden
+    >
+      {/* Account + 金额海报 */}
+      <p className="text-[7px] font-medium uppercase tracking-[0.18em] text-zinc-400">Account · Ohana Inc.</p>
+      <p className="mt-0.5 text-xl font-extralight leading-none tracking-tight">$68,575.00</p>
+
+      {/* 三胶囊：Paid / Credits / Balance */}
+      <div className="mt-2 flex gap-1">
+        <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-300/30 px-1.5 py-0.5 text-[6px] font-medium">
+          <i className="h-1 w-1 rounded-full bg-emerald-400" /> Paid
+        </span>
+        <span className="inline-flex items-center gap-0.5 rounded-full bg-amber-300/30 px-1.5 py-0.5 text-[6px] font-medium">
+          <i className="h-1 w-1 rounded-full bg-amber-400" /> Credits
+        </span>
+        <span className="rounded-full bg-white px-1.5 py-0.5 text-[6px] font-medium shadow-sm">Balance</span>
+      </div>
+
+      {/* 分段进度条（绿 / 黄 / 白 三段） */}
+      <div className="mt-1.5 flex h-1.5 overflow-hidden rounded-full bg-white/80">
+        <span className="h-full w-[34%] bg-emerald-400" />
+        <span className="h-full w-[14%] bg-amber-400" />
+        <span className="h-full flex-1 bg-white" />
+      </div>
+
+      {/* 底部行：标签页点阵 + 紫色 Activity 小卡 */}
+      <div className="mt-2.5 flex items-end gap-1">
+        <span className="h-1.5 w-6 rounded-t-md bg-zinc-800" />
+        <span className="h-1.5 w-4 rounded-t-md bg-zinc-200" />
+        <span className="h-1.5 w-4 rounded-t-md bg-zinc-200" />
+        <span className="ml-auto inline-flex items-center gap-0.5 rounded-lg px-1.5 py-0.5 text-[6px] font-medium text-white" style={{ background: 'linear-gradient(140deg,#8b7cf6,#a78bfa)' }}>
+          <i className="h-1 w-1 rounded-full bg-white/70" /> 12 Activities
+        </span>
+      </div>
+    </div>
+  );
+}

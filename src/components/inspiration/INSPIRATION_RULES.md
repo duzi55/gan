@@ -11,11 +11,12 @@
 
 ```
 InspirationEntry（灵感 = 一次复刻来源 = 列表一张卡）
- ├─ source          唯一来源（原链接 / 图片，必填，见第二节）
+ ├─ source          唯一来源（必填，见第二节；url 自 2026-08-31 起可选）
+ ├─ immersive?      沉浸式开关（可选，见第三节「首屏净化」；IN-02 起支持）
  ├─ coverStage / coverMini  列表卡缩略窗（深空底 + 纯 CSS 微缩图）
  └─ prototypes[]    该灵感下 1:1 复刻的原型（≥1 件，详情页每件独占一整屏）
       ├─ slug       GlassMount 原型加载键（与灵感路由 slug 相互独立）
-      ├─ stage      深空舞台底（仅限舞台容器使用，见第四节）
+      ├─ stage      舞台底（仅限舞台容器使用，见第四节；可为深空或粉彩等浅色渐变）
       ├─ Mini       纯 CSS 微缩图（零客户端 JS）
       └─ variants[] 衍生变体（≥2 个，键 `${slug}:${id}`）
 ```
@@ -34,8 +35,12 @@ InspirationEntry（灵感 = 一次复刻来源 = 列表一张卡）
 
 ## 二、溯源规则（强制）
 
-- 每个**灵感 Entry** 必须登记 `source` 字段：`label` / `url` 必填，`via` / `image` 至少其一。
-- 原文链接在详情页「原文」区块展示并 `target="_blank"` 外跳；列表页仅以统计落款体现来源方，不展示链接。
+- 每个**灵感 Entry** 必须登记 `source` 字段：`label` 必填，`via` / `image` 至少其一。
+- **url 可选化（2026-08-31 Claude·IN-02 起）**：`source.url` 允许缺省——
+  「用户提供设计图」这类无公开原链接的灵感，登记来源身份（label / via 说明）即可，
+  **严禁为凑溯源而编造 URL**；详情页原文幕对 url 做条件渲染，
+  无 url 时以文字说明「来源身份见 via 标注」，不渲染 `<a>` 外跳。
+- 有 url 时，原文链接在详情页「原文」区块展示并 `target="_blank"` 外跳；列表页仅以统计落款体现来源方，不展示链接。
 - 严禁无来源登记新条目（不可溯源 = 不可上架）。
 
 ## 三、展示结构规范
@@ -47,6 +52,13 @@ InspirationEntry（灵感 = 一次复刻来源 = 列表一张卡）
 | 衍生幕 | 全部变体扁平 V1…Vn 依次显现 | 标注行 + `rounded-3xl` 深空舞台块 | 宣纸风标注（ink-index / ink-display / 所属原型 tag）+ 舞台块 |
 | 原文幕 | 溯源卡（来源 / 外跳 / via / 日期） | GlassCard（宣纸风） | 系统 token |
 
+- **首屏净化（immersive，2026-08-31 Claude·用户规范，IN-02 起生效）**：
+  Entry 可声明 `immersive: true`，此时详情页**首个视图只渲染「复刻本体 + 返回键」**——
+  灵感题头、要点 chips、titleEn / 编号水印、底部 Prototype 标注、StageNextButton 步进
+  与右侧 StageRail 屏点导航**全部不进首屏**（设计理念等元信息后续幕照常展示）；
+  返回键配色须按舞台明暗适配：浅色粉彩舞台用深色文字（如 `text-neutral-700`），
+  深空舞台沿用白色 mono；序幕光斑在浅色舞台下换同色系粉彩（保持样式隔离铁律）。
+  未声明 `immersive` 的灵感维持原序幕排版不变（IN-01 等）。
 - 列表页**必须保持原系统宣纸风**，形态为**瀑布流卡片墙**：
   - 一次灵感 = **一张卡片**（缩略图小窗 + 宣纸风信息栏 + 原型/变体/日期统计 chips），
     点进详情才展示具体内容，多卡组成瀑布流；
@@ -88,6 +100,7 @@ InspirationEntry（灵感 = 一次复刻来源 = 列表一张卡）
 **新增一个灵感（新链接复刻）**：
 1. 通读本文件；
 2. `registry.ts` 新增一个 Entry：`slug / no / title / titleEn / desc / date / source / coverStage / coverMini / prototypes`；
+   首屏需「只留复刻 + 返回键」时追加 `immersive: true`（见第三节首屏净化）；
 3. 逐件复刻原型并衍生变体（每件原型走下方「新增原型」流程）；
 4. 列表 / 详情页无需改动（数据驱动），`npm run build` 通过后提交。
 

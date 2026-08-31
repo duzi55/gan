@@ -60,6 +60,12 @@ const LOADERS: Record<string, ComponentType> = {
   'glass-weather': dynamic(() => import('./glass/GlassWeather'), { ssr: false, loading: () => <Skeleton /> }),
   'glass-weather:clock': dynamic(() => import('./glass/variants/GlassClock'), { ssr: false, loading: () => <Skeleton /> }),
   'glass-weather:air': dynamic(() => import('./glass/variants/GlassAir'), { ssr: false, loading: () => <Skeleton /> }),
+
+  /* ── 07 发票工作台原型 + 变体 ──
+   * 2026-08-31 Claude·新增 IN-02 柔性账单（发票工作台 + 移动账单 + 支付回执） */
+  'invoice-dashboard': dynamic(() => import('./invoice/InvoiceDashboard'), { ssr: false, loading: () => <Skeleton /> }),
+  'invoice-dashboard:mobile': dynamic(() => import('./invoice/variants/InvoiceMobile'), { ssr: false, loading: () => <Skeleton /> }),
+  'invoice-dashboard:receipt': dynamic(() => import('./invoice/variants/InvoiceReceipt'), { ssr: false, loading: () => <Skeleton /> }),
 };
 
 export function GlassMount({ slug, variant }: { slug: string; variant?: string }) {

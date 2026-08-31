@@ -20,7 +20,8 @@ import '@/components/inspiration/liquid-glass.css';
 
 export const metadata: Metadata = {
   title: '灵感',
-  description: '液态玻璃 UI 复刻——半透明材质、液态渐变、柔软体积感、颗粒噪点、虚焦景深、编辑式排版。',
+  // 2026-08-31 Claude·描述通用化：不再绑定「液态玻璃」单一语言（IN-02 起收录粉彩等更多风格）
+  description: '灵感复刻档案——每复刻一个来源就多一张卡片：整屏原型、衍生变体与原文溯源。',
 };
 
 /* 缩略窗比例按条目顺序轮换：制造瀑布流错落感（零 JS，构建期固定） */
@@ -33,7 +34,9 @@ export default function InspirationPage() {
     (n, e) => n + e.prototypes.reduce((m, p) => m + p.variants.length, 0),
     0,
   );
-  const via = INSPIRATIONS[0]?.source.via ?? '—';
+  /* 2026-08-31 Claude·via 统计去重：多灵感各自来源合并展示，不再硬取第一条 */
+  const via =
+    [...new Set(INSPIRATIONS.map((e) => e.source.via).filter(Boolean))].join(' / ') || '—';
 
   return (
     <div className="text-foreground">

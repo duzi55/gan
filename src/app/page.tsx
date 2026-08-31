@@ -165,28 +165,30 @@ export default function Home() {
 
       {/* ═══════════════ 第三幕 · 图像与订阅 ═══════════════ */}
 
-      {/* 03 · 灵感 —— 液态玻璃复刻微缩预览
+      {/* 03 · 灵感 —— 复刻微缩预览
           2026-08-28 Claude·取缔画廊图片流，改为灵感组件预览：
-          列表只渲染 registry 中前 3 个条目的纯 CSS 微缩图（Server Component 直出，
-          不引入任何客户端 JS / 图片请求 / 动画循环），完整组件在灵感详情页按需加载 */}
+          列表只渲染纯 CSS 微缩图（Server Component 直出，
+          不引入任何客户端 JS / 图片请求 / 动画循环），完整组件在灵感详情页按需加载
+          2026-08-31 Claude·取样改为「每灵感取首件原型」（跨灵感均衡曝光，
+          新增灵感自动上榜）；副标题与编号落款去「液态玻璃 / LG-」单一前缀 */}
       <section className="mx-auto max-w-6xl px-6 pt-20 md:pt-28">
         <SectionHeader
           index="03"
           title="灵 感"
-          subtitle="液态玻璃 UI 复刻 · 微缩即纯 CSS"
+          subtitle="灵感复刻档案 · 微缩即纯 CSS"
           action={{ href: '/inspiration', label: '全部' }}
         />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          {/* 跨灵感扁平原型序列（灵感→原型两级），取前 3 件；链接指向所属灵感详情页 */}
-          {INSPIRATIONS.flatMap((e) => e.prototypes.map((p) => ({ entry: e, proto: p })))
-            .slice(0, 3)
-            .map(({ entry, proto }) => (
+          {/* 每灵感取首件原型（灵感级取样），链接指向所属灵感详情页 */}
+          {INSPIRATIONS.map((entry) => {
+            const proto = entry.prototypes[0];
+            return (
               <Link
                 key={proto.slug}
                 href={`/inspiration/${entry.slug}/`}
                 className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10"
               >
-                {/* 深空微缩舞台：专属光斑背景 + 等比微缩图 */}
+                {/* 微缩舞台：专属光斑背景 + 等比微缩图 */}
                 <div
                   className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                   style={{ background: proto.stage }}
@@ -195,13 +197,16 @@ export default function Home() {
                     <proto.Mini />
                   </div>
                 </div>
-                {/* 底部信息条：中文题 + LG 编号 */}
+                {/* 底部信息条：中文题 + 灵感/原型编号（通用前缀，不再绑定 LG-） */}
                 <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/55 to-transparent px-4 pb-3 pt-8 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   <span className="text-sm text-white drop-shadow">{proto.title}</span>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-white/70">LG-{proto.no}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-white/70">
+                    IN-{entry.no} / P{proto.no}
+                  </span>
                 </div>
               </Link>
-            ))}
+            );
+          })}
         </div>
       </section>
 

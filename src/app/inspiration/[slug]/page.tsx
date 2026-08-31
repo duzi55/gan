@@ -31,10 +31,19 @@ import '@/components/inspiration/liquid-glass.css';
  *     底部放 StageNextButton 点击直达下一视图；顶部 ReadingProgress 进度条 +
  *     右侧 StageRail 屏点导航回应「不知道还剩多少没滚」；每屏以编号水印 /
  *     要点 chips / desc 增加排版层次。
+ *   - 2026-08-31 Claude·沉浸式灵感（immersive）：entry.immersive === true 时，
+ *     首个视图只渲染「复刻本体 + 返回键」——题头 / 要点 chips / 编号水印 /
+ *     底部标注 / 步进按钮与 StageRail 全部隐藏（用户规范：首屏不出现设计理念
+ *     等元信息）；浅色粉彩舞台下返回键改用深色文字保证对比度；序幕光斑
+ *     同步换为粉彩色系；原文幕来源 url 可选（无 url 时不再渲染外跳链接）。
  */
 
 /* 变体舞台光斑配色（按序轮换，与六要点色系一致） */
 const BLOB_COLORS = ['rgba(56,189,248,0.28)', 'rgba(167,139,250,0.28)', 'rgba(251,113,133,0.26)'];
+
+/* 2026-08-31 Claude·沉浸式序幕光斑：浅色粉彩舞台配薄荷 / 薰衣草光斑（替代深空霓虹，维持样式隔离） */
+const IMMERSIVE_BLOB_A = 'rgba(134,239,172,0.5)';
+const IMMERSIVE_BLOB_B = 'rgba(196,181,253,0.45)';
 
 /* 整屏原型舞台高度：h-screen 回落 + 100svh 内联声明（双端适配，见规则文件第六条） */
 const STAGE_HEIGHT = { height: '100svh' } as const;
@@ -91,6 +100,9 @@ export default async function InspirationDetailPage({
   const entry = getInspiration(slug);
   if (!entry) notFound();
 
+  /* 2026-08-31 Claude·沉浸式灵感开关：IN-02 起支持「首屏只留复刻 + 返回键」 */
+  const immersive = entry.immersive === true;
+
   const prototypes = entry.prototypes;
   const totalVariants = prototypes.reduce((m, p) => m + p.variants.length, 0);
   /* 变体扁平序列：V1…Vn 跨原型连续编号，标注所属原型 */
@@ -107,7 +119,8 @@ export default async function InspirationDetailPage({
       <SnapController />
       {/* 2026-08-28 Claude·顶部阅读进度条 + 右侧屏点导航：回应「不知道还剩多少没滚」 */}
       <ReadingProgress />
-      <StageRail />
+      {/* 2026-08-31 Claude·沉浸式灵感隐藏右侧屏点导航（首屏保持纯净，只留复刻 + 返回键） */}
+      {!immersive && <StageRail />}
 
       {/* ═══════ 序幕 · 灵感题头 + 第一件原型整屏舞台（深空，仅限本容器） ═══════ */}
       <section
@@ -115,73 +128,91 @@ export default async function InspirationDetailPage({
         data-snap-stage
         style={{ ...STAGE_HEIGHT, background: prototypes[0].stage }}
       >
-        {/* ④ 颗粒噪点 + ⑤ 虚焦光斑：舞台景深氛围（纯 CSS） */}
+        {/* ④ 颗粒噪点 + ⑤ 虚焦光斑：舞台景深氛围（纯 CSS；immersive 时换粉彩色系） */}
         <span className="lg-noise" aria-hidden />
         <span
           className="lg-blob left-[-120px] top-[-90px] h-[420px] w-[420px]"
-          style={{ background: 'rgba(56,189,248,0.3)' }}
+          style={{ background: immersive ? IMMERSIVE_BLOB_A : 'rgba(56,189,248,0.3)' }}
           aria-hidden
         />
         <span
           className="lg-blob bottom-[-140px] right-[-110px] h-[420px] w-[420px]"
-          style={{ background: 'rgba(167,139,250,0.28)' }}
+          style={{ background: immersive ? IMMERSIVE_BLOB_B : 'rgba(167,139,250,0.28)' }}
           aria-hidden
         />
 
-        {/* 顶部行：返回灵感 + 灵感编号（舞台内使用白色 mono 排版） */}
-        <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-5 font-mono text-[11px] uppercase tracking-[0.3em] text-white/60 md:px-8">
+        {/* 顶部行：返回灵感（immersive 时为唯一 chrome；浅色舞台用深色文字保证对比度）+ 灵感编号（immersive 隐藏） */}
+        <div
+          className={`absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-5 font-mono text-[11px] uppercase tracking-[0.3em] md:px-8 ${
+            immersive ? 'text-neutral-700' : 'text-white/60'
+          }`}
+        >
           {/* 2026-08-28 Claude·双端适配：负 margin 扩大触控热区，11px 小字在移动端不难点 */}
           <Link
             href="/inspiration/"
-            className="-my-2 inline-block py-2 transition-colors hover:text-white"
+            className={`-my-2 inline-block py-2 transition-colors ${
+              immersive ? 'hover:text-neutral-950' : 'hover:text-white'
+            }`}
           >
             ← 灵感 Inspiration
           </Link>
-          <span>IN-{entry.no}</span>
+          {/* 2026-08-31 Claude·immersive 首屏不出现灵感编号等元信息 */}
+          {!immersive && <span>IN-{entry.no}</span>}
         </div>
 
-        {/* 灵感题头：中文大题 + mono 英文题 + 收录日期 + 首件原型要点（压在舞台左上区域） */}
-        <div className="absolute left-5 top-20 z-20 max-w-[70vw] md:left-8 md:top-24">
-          <h1 className="ink-display text-3xl font-normal text-white md:text-5xl">{entry.title}</h1>
-          <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.3em] text-white/50">
-            {entry.titleEn} · {entry.date}
-          </p>
-          {/* 2026-08-28 Claude·要点 chips：首屏信息层次增强（材质/渐变/噪点关键词） */}
-          <PointsChips items={prototypes[0].points} />
-        </div>
+        {/* 灵感题头：中文大题 + mono 英文题 + 收录日期 + 首件原型要点（压在舞台左上区域）
+            2026-08-31 Claude·immersive 首屏隐藏题头 / 要点 chips（设计理念不进首屏） */}
+        {!immersive && (
+          <div className="absolute left-5 top-20 z-20 max-w-[70vw] md:left-8 md:top-24">
+            <h1 className="ink-display text-3xl font-normal text-white md:text-5xl">{entry.title}</h1>
+            <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.3em] text-white/50">
+              {entry.titleEn} · {entry.date}
+            </p>
+            {/* 2026-08-28 Claude·要点 chips：首屏信息层次增强（材质/渐变/噪点关键词） */}
+            <PointsChips items={prototypes[0].points} />
+          </div>
+        )}
 
-        {/* ⑥ 编辑式排版：超大英文水印题（压在舞台底层） */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -bottom-4 left-3 z-0 select-none text-[24vw] font-semibold leading-none text-white/[0.06] md:text-[12rem]"
-        >
-          {entry.titleEn}
-        </span>
+        {/* ⑥ 编辑式排版：超大英文水印题（压在舞台底层；immersive 隐藏） */}
+        {!immersive && (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -bottom-4 left-3 z-0 select-none text-[24vw] font-semibold leading-none text-white/[0.06] md:text-[12rem]"
+          >
+            {entry.titleEn}
+          </span>
+        )}
 
         {/* 原型舞台：1:1 复刻原型独占整屏视窗，按需加载组件 chunk */}
         <div className="relative z-10 flex h-full items-center justify-center px-6">
           <GlassMount slug={prototypes[0].slug} />
         </div>
 
-        {/* 2026-08-28 Claude·屏序编号水印（右下）：与左下 titleEn 水印对角呼应，补充每屏层次 */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute bottom-6 right-4 z-0 select-none font-mono text-[22vw] font-semibold leading-none text-white/[0.07] md:right-8 md:text-[9rem]"
-        >
-          01
-        </span>
+        {/* 2026-08-28 Claude·屏序编号水印（右下）：与左下 titleEn 水印对角呼应，补充每屏层次（immersive 隐藏） */}
+        {!immersive && (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute bottom-6 right-4 z-0 select-none font-mono text-[22vw] font-semibold leading-none text-white/[0.07] md:right-8 md:text-[9rem]"
+          >
+            01
+          </span>
+        )}
 
-        {/* 底部标注（原型 1/N）+ 复刻说明（2026-08-28 Claude·加 desc 补充每屏信息量） */}
-        <div className="absolute bottom-12 left-5 z-20 max-w-[80vw] md:left-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
-            Prototype 1/{prototypes.length} · {prototypes[0].title}
-          </p>
-          <p className="mt-2 font-serif text-sm text-white/60">{prototypes[0].desc}</p>
-        </div>
-        {/* 2026-08-28 Claude·滚动提示改为可点击步进按钮：点击平滑滚动到下一幕 */}
-        <div className="absolute bottom-0 left-1/2 z-20 -translate-x-1/2 pb-5">
-          <StageNextButton hint="scroll · 变体与原文" />
-        </div>
+        {/* 底部标注（原型 1/N）+ 复刻说明（2026-08-28 Claude·加 desc 补充每屏信息量；immersive 隐藏） */}
+        {!immersive && (
+          <div className="absolute bottom-12 left-5 z-20 max-w-[80vw] md:left-8">
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
+              Prototype 1/{prototypes.length} · {prototypes[0].title}
+            </p>
+            <p className="mt-2 font-serif text-sm text-white/60">{prototypes[0].desc}</p>
+          </div>
+        )}
+        {/* 2026-08-28 Claude·滚动提示改为可点击步进按钮（immersive 首屏隐藏，保持纯净） */}
+        {!immersive && (
+          <div className="absolute bottom-0 left-1/2 z-20 -translate-x-1/2 pb-5">
+            <StageNextButton hint="scroll · 变体与原文" />
+          </div>
+        )}
       </section>
 
       {/* ═══════ 原型幕 2..N：其余原型各独占一整屏视窗（深空舞台） ═══════ */}
@@ -322,21 +353,28 @@ export default async function InspirationDetailPage({
               </span>
             </div>
 
-            {/* 原文外跳链接（溯源核心：原链接或图片至少其一） */}
-            <a
-              href={entry.source.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group mt-3 inline-flex max-w-full items-center gap-1.5 text-sm text-accent"
-            >
-              <span className="ink-underline break-all">{entry.source.url}</span>
-              <span
-                aria-hidden
-                className="shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+            {/* 原文外跳链接（溯源核心）·2026-08-31 Claude·url 可选化：无公开原链接的
+                「用户灵感图」类来源不渲染 <a>，改以 via 标注说明来源身份，不编造 URL */}
+            {entry.source.url ? (
+              <a
+                href={entry.source.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group mt-3 inline-flex max-w-full items-center gap-1.5 text-sm text-accent"
               >
-                ↗
-              </span>
-            </a>
+                <span className="ink-underline break-all">{entry.source.url}</span>
+                <span
+                  aria-hidden
+                  className="shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                >
+                  ↗
+                </span>
+              </a>
+            ) : (
+              <p className="mt-3 font-mono text-[11px] leading-relaxed tracking-[0.08em] text-muted">
+                未登记公开原链接 · 来源身份见 via 标注
+              </p>
+            )}
 
             {/* 灵感说明 */}
             <p className="mt-5 border-t border-border pt-5 font-serif text-sm leading-loose text-muted">
