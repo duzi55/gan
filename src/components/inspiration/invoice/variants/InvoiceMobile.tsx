@@ -8,7 +8,7 @@
  *   加载键：'invoice-dashboard:mobile'（见 GlassMount LOADERS）。
  */
 
-import { artUrl, BILL, IV_COLOR, IV_FONT } from '../invoiceShared';
+import { BILL, IV_COLOR, IV_FONT } from '../invoiceShared';
 
 export default function InvoiceMobile() {
   return (
@@ -93,7 +93,7 @@ export default function InvoiceMobile() {
       <div className="-mx-4 mt-3 flex gap-2.5 overflow-x-auto px-4 pb-1">
         {BILL.items.slice(0, 3).map((it) => (
           <div key={it.name} className="w-28 shrink-0 overflow-hidden rounded-2xl bg-white shadow-sm">
-            <img src={artUrl(it.prompt)} alt={it.name} loading="lazy" className="h-16 w-full object-cover" />
+            <img src={it.src} alt={it.name} loading="lazy" className="h-16 w-full object-cover" />
             <div className="p-2">
               <p className="truncate text-[10px] font-semibold">{it.name}</p>
               <p className="mt-0.5 text-[10px] text-zinc-500">

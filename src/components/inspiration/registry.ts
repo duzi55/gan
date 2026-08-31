@@ -7,6 +7,7 @@ import {
   MiniToggle,
   MiniWeather,
   MiniInvoice,
+  MiniCrt,
 } from './minis';
 
 /**
@@ -135,6 +136,16 @@ const USER_IMAGE_SOURCE: InspirationSource = {
   label: '用户提供灵感图 · Invoice Dashboard 设计稿（粉彩柔性账单工作台）',
   via: '用户灵感截图（未找到公开原稿）',
 };
+
+/**
+ * IN-03 复古电视 · 舞台底：暖棕复古舞台（琥珀 × 青，深色系）
+ * 2026-08-31 Claude·新增：80 年代客厅夜色——深暖棕底 + 琥珀/青双光斑，
+ *   呼应奶油机身 CRT 与荧光绿 OSD 的复古氛围；coverStage 与原型 stage 复用。
+ */
+const RETRO_CRT_STAGE =
+  'radial-gradient(85% 85% at 18% 14%, rgba(251,146,60,0.3), transparent 60%), ' +
+  'radial-gradient(85% 85% at 84% 88%, rgba(45,212,191,0.2), transparent 62%), ' +
+  'linear-gradient(165deg, #171009, #241a10)';
 
 export const INSPIRATIONS: InspirationEntry[] = [
   {
@@ -276,6 +287,51 @@ export const INSPIRATIONS: InspirationEntry[] = [
         variants: [
           { id: 'mobile', title: '移动账单', titleEn: 'MOBILE', desc: '同一张账单折进竖屏，金额海报与胶囊重排成单列动线。' },
           { id: 'receipt', title: '支付回执', titleEn: 'RECEIPT', desc: '结清时刻的凭证形态，余款化作对勾、明细与条码。' },
+        ],
+      },
+    ],
+  },
+
+  /**
+   * IN-03 复古电视 Retro CRT
+   * 2026-08-31 Claude·新增灵感（用户提供的小红书笔记：复古 CRT 电视 + VHS 卡带
+   *   播放器，按其呈现的样式逻辑 1:1 复刻）：
+   *   - 页面中央拟物 CRT 电视 + 多张 VHS 卡带；把卡带拖到机身上松手即插带
+   *     （HTML5 Drag & Drop + 点击兜底），屏幕闪雪花后播放对应节目——
+   *     拖放为交互逻辑，转场动效（雪花 / 登场 / ken-burns）仍全部纯 CSS；
+   *   - immersive: true —— 首屏净化（同 IN-02 用户口述规范）；
+   *   - 暖棕复古舞台（琥珀 × 青），与 IN-01 深空 / IN-02 粉彩并立第三种语言；
+   *   - 1 件原型（卡带电视机）+ 2 变体（遥控换台 / 掌上电视），
+   *     组件与共享数据见 crt/ 目录（crtShared.ts 解耦复用）。
+   */
+  {
+    slug: 'retro-crt',
+    no: '03',
+    title: '复古电视',
+    titleEn: 'RETRO CRT',
+    desc: '同一台便携 CRT 的复古语言——奶油机身、VHS 插带、雪花转场与荧光绿 OSD——复刻卡带电视机，并衍生遥控换台与掌上电视。',
+    date: '2026-08-31',
+    source: {
+      label: '小红书 · 复古 CRT 电视 + VHS 卡带播放器灵感分享',
+      url: 'https://xhslink.cn/o/45ilAFqTjus',
+    },
+    immersive: true,
+    coverStage: RETRO_CRT_STAGE,
+    coverMini: MiniCrt,
+    prototypes: [
+      {
+        slug: 'crt-player',
+        no: '01',
+        title: '卡带电视机',
+        titleEn: 'CRT PLAYER',
+        /* 2026-08-31 Claude·交互升级：desc 同步拖放措辞（原为点击插带零 JS） */
+        desc: '电视居中、卡带架在下——把卡带拖到机身上松手即插带播放（点击亦可），雪花闪屏后节目延迟登场。',
+        points: ['颗粒噪点', '柔软体积感', '编辑式排版'],
+        stage: RETRO_CRT_STAGE,
+        Mini: MiniCrt,
+        variants: [
+          { id: 'remote', title: '遥控换台', titleEn: 'REMOTE', desc: '同一台 CRT 配上拟物遥控器，数字键 1-4 换台，雪花与 OSD 语言不变。' },
+          { id: 'handheld', title: '掌上电视', titleEn: 'HANDHELD', desc: '横版迷你机身收进掌心，顶部提手 + 底部迷你卡带可拖放/点击插带换台。' },
         ],
       },
     ],

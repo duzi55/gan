@@ -21,7 +21,8 @@ import '@/components/inspiration/liquid-glass.css';
 export const metadata: Metadata = {
   title: '灵感',
   // 2026-08-31 Claude·描述通用化：不再绑定「液态玻璃」单一语言（IN-02 起收录粉彩等更多风格）
-  description: '灵感复刻档案——每复刻一个来源就多一张卡片：整屏原型、衍生变体与原文溯源。',
+  // 2026-08-31 Claude·文案去口语化：按用户反馈改写为书面导语，避免对话式表述
+  description: '灵感复刻档案：一辑一源，整屏重勘原型，辑录衍生变体与原文溯源。',
 };
 
 /* 缩略窗比例按条目顺序轮换：制造瀑布流错落感（零 JS，构建期固定） */
@@ -51,9 +52,9 @@ export default function InspirationPage() {
           灵感<span className="text-accent">。</span>
         </h1>
 
+        {/* 2026-08-31 Claude·导语去口语化：书面编辑体，一辑一源即卡片粒度说明 */}
         <p className="mt-8 max-w-xl font-serif text-sm leading-loose text-muted md:text-base">
-          每复刻一个来源就多一张卡片；点进每一张，才能看到整屏复刻的
-          原型、衍生出的变体与原文出处。
+          以整屏舞台重勘原型，衍生变体与原文出处，皆辑录于各卷之内。一辑一源，新收按序列次。
         </p>
 
         {/* mono 统计落款：灵感 / 原型 / 变体 / 来源（溯源链接在详情页展示） */}

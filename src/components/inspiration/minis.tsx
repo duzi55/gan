@@ -188,3 +188,63 @@ export function MiniInvoice() {
     </div>
   );
 }
+
+/**
+ * 08 · 复古电视微缩图（IN-03，复古 CRT 快照）
+ * 2026-08-31 Claude·新增：复刻自 crt/CRTPlayer（等比简化）——
+ *   奶油机身迷你电视：双天线 + 深棕框屏幕（日落画面用纯 CSS 渐变示意，
+ *   零图片）+ 扫描线 + 荧光绿 OSD「CH 01」+ 底部四色卡带排；
+ *   零 hooks、零图片、零动画循环（性能铁律），静态 JSX + 内联色值自包含。
+ */
+export function MiniCrt() {
+  return (
+    <div
+      className="w-44 rounded-xl p-2.5 shadow-xl"
+      style={{
+        fontFamily: '-apple-system, "Segoe UI", Roboto, sans-serif',
+        background: 'linear-gradient(165deg, #f7f0df, #e0cfae)',
+        border: '1.5px solid #b49a72',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,.75), 0 18px 30px -14px rgba(40,30,15,.55)',
+      }}
+      aria-hidden
+    >
+      {/* 双天线 + 顶端圆球 */}
+      <div className="relative h-3">
+        <i className="absolute bottom-0 left-1/2 h-3.5 w-[1.5px] origin-bottom -rotate-[24deg] rounded-full bg-[#8f8f94]" />
+        <i className="absolute bottom-0 left-1/2 h-3.5 w-[1.5px] origin-bottom rotate-[24deg] rounded-full bg-[#8f8f94]" />
+      </div>
+
+      {/* 屏幕（深棕框 + 日落画面渐变 + 扫描线 + OSD） */}
+      <div className="rounded-lg p-1.5" style={{ background: 'linear-gradient(170deg, #4a3b2c, #332718)' }}>
+        <div
+          className="relative aspect-[4/3] overflow-hidden rounded-md"
+          style={{ background: 'linear-gradient(180deg, #f7b06a 0%, #e8834f 55%, #7c4a63 100%)' }}
+        >
+          {/* 扫描线（repeating-linear-gradient，纯 CSS） */}
+          <span
+            className="absolute inset-0"
+            style={{ background: 'repeating-linear-gradient(180deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px)' }}
+          />
+          {/* 荧光绿 OSD 频道号 */}
+          <span
+            className="absolute bottom-1 left-1.5 text-[7px] font-bold tracking-[0.12em]"
+            style={{ fontFamily: 'ui-monospace, Consolas, monospace', color: '#8dffb0', textShadow: '0 0 5px rgba(80,255,140,.55)' }}
+          >
+            CH 01
+          </span>
+        </div>
+      </div>
+
+      {/* 下面板：品牌标 + 迷你卡带排（四色块） */}
+      <div className="mt-1.5 flex items-center gap-1.5 px-0.5">
+        <span className="text-[5px] font-semibold uppercase tracking-[0.2em] text-[#7a6446]">OHANA·VISION</span>
+        <span className="ml-auto flex gap-1" aria-hidden>
+          <i className="h-3 w-3 rounded-[2px] bg-[#c96f4a]" />
+          <i className="h-3 w-3 rounded-[2px] bg-[#3f6f8e]" />
+          <i className="h-3 w-3 rounded-[2px] bg-[#5c7a4e]" />
+          <i className="h-3 w-3 rounded-[2px] bg-[#7b6394]" />
+        </span>
+      </div>
+    </div>
+  );
+}

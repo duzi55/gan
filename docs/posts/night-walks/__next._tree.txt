@@ -1,3 +1,3 @@
 :HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
-:HL["/gan/_next/static/css/b6b715d2a6c2daf4.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"posts","param":null,"prefetchHints":4192,"slots":{"children":{"name":"slug","param":{"type":"d","key":"night-walks","siblings":[]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}}}},"staleTime":300,"buildId":"eAwhlQot-2Rdd1saTVv7e"}
+:HL["/gan/_next/static/css/40997dae11439024.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"posts","param":null,"prefetchHints":4192,"slots":{"children":{"name":"slug","param":{"type":"d","key":"night-walks","siblings":[]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}}}},"staleTime":300,"buildId":"exmACgcFbNjWaqbXlXy-j"}

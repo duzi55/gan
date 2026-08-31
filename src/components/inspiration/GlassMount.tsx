@@ -66,6 +66,12 @@ const LOADERS: Record<string, ComponentType> = {
   'invoice-dashboard': dynamic(() => import('./invoice/InvoiceDashboard'), { ssr: false, loading: () => <Skeleton /> }),
   'invoice-dashboard:mobile': dynamic(() => import('./invoice/variants/InvoiceMobile'), { ssr: false, loading: () => <Skeleton /> }),
   'invoice-dashboard:receipt': dynamic(() => import('./invoice/variants/InvoiceReceipt'), { ssr: false, loading: () => <Skeleton /> }),
+
+  /* ── 08 卡带电视机原型 + 变体 ──
+   * 2026-08-31 Claude·新增 IN-03 复古电视（卡带电视机 + 遥控换台 + 掌上电视） */
+  'crt-player': dynamic(() => import('./crt/CRTPlayer'), { ssr: false, loading: () => <Skeleton /> }),
+  'crt-player:remote': dynamic(() => import('./crt/variants/CRTRemote'), { ssr: false, loading: () => <Skeleton /> }),
+  'crt-player:handheld': dynamic(() => import('./crt/variants/CRTHandheld'), { ssr: false, loading: () => <Skeleton /> }),
 };
 
 export function GlassMount({ slug, variant }: { slug: string; variant?: string }) {

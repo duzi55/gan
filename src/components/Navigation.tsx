@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type KeyboardEvent } from 'react';
+import { useEffect, useState, type KeyboardEvent } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
@@ -13,11 +13,32 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle';
  *   - Logo 改为「朱砂印章 记 + 衬线字标」，弱化加粗大写字；
  *   - hover 描边统一为朱砂 accent 细线；搜索框 focus 同步；
  *   - 页脚引言前置印章元素，收束整体文人手记气质。
+ * 2026-08-31 Claude·返回融合：灵感详情页（/inspiration/[slug]）滚动离顶时，
+ *   字标「Notes」丝滑 crossfade 为「← 灵感」返回入口，点击直达灵感列表；
+ *   回到顶部时还原为「Notes」。全局 header 生效，桌面/移动共用同一 Logo 槽位。
  */
 export function Navigation({ showFooter = false }: { showFooter?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
+
+  /* ── 2026-08-31 Claude·返回融合状态 ──────────────────────────────
+     仅灵感详情页启用：滚动超过阈值（非顶部）时 swapped=true，
+     字标槽位内两元素 crossfade + 纵向位移互换，Link href 同步切换。 */
+  const isInspirationDetail = pathname.startsWith('/inspiration/');
+  const [backSwap, setBackSwap] = useState(false);
+
+  useEffect(() => {
+    // 非灵感详情页直接复位，不挂监听
+    if (!isInspirationDetail) {
+      setBackSwap(false);
+      return;
+    }
+    const onScroll = () => setBackSwap(window.scrollY > 48);
+    onScroll(); // 挂载时对齐当前滚动位置（浏览器恢复滚动条的场景）
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [isInspirationDetail]);
 
   const links = [
     { href: '/', label: '首页' },
@@ -70,10 +91,37 @@ export function Navigation({ showFooter = false }: { showFooter?: boolean }) {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
       <nav className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-6">
-        {/* Logo：印章 + 衬线字标 */}
-        <Link href="/" className="group flex items-center gap-2.5">
+        {/* Logo：印章 + 衬线字标
+            2026-08-31 Claude·返回融合：灵感详情页滚动离顶（非顶部）时，
+            字标槽位内「Notes」与「← 灵感」crossfade + 位移丝滑互换，
+            整个 Link 的 href 同步切换（/ ↔ /inspiration/）；
+            槽位定宽避免两文案宽度差引起 header 抖动。 */}
+        <Link
+          href={isInspirationDetail && backSwap ? '/inspiration/' : '/'}
+          aria-label={isInspirationDetail && backSwap ? '返回灵感列表' : '返回首页'}
+          className="group flex items-center gap-2.5"
+        >
           <span className="ink-seal transition-transform duration-300 group-hover:-rotate-6">记</span>
-          <span className="font-display text-lg tracking-[0.35em] text-foreground">Notes</span>
+          {/* 字标槽位：两元素绝对定位叠放，进入方自下而上滑入、离场方向上滑出 */}
+          <span className="relative block h-7 w-[5.75rem] overflow-hidden">
+            <span
+              aria-hidden={backSwap}
+              className={`absolute inset-0 flex items-center font-display text-lg tracking-[0.35em] text-foreground transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                backSwap ? '-translate-y-2 opacity-0' : 'translate-y-0 opacity-100'
+              }`}
+            >
+              Notes
+            </span>
+            <span
+              aria-hidden={!backSwap}
+              className={`absolute inset-0 flex items-center gap-1.5 text-sm tracking-[0.2em] text-foreground transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                backSwap ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
+              }`}
+            >
+              <span aria-hidden className="text-base leading-none text-accent transition-transform duration-300 group-hover:-translate-x-0.5">←</span>
+              灵感
+            </span>
+          </span>
         </Link>
 
         {/* Nav Links */}

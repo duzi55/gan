@@ -1,0 +1,135 @@
+1:"$Sreact.fragment"
+2:I[911,["1831","static/chunks/bd904a5c-d8b54a443191707b.js","9367","static/chunks/b536a0f1-5a169a17c17fc275.js","8500","static/chunks/8500-f4d7bfbe7500f274.js","5858","static/chunks/app/posts/%5Bslug%5D/page-9ba69b0f1ea6dc33.js"],"default"]
+3:I[3123,["1831","static/chunks/bd904a5c-d8b54a443191707b.js","9367","static/chunks/b536a0f1-5a169a17c17fc275.js","8500","static/chunks/8500-f4d7bfbe7500f274.js","5858","static/chunks/app/posts/%5Bslug%5D/page-9ba69b0f1ea6dc33.js"],"default"]
+4:I[9919,["1831","static/chunks/bd904a5c-d8b54a443191707b.js","9367","static/chunks/b536a0f1-5a169a17c17fc275.js","8500","static/chunks/8500-f4d7bfbe7500f274.js","5858","static/chunks/app/posts/%5Bslug%5D/page-9ba69b0f1ea6dc33.js"],"default"]
+5:I[9397,["1831","static/chunks/bd904a5c-d8b54a443191707b.js","9367","static/chunks/b536a0f1-5a169a17c17fc275.js","8500","static/chunks/8500-f4d7bfbe7500f274.js","5858","static/chunks/app/posts/%5Bslug%5D/page-9ba69b0f1ea6dc33.js"],"InkField"]
+6:I[8500,["1831","static/chunks/bd904a5c-d8b54a443191707b.js","9367","static/chunks/b536a0f1-5a169a17c17fc275.js","8500","static/chunks/8500-f4d7bfbe7500f274.js","5858","static/chunks/app/posts/%5Bslug%5D/page-9ba69b0f1ea6dc33.js"],""]
+7:T915,font-serif text-[18px] leading-[1.95] text-foreground/80
+
+            [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:scroll-mt-24 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:text-foreground
+
+            [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:scroll-mt-24 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-foreground
+
+            [&_p]:mb-6 [&_p]:text-muted
+
+            [&_p:first-of-type]:text-[20px] [&_p:first-of-type]:leading-[1.8] [&_p:first-of-type]:text-foreground/85
+
+            [&_ul]:mb-6 [&_ul]:ml-1
+
+            [&_ul]:list-none
+
+            [&_li]:relative [&_li]:mb-3 [&_li]:pl-6 [&_li]:text-muted
+
+            [&_li::before]:absolute [&_li::before]:left-0 [&_li::before]:top-[0.7em] [&_li::before]:h-1.5 [&_li::before]:w-1.5 [&_li::before]:rounded-full [&_li::before]:bg-accent/60
+
+            [&_blockquote]:relative [&_blockquote]:my-8 [&_blockquote]:border-0 [&_blockquote]:pl-8
+
+            [&_blockquote::before]:absolute [&_blockquote::before]:left-0 [&_blockquote::before]:top-0 [&_blockquote::before]:h-full [&_blockquote::before]:w-1 [&_blockquote::before]:rounded-full [&_blockquote::before]:bg-accent/70
+
+            [&_blockquote]:text-xl [&_blockquote]:font-medium [&_blockquote]:italic [&_blockquote]:leading-[1.7] [&_blockquote]:text-muted
+
+            [&_a]:text-foreground [&_a]:underline [&_a]:decoration-accent/50 [&_a]:underline-offset-4
+
+            [&_strong]:font-bold [&_strong]:text-foreground
+
+            [&_em]:italic
+
+            [&_pre]:relative [&_pre]:my-8 [&_pre]:overflow-x-auto [&_pre]:rounded-xl [&_pre]:border [&_pre]:border-white/10 [&_pre]:bg-[#0d1117] [&_pre]:px-5 [&_pre]:pb-5 [&_pre]:pt-12 [&_pre]:shadow-lg [&_pre]:shadow-black/20
+
+            [&_pre]:font-mono [&_pre]:text-[13px] [&_pre]:leading-[1.7] [&_pre]:text-[#e6edf3]
+
+            [&_pre::before]:absolute [&_pre::before]:left-5 [&_pre::before]:top-[18px] [&_pre::before]:h-3 [&_pre::before]:w-3 [&_pre::before]:rounded-full [&_pre::before]:bg-[#ff5f56] [&_pre::before]:shadow-[14px_0_0_#ffbd2e,28px_0_0_#27c93f] [&_pre::before]:content-['']
+
+            [&_pre_code]:block [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:font-mono [&_pre_code]:text-inherit
+
+            [&_code]:rounded [&_code]:bg-foreground/5 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]8:T1fd8,<p>刷到一条小红书视频：深夜的客厅里，一台奶油色的便携 CRT 电视坐在木柜上，拉杆天线支棱着。一只手拿起旁边的彩色 VHS 卡带，<strong>拖到机身上松手</strong>——屏幕哗地闪过一阵雪花，然后节目画面淡入，荧光绿的频道号在左上角亮起。</p>
+<p>就是这个「拖进去」的动作击中了我。它不是点击按钮那种干巴巴的交互，而是一个有重量、有仪式感的拟物动作：取带、拖动、插入、等待雪花退去。于是有了站内灵感档案的 IN-03「复古电视」——本文把这次复刻的设计思路完整摊开。</p>
+<p><img src="/gan/images/posts/crt-blog-cover.jpg" alt="奶油机身 CRT 与一摞彩色卡带：本次复刻的灵感场景"></p>
+<h2 id="一、质感不是一张贴图，是一份拆解清单">一、质感不是一张贴图，是一份拆解清单</h2>
+<p>复刻的第一步不是写代码，是把原片里的「复古感」翻译成可执行的样式清单。这台电视的质感来自五个层次，缺一层就「塑料」一分：</p>
+<ol>
+<li><strong>机身不是纯色</strong>。奶油外壳用一道 <code>165°</code> 的线性渐变铺底——上亮下沉，再用 <code>inset</code> 阴影在顶部擦一道高光、在底部压一条暖棕，拟物的体积感全靠这三笔；</li>
+<li><strong>屏幕必须凸</strong>。4:3 比例、大圆角、粗黑边框，屏幕内部再叠三层：<code>radial-gradient</code> 暗角（CRT 玻璃的边缘收光）、斜切白色半透明条（玻璃反光）、细密横向条纹（扫描线）；</li>
+<li><strong>细节要做足</strong>。双拉杆天线带顶端圆球、VOL/CH 两颗旋钮带刻度点、喇叭格栅用 <code>repeating-linear-gradient</code> 拉出竖条纹、进带窗是内凹的黑缝；</li>
+<li><strong>卡带是第二主角</strong>。彩色壳体 + 白标签（手写频道号和节目名）+ 双带卷窗，四张卡带就是四个频道；</li>
+<li><strong>OSD 是灵魂</strong>。荧光绿（<code>#8f6</code> 系）等宽字体 + 辉光 <code>text-shadow</code>，左上角频道号、右下角 <code>PLAY 0:12:44</code>——80 年代电视机的所有记忆点都在这两行小字里。</li>
+</ol>
+<p>这些全部是纯 CSS，没有一张机身贴图。好处是机身宽度可以在 <code>min(560px, 84vw)</code> 之间自由伸缩，材质不糊、细节不丢。</p>
+<h2 id="二、交互：把「插卡带」还给手">二、交互：把「插卡带」还给手</h2>
+<p>原片里最动人的就是拖放，所以这是本次复刻的红线——<strong>卡带必须能拖</strong>。用原生 HTML5 Drag &#x26; Drop 实现，全程不到六十行：</p>
+<ul>
+<li>每张卡带是 <code>draggable</code> 的按钮，<code>dragstart</code> 时把卡带 id 写进 <code>dataTransfer</code>；</li>
+<li>电视机身是投放区：<code>dragover</code> 时 <code>preventDefault</code> 并点亮高亮——机身描边换成荧光绿、加一圈辉光、微微放大，屏幕中央浮现「<strong>松手插带 ▼</strong>」的 OSD 提示；</li>
+<li><code>drop</code> 时读出卡带 id，插带播放；</li>
+<li>有个经典小坑：<code>dragleave</code> 会在拖拽经过机身子元素时反复触发，高亮会疯狂闪烁。解法是判断 <code>currentTarget.contains(relatedTarget)</code>——只有真正离开机身边界才熄灯；</li>
+<li>触屏浏览器没有原生拖放，所以卡带同时是按钮，<strong>点击兜底插带</strong>。底部提示也写成双通道：「把卡带拖到电视上插放 · 也可以直接点击」。</li>
+</ul>
+<p>拖起卡带的一瞬，源卡带缩小变暗——像真的被手提离了卡带架。这些微表情不构成功能，但构成「手感」。</p>
+<p><img src="/gan/images/posts/crt-blog-drag.jpg" alt="拖放插带：机身亮起荧光绿描边，卡带在手"></p>
+<h2 id="三、雪花是仪式感，也是一次架构取舍">三、雪花是仪式感，也是一次架构取舍</h2>
+<p>插带之后发生什么，决定了这个组件的叙事质量。原片的时序是：<strong>插入 → 雪花闪屏 → 节目登场</strong>。复刻成四段纯 CSS 动画：</p>
+<ul>
+<li><code>crt-tape-in</code>：进带窗里的同色带条落入卡缝——「插进去」的物理确认；</li>
+<li><code>crt-snow</code>：feTurbulence 生成的白噪声图，<code>steps(4)</code> 阶梯式抖动 0.55 秒——老电视换台的雪花蹦跳感（平滑缓动就假了）；</li>
+<li><code>crt-show</code>：节目画面延迟 0.5 秒才登场，正好挡住雪花的尾巴，随后 <code>crt-ken</code> 以 16 秒周期做 ken-burns 缓动，模拟「正在播放」；</li>
+<li><code>crt-osd</code>：荧光绿频道号分步点亮。</li>
+</ul>
+<p>关键的架构决策在这里：<strong>state 只承载交互逻辑（哪张卡带已插入），动画全部留在 CSS 里</strong>。做法是换带时只更新 <code>loaded</code> 状态，而画面、雪花、OSD 三组元素的 React <code>key</code> 都含卡带 id——id 一变，三组元素重新挂载，CSS 动画自然从头重放。没有一层 JS 计时器，没有一处 <code>classList</code> 手术。</p>
+<p>这里还踩过一个真实的坑：三组元素是同父兄弟，<code>key</code> 全等于卡带 id 时，React 会警告 <code>Encountered two children with the same key, sunset</code>。解法是给每组加前缀（<code>scene-</code> / <code>snow-</code> / <code>osd-</code>）——key 的语义是「同组内的身份」，不是「全局身份证」。</p>
+<p>最后是降级：所有动效元素挂同一个 <code>.crt-fx</code> 类，<code>prefers-reduced-motion</code> 下一刀全关，画面由条件挂载保证直接呈现，雪花层基础 <code>opacity-0</code> 不残留。</p>
+<p><img src="/gan/images/posts/crt-blog-snow.jpg" alt="雪花闪屏与荧光绿 OSD：换台仪式的两秒钟"></p>
+<h2 id="四、变体：同一语言的两种再演绎">四、变体：同一语言的两种再演绎</h2>
+<p>一比一复刻的原型之外，同一个视觉语言衍生了两个变体，各保留一种交互：</p>
+<ul>
+<li><strong>遥控换台</strong>：交互从「插卡带」换成「按遥控器」。右侧拟物遥控器数字键 1-4，整个换台引擎是 CSS-only 的 radio 方案——隐藏的 <code>input[type=radio]</code> + <code>label[for]</code> + 兄弟选择器，选中键点亮为卡带色，零 hooks 零 JS；</li>
+<li><strong>掌上电视</strong>：横版迷你机身收进掌心，顶部提手、屏幕左置、右列控制键，底部一排迷你卡带——同样可拖可点，交互语言与原型完全同源。</li>
+</ul>
+<p><img src="/gan/images/posts/crt-blog-family.jpg" alt="三件套：卡带电视机、遥控换台、掌上电视"></p>
+<h2 id="五、移动端：小屏上的电视也要能看">五、移动端：小屏上的电视也要能看</h2>
+<p>复古电视天然是「客厅尺度」的设计，搬进 375px 的手机屏要补三笔：</p>
+<ul>
+<li>卡带架四张并排，宽度从 <code>21vw</code> 收到 <code>19vw</code>、间距减半，总宽正好收进机身投影之内，不再溢出舞台；</li>
+<li>遥控变体的拉杆天线从伸出 80px 缩到 52px——变体舞台块顶部只有 56px 的余量，长出来的部分会被 <code>overflow-hidden</code> 无声裁掉；</li>
+<li>详情页的整屏舞台在小屏改为内部滚动 + 底部避让，超高内容（比如桌面整版的发票工作台）不再被视口上下裁切。</li>
+</ul>
+<p>桌面端视觉零变化，所有补偿都发生在 <code>sm:</code> 断点以下。</p>
+<h2 id="结语">结语</h2>
+<p>复刻不是做仿制品，是做翻译——把一条视频里的材质、动作和节奏，翻译成浏览器能理解的语言。这台电视机最迷人的地方，恰恰不是像素级的相似，而是那个「拖起卡带」的瞬间：<strong>交互的仪式感，比任何滤镜都更接近复古本身</strong>。</p>
+<p>完整实现已在站内灵感档案上架（IN-03 复古电视）：<a href="/gan/inspiration/retro-crt/">inspiration/retro-crt</a>，欢迎拖一张卡带试试手感。</p>
+f:X
+14:X
+14:C
+0:{"buildId":"exmACgcFbNjWaqbXlXy-j","data":[{"rsc":["$","$1","c",{"children":[["$","article",null,{"className":"min-h-screen bg-background text-foreground","children":[["$","$L2",null,{}],["$","$L3",null,{"headings":[{"depth":2,"slug":"一、质感不是一张贴图，是一份拆解清单","text":"一、质感不是一张贴图，是一份拆解清单"},{"depth":2,"slug":"二、交互：把「插卡带」还给手","text":"二、交互：把「插卡带」还给手"},{"depth":2,"slug":"三、雪花是仪式感，也是一次架构取舍","text":"三、雪花是仪式感，也是一次架构取舍"},{"depth":2,"slug":"四、变体：同一语言的两种再演绎","text":"四、变体：同一语言的两种再演绎"},{"depth":2,"slug":"五、移动端：小屏上的电视也要能看","text":"五、移动端：小屏上的电视也要能看"},{"depth":2,"slug":"结语","text":"结语"}]}],["$","$L4",null,{"headings":"$0:data:0:rsc:props:children:0:props:children:1:props:headings"}],["$","div",null,{"className":"relative flex min-h-[72svh] w-full items-end overflow-hidden bg-background","children":[["$","div",null,{"className":"absolute inset-x-0 top-0 z-20 h-1","style":{"background":"linear-gradient(135deg,"},"aria-hidden":true}],["$","$L5",null,{"className":"absolute inset-0 h-full w-full","density":0.7}],["$","span",null,{"className":"pointer-events-none absolute right-4 top-14 select-none font-display text-[11rem] leading-none opacity-[0.07] md:right-10 md:top-24 md:text-[19rem]","style":{"color":"#f0b45c"},"aria-hidden":true,"children":"把"}],["$","div",null,{"className":"relative z-10 w-full px-6 pb-14 md:px-12 md:pb-20","children":["$","div",null,{"className":"mx-auto max-w-2xl","children":[["$","div",null,{"className":"mb-5 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.3em]","style":{"color":"#f0b45c"},"children":[["$","span",null,{"className":"h-px w-8","style":{"background":"#f0b45c"}}],["$","span",null,{"children":"2026-08-31"}],["$","span",null,{"className":"h-px w-8","style":{"background":"#f0b45c"}}],["$","span",null,{"children":[1611," 字"]}]]}],["$","h1",null,{"className":"ink-display max-w-2xl text-4xl leading-[1.18] text-foreground md:text-6xl","children":"把一台 1988 年的电视机搬进浏览器"}],["$","p",null,{"className":"mt-6 max-w-xl font-serif text-sm leading-loose text-muted md:text-base","children":"复古 CRT 卡带电视复刻记——奶油机身的质感拆解、拖放插带的交互还原、雪花转场的纯 CSS 叙事，以及一次「state 只切 key」的工程克制"}],["$","div",null,{"className":"mt-7 flex flex-wrap items-center gap-2.5","children":[["$","$L6","设计",{"href":"/tags/设计","className":"rounded-full border border-border px-3 py-1 font-mono text-xs tracking-wide text-muted transition-colors hover:border-accent/50 hover:text-foreground","children":["#","设计"]}],["$","$L6","Web",{"href":"/tags/Web","className":"rounded-full border border-border px-3 py-1 font-mono text-xs tracking-wide text-muted transition-colors hover:border-accent/50 hover:text-foreground","children":["#","Web"]}]]}]]}]}]]}],["$","div",null,{"className":"mx-auto max-w-2xl px-6 py-20 md:py-28","children":["$","div",null,{"className":"$7","dangerouslySetInnerHTML":{"__html":"$8"}}]}],"$L9","$La","$Lb","$Lc"]}],null,"$Ld"]}],"isPartial":"$@e","staleTime":"$f","varyParams":null},{"rsc":"$L10","isPartial":"$@11","staleTime":"$f","varyParams":null},{"rsc":"$L12","isPartial":"$@13","staleTime":"$f","varyParams":"$14"},{"rsc":"$L15","isPartial":"$@16","staleTime":"$f","varyParams":"$14"},{"rsc":"$L17","isPartial":"$@18","staleTime":"$f","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@19","rootVaryParams":null,"needsRuntimeRequest":"$@1a"}
+1b:I[119,["1831","static/chunks/bd904a5c-d8b54a443191707b.js","9367","static/chunks/b536a0f1-5a169a17c17fc275.js","8500","static/chunks/8500-f4d7bfbe7500f274.js","5858","static/chunks/app/posts/%5Bslug%5D/page-9ba69b0f1ea6dc33.js"],"ReadingCompanion"]
+1c:I[2742,["1831","static/chunks/bd904a5c-d8b54a443191707b.js","9367","static/chunks/b536a0f1-5a169a17c17fc275.js","8500","static/chunks/8500-f4d7bfbe7500f274.js","5858","static/chunks/app/posts/%5Bslug%5D/page-9ba69b0f1ea6dc33.js"],"WeatherMood"]
+1d:I[8434,["1831","static/chunks/bd904a5c-d8b54a443191707b.js","9367","static/chunks/b536a0f1-5a169a17c17fc275.js","8500","static/chunks/8500-f4d7bfbe7500f274.js","5858","static/chunks/app/posts/%5Bslug%5D/page-9ba69b0f1ea6dc33.js"],"AuthorBio"]
+1e:I[484,[],"OutletBoundary"]
+1f:"$Sreact.suspense"
+21:I[484,[],"ViewportBoundary"]
+22:I[484,[],"MetadataBoundary"]
+23:I[6869,[],"IconMark"]
+24:I[7121,[],""]
+25:I[4581,[],""]
+26:I[8568,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-02afbe7d937b331d.js"],"Navigation"]
+27:I[9610,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-02afbe7d937b331d.js"],"MobileNav"]
+:HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
+:HL["/gan/_next/static/css/40997dae11439024.css","style"]
+9:["$","div",null,{"className":"mx-auto max-w-2xl px-6","children":["$","nav",null,{"className":"mt-16 grid grid-cols-2 gap-6 border-t border-border pt-8","children":[["$","span",null,{"aria-hidden":true}],["$","$L6",null,{"href":"/posts/why-reload-after-deploy","className":"group flex flex-col items-end gap-2 text-right","children":[["$","span",null,{"className":"font-mono text-[11px] tracking-[0.08em] text-faint","children":"下一篇 →"}],["$","span",null,{"className":"text-[13.5px] font-medium leading-[1.4] text-foreground transition-colors group-hover:text-accent","children":"为什么进页面要再刷新一次——静态站缓存的门道"}]]}]]}]}]
+a:["$","section",null,{"className":"border-t border-border py-16","children":["$","div",null,{"className":"mx-auto max-w-2xl px-6","children":[["$","div",null,{"className":"mb-8 text-center","children":[["$","h2",null,{"className":"ink-display text-lg text-muted","children":"阅读体验"}],["$","p",null,{"className":"mt-1 text-xs text-faint","children":"环境音与氛围，为这段阅读留个余韵"}]]}],["$","div",null,{"className":"grid gap-5 md:grid-cols-2","children":[["$","$L1b",null,{}],["$","$L1c",null,{"gradient":"linear-gradient(135deg,","accent":"#f0b45c","mood":"设计"}]]}]]}]}]
+b:["$","section",null,{"className":"pb-16","children":["$","div",null,{"className":"mx-auto max-w-md px-6","children":["$","$L1d",null,{"postCount":12,"totalWords":8360}]}]}]
+c:["$","footer",null,{"className":"border-t border-border py-8","children":["$","div",null,{"className":"mx-auto max-w-2xl px-6","children":["$","div",null,{"className":"flex items-center justify-between","children":[["$","$L6",null,{"href":"/","className":"group inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-foreground","children":[["$","span",null,{"className":"transition-transform duration-300 group-hover:-translate-x-1","children":"←"}],"返回首页"]}],["$","$L6",null,{"href":"/inspiration","className":"group inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-foreground","children":["灵感",["$","span",null,{"className":"transition-transform duration-300 group-hover:translate-x-1","children":"→"}]]}]]}]}]}]
+d:["$","$L1e",null,{"children":["$","$1f",null,{"name":"Next.MetadataOutlet","children":"$@20"}]}]
+10:["$","$1","h",{"children":[null,["$","$L21",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L22",null,{"children":["$","$1f",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"把一台 1988 年的电视机搬进浏览器 · Notes"}],["$","meta","1",{"name":"description","content":"复古 CRT 卡带电视复刻记——奶油机身的质感拆解、拖放插带的交互还原、雪花转场的纯 CSS 叙事，以及一次「state 只切 key」的工程克制"}],["$","meta","2",{"name":"author","content":"duzi55"}],["$","link","3",{"rel":"icon","href":"/gan/favicon.ico?603d046c9a6fdfbb","type":"image/x-icon","sizes":"16x16"}],["$","$L23","4",{}]]}]}]}],null]}]
+12:["$","$1","c",{"children":[null,["$","$L24",null,{"parallelRouterKey":"children","template":["$","$L25",null,{}]}]]}]
+15:["$","$1","c",{"children":[null,["$","$L24",null,{"parallelRouterKey":"children","template":["$","$L25",null,{}]}]]}]
+17:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/gan/_next/static/css/0634c25f18e3e31c.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/gan/_next/static/css/40997dae11439024.css","precedence":"next"}]],["$","html",null,{"lang":"zh-CN","className":"__variable_074a08 h-full antialiased","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{var t=localStorage.getItem(\"theme\");if(t===\"dark\"){document.documentElement.classList.add(\"dark\")}}catch(e){}})();"}}],["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){if(typeof ReadableStream===\"undefined\"||ReadableStream.prototype[Symbol.asyncIterator])return;ReadableStream.prototype[Symbol.asyncIterator]=function(){var r=this.getReader();return{next:function(){return r.read()},throw:function(e){return Promise.reject(e)},return:function(){try{r.releaseLock()}catch(e){}return Promise.resolve({done:true})},[Symbol.asyncIterator]:function(){return this}}}})();"}}]]}],["$","body",null,{"className":"flex min-h-full flex-col pb-16 md:pb-0","children":[["$","$L26",null,{}],["$","main",null,{"className":"flex-1","children":["$","$L24",null,{"parallelRouterKey":"children","template":["$","$L25",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}],["$","$L26",null,{"showFooter":true}],["$","$L27",null,{}]]}]]}]]}]
+20:null
+1a:true
+f:300
+f:C
+19:0
+11:"$undefined"
+13:"$undefined"
+16:"$undefined"
+18:"$undefined"
+e:"$undefined"

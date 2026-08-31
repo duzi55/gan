@@ -183,8 +183,15 @@ export default async function InspirationDetailPage({
           </span>
         )}
 
-        {/* 原型舞台：1:1 复刻原型独占整屏视窗，按需加载组件 chunk */}
-        <div className="relative z-10 flex h-full items-center justify-center px-6">
+        {/* 原型舞台：1:1 复刻原型独占整屏视窗，按需加载组件 chunk
+            2026-08-31 Claude·移动端适配：小屏改内部滚动 + py-28 底部避让——
+            超高原型（发票整版）不再被 h-screen overflow-hidden 裁切，
+            矮视口下组件不再与底部标注重叠；sm 起恢复满屏居中（桌面视觉不变）
+            2026-08-31 Claude·修复滚动锁死：移除 overscroll-contain——
+            组件高于视口（复古电视整列 ≈700px）时内层滚动器会截留滚轮，
+            overscroll-contain 又禁止链式滚动到页面，导致整页无法下滑；
+            移除后内层滚到底自然衔接页面滚动（链式行为恢复） */}
+        <div className="relative z-10 flex h-full items-center justify-center overflow-y-auto px-6 py-28 sm:py-0">
           <GlassMount slug={prototypes[0].slug} />
         </div>
 
@@ -260,8 +267,9 @@ export default async function InspirationDetailPage({
               {String(i + 2).padStart(2, '0')}
             </span>
 
-            {/* 原型本体独占整屏 */}
-            <div className="relative z-10 flex h-full items-center justify-center px-6">
+            {/* 原型本体独占整屏（2026-08-31 Claude·同序幕：小屏内部滚动 + py-28 底部避让，sm 恢复满屏居中；
+                2026-08-31 Claude·修复滚动锁死：移除 overscroll-contain 恢复链式滚动，缘由见序幕注释） */}
+            <div className="relative z-10 flex h-full items-center justify-center overflow-y-auto px-6 py-28 sm:py-0">
               <GlassMount slug={p.slug} />
             </div>
 
