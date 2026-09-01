@@ -6,7 +6,12 @@
  *   - 结构与配色复刻自 glass/ 下对应完整组件（等比简化），点击卡片进入
  *     详情页后才按需加载真组件本体；
  *   - 仅使用 lg-glass / lg-liquid / lg-noise 三个 CSS 类（liquid-glass.css）。
+ * 2026-08-31 Claude·例外（用户裁定，IN-04 治愈画卷起）：图片画廊类灵感的
+ *   微缩图直接用原图缩略（本地已入库 webp + lazy/async，零客户端 JS），
+ *   不再手写 CSS 微缩组件——「这种灵感的微缩图就用原图」。
  */
+
+import { WALLS } from './wall/wallShared';
 
 /** 01 · 玻璃唱片机微缩图 */
 export function MiniPlayer() {
@@ -190,11 +195,12 @@ export function MiniInvoice() {
 }
 
 /**
- * 09 · 治愈画卷微缩图（IN-04，壁纸画廊快照）
- * 2026-08-31 Claude·新增：复刻自 wall/WallViewer（等比简化）——
- *   深色细边画框内一幅 CSS 山水（青绿天空 + 双丘 + 小径），右侧迷你细轨
- *   滚动条 + 底部下指小箭头（SCROLL 提示快照）；
- *   零 hooks、零图片、零动画循环（性能铁律），静态 JSX + 内联色值自包含。
+ * 09 · 治愈画卷微缩图（IN-04，原图缩略）
+ * 2026-08-31 Claude·用户裁定：图片画廊类灵感微缩图直接用原图，不手写
+ *   CSS 微缩组件——取 wallShared.WALLS 首图（林间溪瀑，本地已入库 webp，
+ *   路径含 NEXT_PUBLIC_BASE_PATH 前缀 dev / 生产双端正确），
+ *   object-cover 裁切进缩略窗；仍是静态 JSX：零 hooks、零客户端 JS，
+ *   lazy + async 解码不影响列表页性能。
  */
 export function MiniWall() {
   return (
@@ -202,27 +208,14 @@ export function MiniWall() {
       className="relative w-44 overflow-hidden rounded-xl border border-emerald-950/20 shadow-xl"
       aria-hidden
     >
-      {/* CSS 山水：天空渐变 + 远丘 / 近丘 / 小径（呼应 wall-01 林间溪瀑） */}
-      <div
-        className="relative h-24"
-        style={{ background: 'linear-gradient(180deg, #bfe3d6 0%, #d8efe2 55%, #eaf6ea 100%)' }}
-      >
-        <span
-          className="absolute -left-6 bottom-0 h-16 w-28 rounded-[50%]"
-          style={{ background: 'linear-gradient(160deg, #5f9e7e, #3f7a5f)' }}
-        />
-        <span
-          className="absolute -right-8 bottom-0 h-14 w-32 rounded-[50%]"
-          style={{ background: 'linear-gradient(160deg, #7fb894, #58916f)' }}
-        />
-        <span className="absolute bottom-0 left-1/2 h-10 w-3 -translate-x-1/2 rotate-6 rounded-t-full bg-[#f4ecd8]/90" />
-      </div>
-      {/* 右侧迷你细轨滚动条（风格化滚动条快照） */}
-      <span className="absolute right-1.5 top-1/2 h-10 w-[2px] -translate-y-1/2 rounded-full bg-white/40">
-        <span className="absolute left-0 top-0 h-2 w-full rounded-full bg-white" />
-      </span>
-      {/* 底部下指小箭头（向下滚动提示快照） */}
-      <span className="absolute bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rotate-45 border-b border-r border-white/90" />
+      <img
+        src={WALLS[0].src}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+        className="h-24 w-full select-none object-cover"
+      />
     </div>
   );
 }
