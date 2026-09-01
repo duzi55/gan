@@ -94,13 +94,16 @@ export default function InspirationPage() {
                     <div className="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.06]">
                       <Mini />
                     </div>
-                    {/* 左上灵感编号 + 右上变体数（编辑式排版元素） */}
+                    {/* 左上灵感编号 + 右上变体数（编辑式排版元素；
+                        2026-08-31 Claude·无变体灵感（IN-04 起）角标 +0 不显示） */}
                     <span className="absolute left-4 top-4 font-mono text-[10px] tracking-[0.2em] text-white/40">
                       IN-{entry.no}
                     </span>
-                    <span className="absolute right-4 top-4 font-mono text-[10px] tracking-[0.2em] text-white/40">
-                      +{variants}
-                    </span>
+                    {variants > 0 && (
+                      <span className="absolute right-4 top-4 font-mono text-[10px] tracking-[0.2em] text-white/40">
+                        +{variants}
+                      </span>
+                    )}
                   </div>
 
                   {/* 信息栏：系统宣纸风（ink-display 中文题 + mono 英文题 + desc + 统计 chips） */}
@@ -117,14 +120,17 @@ export default function InspirationPage() {
 
                     <p className="mt-3 font-serif text-sm leading-relaxed text-muted">{entry.desc}</p>
 
-                    {/* 构成统计：原型 / 变体 / 收录日期（系统 border token 描边小标签） */}
+                    {/* 构成统计：原型 / 变体 / 收录日期（系统 border token 描边小标签；
+                        2026-08-31 Claude·无变体灵感省略变体 chip，不展示「0 变体」） */}
                     <div className="mt-4 flex flex-wrap items-center gap-2">
                       <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[10px] tracking-[0.12em] text-faint">
                         {entry.prototypes.length} 原型
                       </span>
-                      <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[10px] tracking-[0.12em] text-faint">
-                        {variants} 变体
-                      </span>
+                      {variants > 0 && (
+                        <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[10px] tracking-[0.12em] text-faint">
+                          {variants} 变体
+                        </span>
+                      )}
                       <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[10px] tracking-[0.12em] text-faint">
                         {entry.date}
                       </span>

@@ -292,62 +292,74 @@ export default async function InspirationDetailPage({
       })}
 
       {/* ═══════ 衍生幕 · 全部变体依次显现（回到宣纸纸面） ═══════ */}
-      {/* 2026-08-28 Claude·data-snap-next：仅作最后一块舞台步进按钮的滚动终点标记，不参与 CSS 吸附 */}
-      <section data-snap-next className="mx-auto max-w-5xl px-6 pt-16 md:pt-24">
-        <SectionHeader
-          index="01"
-          title="衍 生"
-          subtitle={`基于 ${prototypes.length} 件原型的 ${totalVariants} 个变体 · 向下滚动依次显现`}
-        />
+      {/* 2026-08-28 Claude·data-snap-next：仅作最后一块舞台步进按钮的滚动终点标记，不参与 CSS 吸附
+          2026-08-31 Claude·无变体灵感（IN-04 治愈画卷起，用户裁定图片画廊类不衍生）：
+          totalVariants === 0 时衍生幕整节不渲染，步进终点 data-snap-next 移至原文幕，
+          原文幕序号相应由 02 收为 01 */}
+      {totalVariants > 0 && (
+        <section data-snap-next className="mx-auto max-w-5xl px-6 pt-16 md:pt-24">
+          <SectionHeader
+            index="01"
+            title="衍 生"
+            subtitle={`基于 ${prototypes.length} 件原型的 ${totalVariants} 个变体 · 向下滚动依次显现`}
+          />
 
-        <div className="space-y-12 md:space-y-16">
-          {flatVariants.map(({ proto, v }, i) => (
-            <Reveal key={`${proto.slug}:${v.id}`}>
-              {/* 变体标注行：宣纸风排版（序号 / 中文题 / mono 英文题 / 所属原型） */}
-              <div className="mb-3 flex flex-wrap items-baseline gap-3 px-1">
-                <span className="ink-index">V{i + 1}</span>
-                <h3 className="ink-display text-xl text-foreground">{v.title}</h3>
-                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint">
-                  {v.titleEn}
-                </span>
-                {/* 所属原型 tag：跨原型变体序列中标识出处 */}
-                <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[10px] tracking-[0.12em] text-faint">
-                  {proto.title}
-                </span>
-              </div>
-              <p className="mb-4 px-1 text-sm leading-relaxed text-muted">{v.desc}</p>
+          <div className="space-y-12 md:space-y-16">
+            {flatVariants.map(({ proto, v }, i) => (
+              <Reveal key={`${proto.slug}:${v.id}`}>
+                {/* 变体标注行：宣纸风排版（序号 / 中文题 / mono 英文题 / 所属原型） */}
+                <div className="mb-3 flex flex-wrap items-baseline gap-3 px-1">
+                  <span className="ink-index">V{i + 1}</span>
+                  <h3 className="ink-display text-xl text-foreground">{v.title}</h3>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint">
+                    {v.titleEn}
+                  </span>
+                  {/* 所属原型 tag：跨原型变体序列中标识出处 */}
+                  <span className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[10px] tracking-[0.12em] text-faint">
+                    {proto.title}
+                  </span>
+                </div>
+                <p className="mb-4 px-1 text-sm leading-relaxed text-muted">{v.desc}</p>
 
-              {/* 深空变体舞台块：深空底与光斑只存在于本圆角容器内（样式隔离） */}
-              <div
-                className="relative flex min-h-[420px] items-center justify-center overflow-hidden rounded-3xl px-4 py-14"
-                style={{ background: proto.stage }}
-              >
-                <span className="lg-noise rounded-3xl" aria-hidden />
-                <span
-                  className="lg-blob left-[-90px] bottom-[-120px] h-[360px] w-[360px]"
-                  style={{ background: BLOB_COLORS[i % BLOB_COLORS.length] }}
-                  aria-hidden
-                />
-                <span
-                  className="lg-blob right-[-80px] top-[-100px] h-[320px] w-[320px]"
-                  style={{ background: BLOB_COLORS[(i + 1) % BLOB_COLORS.length] }}
-                  aria-hidden
-                />
-                {/* 变体本体：`${proto.slug}:${v.id}` 键按需加载 */}
-                <GlassMount slug={proto.slug} variant={v.id} />
-                {/* 舞台角标 */}
-                <span className="absolute right-4 top-4 font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">
-                  {v.titleEn}
-                </span>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
+                {/* 深空变体舞台块：深空底与光斑只存在于本圆角容器内（样式隔离） */}
+                <div
+                  className="relative flex min-h-[420px] items-center justify-center overflow-hidden rounded-3xl px-4 py-14"
+                  style={{ background: proto.stage }}
+                >
+                  <span className="lg-noise rounded-3xl" aria-hidden />
+                  <span
+                    className="lg-blob left-[-90px] bottom-[-120px] h-[360px] w-[360px]"
+                    style={{ background: BLOB_COLORS[i % BLOB_COLORS.length] }}
+                    aria-hidden
+                  />
+                  <span
+                    className="lg-blob right-[-80px] top-[-100px] h-[320px] w-[320px]"
+                    style={{ background: BLOB_COLORS[(i + 1) % BLOB_COLORS.length] }}
+                    aria-hidden
+                  />
+                  {/* 变体本体：`${proto.slug}:${v.id}` 键按需加载 */}
+                  <GlassMount slug={proto.slug} variant={v.id} />
+                  {/* 舞台角标 */}
+                  <span className="absolute right-4 top-4 font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">
+                    {v.titleEn}
+                  </span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ═══════ 原文幕 · 灵感溯源（宣纸风 GlassCard） ═══════ */}
-      <section className="mx-auto max-w-5xl px-6 pt-16 md:pt-24">
-        <SectionHeader index="02" title="原 文" subtitle="灵感来源 · 可追溯" />
+      <section
+        {...(totalVariants === 0 ? { 'data-snap-next': true } : {})}
+        className="mx-auto max-w-5xl px-6 pt-16 md:pt-24"
+      >
+        <SectionHeader
+          index={totalVariants > 0 ? '02' : '01'}
+          title="原 文"
+          subtitle="灵感来源 · 可追溯"
+        />
         <Reveal>
           <GlassCard className="p-7 md:p-9">
             {/* 来源平台与文章名 + 原始设计方 + 收录日期 */}

@@ -190,6 +190,44 @@ export function MiniInvoice() {
 }
 
 /**
+ * 09 · 治愈画卷微缩图（IN-04，壁纸画廊快照）
+ * 2026-08-31 Claude·新增：复刻自 wall/WallViewer（等比简化）——
+ *   深色细边画框内一幅 CSS 山水（青绿天空 + 双丘 + 小径），右侧迷你细轨
+ *   滚动条 + 底部下指小箭头（SCROLL 提示快照）；
+ *   零 hooks、零图片、零动画循环（性能铁律），静态 JSX + 内联色值自包含。
+ */
+export function MiniWall() {
+  return (
+    <div
+      className="relative w-44 overflow-hidden rounded-xl border border-emerald-950/20 shadow-xl"
+      aria-hidden
+    >
+      {/* CSS 山水：天空渐变 + 远丘 / 近丘 / 小径（呼应 wall-01 林间溪瀑） */}
+      <div
+        className="relative h-24"
+        style={{ background: 'linear-gradient(180deg, #bfe3d6 0%, #d8efe2 55%, #eaf6ea 100%)' }}
+      >
+        <span
+          className="absolute -left-6 bottom-0 h-16 w-28 rounded-[50%]"
+          style={{ background: 'linear-gradient(160deg, #5f9e7e, #3f7a5f)' }}
+        />
+        <span
+          className="absolute -right-8 bottom-0 h-14 w-32 rounded-[50%]"
+          style={{ background: 'linear-gradient(160deg, #7fb894, #58916f)' }}
+        />
+        <span className="absolute bottom-0 left-1/2 h-10 w-3 -translate-x-1/2 rotate-6 rounded-t-full bg-[#f4ecd8]/90" />
+      </div>
+      {/* 右侧迷你细轨滚动条（风格化滚动条快照） */}
+      <span className="absolute right-1.5 top-1/2 h-10 w-[2px] -translate-y-1/2 rounded-full bg-white/40">
+        <span className="absolute left-0 top-0 h-2 w-full rounded-full bg-white" />
+      </span>
+      {/* 底部下指小箭头（向下滚动提示快照） */}
+      <span className="absolute bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rotate-45 border-b border-r border-white/90" />
+    </div>
+  );
+}
+
+/**
  * 08 · 复古电视微缩图（IN-03，复古 CRT 快照）
  * 2026-08-31 Claude·新增：复刻自 crt/CRTPlayer（等比简化）——
  *   奶油机身迷你电视：双天线 + 深棕框屏幕（日落画面用纯 CSS 渐变示意，

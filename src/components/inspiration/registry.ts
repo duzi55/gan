@@ -8,6 +8,7 @@ import {
   MiniWeather,
   MiniInvoice,
   MiniCrt,
+  MiniWall,
 } from './minis';
 
 /**
@@ -146,6 +147,17 @@ const RETRO_CRT_STAGE =
   'radial-gradient(85% 85% at 18% 14%, rgba(251,146,60,0.3), transparent 60%), ' +
   'radial-gradient(85% 85% at 84% 88%, rgba(45,212,191,0.2), transparent 62%), ' +
   'linear-gradient(165deg, #171009, #241a10)';
+
+/**
+ * IN-04 治愈画卷 · 舞台底：青绿浅纸舞台（薄荷 × 湖蓝，浅色系）
+ * 2026-08-31 Claude·新增：呼应水彩山水壁纸的纸面青绿调——与 IN-02 粉彩
+ *   （薄荷 × 薰衣草）同属浅色舞台语言但走山水调；coverStage 与原型 stage
+ *   复用同一份，保证列表卡缩略窗与详情页舞台一致。
+ */
+const HEALING_WALL_STAGE =
+  'radial-gradient(80% 80% at 15% 12%, rgba(134,239,172,0.5), transparent 60%), ' +
+  'radial-gradient(85% 85% at 85% 88%, rgba(125,211,192,0.45), transparent 62%), ' +
+  'linear-gradient(160deg, #edf4ec, #e2efe9)';
 
 export const INSPIRATIONS: InspirationEntry[] = [
   {
@@ -333,6 +345,52 @@ export const INSPIRATIONS: InspirationEntry[] = [
           { id: 'remote', title: '遥控换台', titleEn: 'REMOTE', desc: '同一台 CRT 配上拟物遥控器，数字键 1-4 换台，雪花与 OSD 语言不变。' },
           { id: 'handheld', title: '掌上电视', titleEn: 'HANDHELD', desc: '横版迷你机身收进掌心，顶部提手 + 底部迷你卡带可拖放/点击插带换台。' },
         ],
+      },
+    ],
+  },
+
+  /**
+   * IN-04 治愈画卷 Healing Wall
+   * 2026-08-31 Claude·新增灵感（用户指定小红书帖子《树下的人，好治愈！
+   *   -优选电脑壁纸01》：原帖九图择八入库本地——图 2 为竖版旋转存储的
+   *   重复场景，与图 3 同景，数据清单不收录，详见 wall/wallShared.ts）：
+   *   - 交互按用户点单：一图占满一个视图、向下滚动、风格化滚动条、
+   *     向下滚动提示、滚动吸附、PC 与移动端双适配；
+   *   - immersive: true —— 首屏净化（同 IN-02 / IN-03 用户口述规范）；
+   *   - 青绿浅纸舞台（薄荷 × 湖蓝），浅色舞台第三种调性（山水调）；
+   *   - 1 件原型（满屏画卷），无变体——2026-08-31 Claude·用户裁定：
+   *     图片画廊类灵感不做衍生（「这种不要衍生」），variants 登记为空数组，
+   *     详情页衍生幕按 totalVariants === 0 条件隐藏（见 [slug]/page.tsx），
+   *     规则文件《INSPIRATION_RULES.md》已补注此例外；
+   *   - 组件与共享数据见 wall/ 目录（wallShared.ts 单一数据源）。
+   */
+  {
+    slug: 'healing-wall',
+    no: '04',
+    title: '治愈画卷',
+    titleEn: 'HEALING WALL',
+    desc: '同一组治愈壁纸的画廊语言——一图一屏、吸附滚动、细轨滚动条与常驻翻页提示——满屏画卷，慢慢向下。',
+    date: '2026-08-31',
+    source: {
+      label: '小红书 ·《树下的人，好治愈！-优选电脑壁纸01》（治愈系壁纸九图）',
+      url: 'https://xhslink.cn/o/9Pg5ZWIep3m',
+      via: '小红书博主「治愈」（原帖声明含 AI 生成内容）',
+    },
+    immersive: true,
+    coverStage: HEALING_WALL_STAGE,
+    coverMini: MiniWall,
+    prototypes: [
+      {
+        slug: 'wall-viewer',
+        no: '01',
+        title: '满屏画卷',
+        titleEn: 'WALL VIEWER',
+        desc: '壁纸一图占满一屏：滚轮或触摸下翻自动吸附，右侧细轨滚动条随进度滑动，底部翻页提示在末图转为回顶。',
+        points: ['颗粒噪点', '虚焦景深', '编辑式排版'],
+        stage: HEALING_WALL_STAGE,
+        Mini: MiniWall,
+        /* 2026-08-31 Claude·用户裁定：图片画廊类不衍生变体（空数组） */
+        variants: [],
       },
     ],
   },

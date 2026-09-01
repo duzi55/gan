@@ -72,6 +72,11 @@ const LOADERS: Record<string, ComponentType> = {
   'crt-player': dynamic(() => import('./crt/CRTPlayer'), { ssr: false, loading: () => <Skeleton /> }),
   'crt-player:remote': dynamic(() => import('./crt/variants/CRTRemote'), { ssr: false, loading: () => <Skeleton /> }),
   'crt-player:handheld': dynamic(() => import('./crt/variants/CRTHandheld'), { ssr: false, loading: () => <Skeleton /> }),
+
+  /* ── 09 满屏画卷原型 ──
+   * 2026-08-31 Claude·新增 IN-04 治愈画卷（满屏画卷；用户裁定图片画廊类
+   *   不衍生变体，无 wall-viewer:* 加载键） */
+  'wall-viewer': dynamic(() => import('./wall/WallViewer'), { ssr: false, loading: () => <Skeleton /> }),
 };
 
 export function GlassMount({ slug, variant }: { slug: string; variant?: string }) {
