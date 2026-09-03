@@ -77,6 +77,12 @@ const LOADERS: Record<string, ComponentType> = {
    * 2026-08-31 Claude·新增 IN-04 治愈画卷（满屏画卷；用户裁定图片画廊类
    *   不衍生变体，无 wall-viewer:* 加载键） */
   'wall-viewer': dynamic(() => import('./wall/WallViewer'), { ssr: false, loading: () => <Skeleton /> }),
+
+  /* ── 10 树冠之下原型 ──
+   * 2026-09-03 Kimi·新增 IN-05 在意苹果（three.js 程序化苹果树冠；
+   *   用户点单单页互动不衍生，无 apple-canopy:* 加载键；
+   *   同日替换下线的 cat-duo 双子猫加载键） */
+  'apple-canopy': dynamic(() => import('./orchard/OrchardScene'), { ssr: false, loading: () => <Skeleton /> }),
 };
 
 export function GlassMount({ slug, variant }: { slug: string; variant?: string }) {

@@ -9,6 +9,7 @@ import {
   MiniInvoice,
   MiniCrt,
   MiniWall,
+  MiniOrchard,
 } from './minis';
 
 /**
@@ -158,6 +159,16 @@ const HEALING_WALL_STAGE =
   'radial-gradient(80% 80% at 15% 12%, rgba(134,239,172,0.5), transparent 60%), ' +
   'radial-gradient(85% 85% at 85% 88%, rgba(125,211,192,0.45), transparent 62%), ' +
   'linear-gradient(160deg, #edf4ec, #e2efe9)';
+
+/**
+ * IN-05 在意苹果 · 舞台底：正午晴空舞台（蓝天三段渐变 + 右上阳光暖斑）
+ * 2026-09-03 Kimi·新增：复刻视频的仰角天色——列表缩略窗与详情页舞台
+ *   共用同一份，保证双端一致；与 IN-01 深空 / IN-02 粉彩 / IN-03 暖棕 /
+ *   IN-04 青绿并立第五种舞台语言（晴空调）。
+ */
+const APPLE_SKY_STAGE =
+  'radial-gradient(70% 60% at 80% 10%, rgba(255,246,200,0.55), transparent 62%), ' +
+  'linear-gradient(180deg, #2f7fd0 0%, #6bb8ee 55%, #cdeeff 100%)';
 
 export const INSPIRATIONS: InspirationEntry[] = [
   {
@@ -390,6 +401,57 @@ export const INSPIRATIONS: InspirationEntry[] = [
         stage: HEALING_WALL_STAGE,
         Mini: MiniWall,
         /* 2026-08-31 Claude·用户裁定：图片画廊类不衍生变体（空数组） */
+        variants: [],
+      },
+    ],
+  },
+
+  /**
+   * IN-05 在意苹果 Just Apples
+   * 2026-09-03 Kimi·新增灵感（用户指定小红书视频：AlanGaller《幸福的秘诀
+   *   是拥有苹果时只在意苹果🍎》——仰角苹果树冠 7s 治愈慢镜头：红苹果、
+   *   绿叶、蓝天白云、枝头阳光；用户点单：视频为背景、融入互动、小清新
+   *   文案、全屏视角。原视频为 blob DRM 流无法下载入库，按项目惯例
+   *   three.js 正交分层程序化复刻同一场景，零外部资源）：
+   *   - 场景复刻：蓝天三段渐变 + 太阳辉光/缓转光芒 + 一朵慢走的白云 +
+   *     三组枝叶（苹果钟摆悬挂）+ 落光斑 + 前景散焦叶团；
+   *   - 交互：风随指尖（指针速度成风力）、点苹果即摘下（坠落淡出 + 回赠
+   *     小清新句）、摘尽重新结果、分层视差、底部文案轮换（首句溯源原题）；
+   *   - immersive: true —— 首屏净化（同 IN-02 / IN-03 / IN-04 用户口述规范）；
+   *   - 1 件原型（树冠之下），无变体——沿 IN-04 先例：用户点单单页沉浸
+   *     互动不衍生，variants 登记为空数组；
+   *   - 组件拆三段解耦：orchard/orchardShared.ts（配色文案布局）/
+   *     orchard/orchardTextures.ts（程序化贴图）/ orchard/OrchardScene.tsx
+   *     （场景与覆盖层）。
+   *   - 沿革：本槽位初版为「双子猫」（three.js 3D / 2D 着色器双猫），
+   *     2026-09-03 用户裁定移除（「不要做猫」），同日替换为在意苹果。
+   */
+  {
+    slug: 'apple-moment',
+    no: '05',
+    title: '在意苹果',
+    titleEn: 'JUST APPLES',
+    desc: '同一片仰望的苹果树冠——红果、绿叶、蓝天与一朵白云——复刻成会呼吸的舞台：风随指尖起伏，摘一颗苹果，收下一句小清新。',
+    date: '2026-09-03',
+    source: {
+      label: '小红书 · AlanGaller《幸福的秘诀是拥有苹果时只在意苹果🍎》（治愈系苹果树冠视频）',
+      url: 'https://xhslink.cn/o/8FQ4NpkyxkQ',
+      via: 'AlanGaller',
+    },
+    immersive: true,
+    coverStage: APPLE_SKY_STAGE,
+    coverMini: MiniOrchard,
+    prototypes: [
+      {
+        slug: 'apple-canopy',
+        no: '01',
+        title: '树冠之下',
+        titleEn: 'CANOPY',
+        desc: '仰角的苹果树冠：云慢慢走，光斑慢慢落；指尖搅动一阵风，点一颗苹果便把它摘下，落尽又会结满。',
+        points: ['柔软体积感', '虚焦景深', '编辑式排版'],
+        stage: APPLE_SKY_STAGE,
+        Mini: MiniOrchard,
+        /* 2026-09-03 Kimi·沿 IN-04 先例：用户点单单页沉浸互动不衍生（空数组） */
         variants: [],
       },
     ],

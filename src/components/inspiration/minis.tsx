@@ -221,6 +221,44 @@ export function MiniWall() {
 }
 
 /**
+ * 10 · 在意苹果微缩图（IN-05，晴空果园快照）
+ * 2026-09-03 Kimi·新增：复刻自 orchard/OrchardScene（等比简化）——
+ *   蓝天三段渐变 + 一朵白云 + 阳光角斑 + 枝头三颗红苹果与叶点；
+ *   零 hooks、零图片、零动画循环（性能铁律），静态 JSX + 内联色值自包含。
+ * 2026-09-03 Kimi·替换：原 MiniCats（双子猫）随猫灵感下线一并移除。
+ */
+export function MiniOrchard() {
+  return (
+    <div
+      className="relative w-44 overflow-hidden rounded-xl border border-sky-200/70 shadow-xl"
+      style={{ background: 'linear-gradient(180deg, #2f7fd0 0%, #6bb8ee 55%, #cdeeff 100%)' }}
+      aria-hidden
+    >
+      <div className="relative h-24">
+        {/* 阳光角斑（右上暖光） */}
+        <span
+          className="absolute -right-3 -top-4 block h-12 w-12 rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(255,251,232,0.95), rgba(255,251,232,0) 70%)' }}
+        />
+        {/* 白云（两团相叠） */}
+        <span className="absolute left-6 top-3 block h-3.5 w-10 rounded-full bg-white/90" />
+        <span className="absolute left-10 top-2 block h-3 w-6 rounded-full bg-white/95" />
+        {/* 果枝（左上斜下） */}
+        <span className="absolute left-2 top-7 block h-[3px] w-24 origin-left rotate-[16px] rounded-full" style={{ background: '#5d4037', transform: 'rotate(14deg)' }} />
+        {/* 叶点（两绿错落） */}
+        <span className="absolute left-4 top-6 block h-3 w-2 rotate-[-24deg] rounded-[50%]" style={{ background: '#3f9b4f' }} />
+        <span className="absolute left-16 top-8 block h-3.5 w-2 rotate-[30deg] rounded-[50%]" style={{ background: '#57a94a' }} />
+        <span className="absolute left-24 top-7 block h-3 w-2 rotate-[-12deg] rounded-[50%]" style={{ background: '#2e7d32' }} />
+        {/* 三颗红苹果（带高光点） */}
+        <span className="absolute left-8 top-10 block h-4 w-4 rounded-full shadow-sm" style={{ background: 'radial-gradient(circle at 35% 30%, #ff8a66, #d53a2a 60%, #9c1f16)' }} />
+        <span className="absolute left-[52px] top-12 block h-[18px] w-[18px] rounded-full shadow-sm" style={{ background: 'radial-gradient(circle at 35% 30%, #ff8a66, #d53a2a 60%, #9c1f16)' }} />
+        <span className="absolute left-[88px] top-10 block h-3.5 w-3.5 rounded-full shadow-sm" style={{ background: 'radial-gradient(circle at 35% 30%, #ff8a66, #d53a2a 60%, #9c1f16)' }} />
+      </div>
+    </div>
+  );
+}
+
+/**
  * 08 · 复古电视微缩图（IN-03，复古 CRT 快照）
  * 2026-08-31 Claude·新增：复刻自 crt/CRTPlayer（等比简化）——
  *   奶油机身迷你电视：双天线 + 深棕框屏幕（日落画面用纯 CSS 渐变示意，
