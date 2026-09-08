@@ -75,10 +75,9 @@ export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true
     });
   };
 
-  /* 2026-09-08 Claude·前景遮挡层（用户点单对齐原站「部分动物作为前景遮挡卡片底部」）：
-     原站 Crowd Controls 的 Front 参数（240px）即底部前景横带——带内动物渲染在
-     卡片之前，形成「动物从卡片后探出、又压回卡片下缘」的前后景深 */
-  const frontY = box.h * 0.72;
+  /* 2026-09-08 Claude·前景遮挡层（用户点单对齐原站：部分动物作为前景遮挡卡片）：
+     原站为 U 形前景——卡片左右两侧各一列动物骑缘压前 + 底部横带压前
+     （布局层在 hilosShared 打 front 标记，此处按标记分层渲染） */
 
   /** 单只动物渲染（前后景共用同一布局、姿态与事件） */
   const renderAnimal = (a: (typeof crowd)[number]) => {
@@ -154,11 +153,11 @@ export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true
 
         {/* 视差漂移层（人群整体反向微移，制造景深） */}
         <div className="absolute inset-0" style={driftStyle}>
-          {crowd.filter((a) => a.y < frontY).map(renderAnimal)}
+          {crowd.filter((a) => !a.front).map(renderAnimal)}
         </div>
       </div>
 
-      {/* 前景人群（z-20，底部 28% 横带压在卡片下缘上）
+      {/* 前景人群（z-20，U 形：底部横带 + 卡片左右骑缘列，压在卡片前）
           容器 pointer-events-none 穿透 + 动物本体 auto（精准 hover），
           避免重蹈登录卡全屏容器拦截事件（2026-09-08 Claude·穿透教训） */}
       <div
@@ -168,7 +167,7 @@ export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true
         style={cfgVars}
       >
         <div className="absolute inset-0" style={driftStyle}>
-          {crowd.filter((a) => a.y >= frontY).map(renderAnimal)}
+          {crowd.filter((a) => a.front).map(renderAnimal)}
         </div>
       </div>
     </>

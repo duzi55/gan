@@ -1,23 +1,20 @@
 /**
- * animals.tsx —— IN-07 人群登录：手绘简笔动物 SVG 库
+ * animals.tsx —— IN-07 人群登录：手绘简笔动物 SVG 库（角色级 v2）
  * 2026-09-08 Claude·新增（hilos.sh 登录页复刻）：
  *   - 复刻 hilos 登录页「黑白手绘动物人群」的视觉语言：粗黑描边、
- *     白填充、豆豆眼、圆头圆脑，只露头；
- *   - 12 种动物 + 滑板狗（原站登录卡 logo 同款），全部纯 SVG 手写，
- *     零图片资源、零运行时请求；
- *   - 每个组件接收 className（尺寸 / transform 由调用方控制），
- *     单头自包含 <svg>，被 CrowdField / CrowdKeys / CrowdWall 复用（解耦）。
- * 2026-09-08 Claude·配置项（用户点单「边框太粗，提供配置项」）：
- *   - 描边粗细不再写死（原 4.5），改由 CSS 变量 --hl-sw 驱动：各 svg 根
- *     style 注入 var(--hl-sw, 3.2) 并继承到全部子元素；胡须/嘴线等局部
- *     细线按 calc(var(--hl-sw) × 系数) 联动；默认 3.2，调参见
- *     hilosShared.CrowdConfig 与 CrowdLogin 右下角「人群调参」面板。
+ *     白填充、豆豆眼，全部纯 SVG 手写，零图片资源、零运行时请求。
+ * 2026-09-08 Claude·角色级重画 v2（用户点单「动物太简陋，对齐原站级别」）：
+ *   - 从「正脸纯头部」升级为「头 + 颈肩 + 衣领」的角色立绘（原站同款
+ *     结构：肩膀上沿被下一排动物叠住，层层叠叠）；
+ *   - 脸部立体化：狗/狐狸吻部侧伸、鳄鱼长吻、熊猫环纹眼斑、机器人
+ *     单眼大镜头（致敬原站）、熊高领毛衣、猫头鹰胸羽波浪纹；
+ *   - 耳内廓 / 眉线 / 嘴线等细节走 0.7× 细线（calc 联动主描边）；
+ *   - 描边粗细仍由 CSS 变量 --hl-sw 驱动（配置项见 hilosShared.CrowdConfig）。
  */
 
 type IconProps = { className?: string };
 
-/** 共用描边颜色（粗细走 CSS 变量 --hl-sw，由各 svg 根 style 注入并继承到子元素，
- *  见文件头 2026-09-08 配置项说明；默认 3.2，CrowdLogin 调参面板可实时改） */
+/** 共用描边颜色（粗细走 CSS 变量 --hl-sw，svg 根 style 注入并继承） */
 const STROKE = '#181818';
 const COMMON = {
   fill: '#ffffff',
@@ -26,249 +23,349 @@ const COMMON = {
   strokeLinejoin: 'round',
 } as const;
 
-/** 豆豆眼（两眼一对，黑实心） */
-function Eyes({ y, dx, r = 3.4 }: { y: number; dx: number; r?: number }) {
+/** 细线组（嘴线 / 眉线 / 胡须 / 衣领纹，0.7× 主描边） */
+function Fine({ children }: { children: React.ReactNode }) {
   return (
-    <g fill={STROKE} stroke="none">
-      <circle cx={50 - dx} cy={y} r={r} />
-      <circle cx={50 + dx} cy={y} r={r} />
+    <g {...COMMON} fill="none" style={{ strokeWidth: 'calc(var(--hl-sw, 3.2) * 0.7)' }}>
+      {children}
     </g>
   );
 }
 
-/** 狗 · 下垂大耳 */
+/** 实心组（鼻头 / 眼睛 / 黑斑，填黑不描边） */
+function Solid({ children }: { children: React.ReactNode }) {
+  return (
+    <g fill={STROKE} stroke="none">
+      {children}
+    </g>
+  );
+}
+
+/**
+ * 颈肩 + 衣领（角色感关键：不再是浮头）
+ * collar：round 圆领 / v V 领 / turtle 高领（熊的毛衣，致敬原站）
+ * fill：肩部填充（熊猫/企鹅黑肩传 STROKE）
+ */
+function Body({ collar = 'round', fill = '#ffffff' }: { collar?: 'round' | 'v' | 'turtle'; fill?: string }) {
+  return (
+    <g {...COMMON} fill={fill}>
+      <path d="M16 102 q2 -30 34 -32 q32 2 34 32" />
+      {collar === 'round' && <path d="M38 73 q12 8 24 0" fill="none" />}
+      {collar === 'v' && <path d="M40 71 l10 13 l10 -13" fill="none" />}
+      {collar === 'turtle' && <path d="M33 70 q17 7 34 0 M33 77 q17 7 34 0" fill="none" />}
+    </g>
+  );
+}
+
+/** 狗 · 吻部侧伸 + 大垂耳 */
 export function DogIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
-        <path d="M28 40 q-17 1 -16 23 q1 14 13 14 q8 0 9 -10" />
-        <path d="M72 40 q17 1 16 23 q-1 14 -13 14 q-8 0 -9 -10" />
-        <ellipse cx="50" cy="57" rx="32" ry="29" />
+        {/* 远耳（右侧后方，小） */}
+        <path d="M64 20 q12 4 10 20 q-1 10 -9 10" />
+        {/* 头 */}
+        <ellipse cx="46" cy="40" rx="25" ry="23" />
+        {/* 吻筒（向右前方伸出） */}
+        <path d="M54 44 q18 -4 21 6 q2 10 -9 13 l-14 2 q-8 0 -7 -9 q0 -8 9 -12" />
+        {/* 近耳（左大垂耳） */}
+        <path d="M28 24 q-17 2 -15 26 q1 15 14 15 q8 0 9 -10 l2 -20" />
       </g>
-      <Eyes y={52} dx={11} />
-      <g {...COMMON}>
-        <ellipse cx="50" cy="66" rx="6.5" ry="5" fill={STROKE} stroke="none" />
-        <path d="M50 71 q0 6 -7 7 M50 71 q0 6 7 7" fill="none" />
-      </g>
+      <Solid>
+        <ellipse cx="73" cy="49" rx="5.5" ry="4.5" />
+        <circle cx="42" cy="36" r="3.4" />
+        <circle cx="58" cy="35" r="2.9" />
+      </Solid>
+      <Fine>
+        <path d="M70 56 q-2 5 -8 6" />
+        <path d="M36 28 q5 -3 10 -1" />
+      </Fine>
+      <Body collar="round" />
     </svg>
   );
 }
 
-/** 猫 · 尖耳胡须 */
+/** 猫 · 尖耳内廓 + 胡须 + V 领 */
 export function CatIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
-        <path d="M30 36 L25 12 q14 3 21 13" />
-        <path d="M70 36 L75 12 q-14 3 -21 13" />
-        <ellipse cx="50" cy="59" rx="31" ry="27" />
+        <path d="M33 26 L29 6 q13 3 18 12" />
+        <path d="M67 26 L71 6 q-13 3 -18 12" />
+        <ellipse cx="50" cy="40" rx="24" ry="21" />
       </g>
-      <Eyes y={55} dx={10} />
-      <g {...COMMON}>
-        <path d="M47 65 h6 l-3 5 z" fill={STROKE} stroke="none" />
-        <path d="M24 60 h-13 M25 66 l-12 5 M76 60 h13 M75 66 l12 5" fill="none" style={{ strokeWidth: 'calc(var(--hl-sw, 3.2) * 0.75)' }} />
-      </g>
+      <Fine>
+        <path d="M34 21 l-2 -9 q6 2 8 6 M66 21 l2 -9 q-6 2 -8 6" />
+        <path d="M50 51 v3 M50 54 q-4 3 -8 1 M50 54 q4 3 8 1" />
+        <path d="M26 44 h-11 M27 50 l-10 4 M74 44 h11 M73 50 l10 4" />
+      </Fine>
+      <Solid>
+        <path d="M47 46 h6 l-3 5 z" />
+        <circle cx="41" cy="38" r="3.2" />
+        <circle cx="59" cy="38" r="3.2" />
+      </Solid>
+      <Body collar="v" />
     </svg>
   );
 }
 
-/** 兔 · 竖长耳 */
+/** 兔 · 一竖一垂双耳 + 门牙 */
 export function RabbitIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
-        <path d="M40 35 q-10 -33 2 -34 q11 -1 8 34" />
-        <path d="M60 35 q10 -33 -2 -34 q-11 -1 -8 34" />
-        <ellipse cx="50" cy="61" rx="29" ry="26" />
+        <path d="M41 24 q-9 -28 2 -29 q10 -1 7 29" />
+        <path d="M60 26 q16 -14 21 -4 q4 10 -12 14" />
+        <ellipse cx="50" cy="44" rx="23" ry="21" />
+        {/* 门牙 */}
+        <path d="M46 55 h8 v7 q-4 2.5 -8 0 z" />
       </g>
-      <Eyes y={57} dx={9} />
-      <g {...COMMON}>
-        <circle cx="50" cy="66" r="3.6" fill={STROKE} stroke="none" />
-        <path d="M50 70 v4 M50 74 q-4 4 -8 2 M50 74 q4 4 8 2" fill="none" style={{ strokeWidth: 'calc(var(--hl-sw, 3.2) * 0.75)' }} />
-      </g>
+      <Solid>
+        <circle cx="42" cy="42" r="3.2" />
+        <circle cx="58" cy="42" r="3.2" />
+        <circle cx="50" cy="50" r="3.2" />
+      </Solid>
+      <Fine>
+        <path d="M44 22 q-4 -18 1 -20" />
+      </Fine>
+      <Body collar="round" />
     </svg>
   );
 }
 
-/** 熊 · 半圆耳 */
+/** 熊 · 高领毛衣（致敬原站毛衣熊） */
 export function BearIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
-        <circle cx="29" cy="31" r="11" />
-        <circle cx="71" cy="31" r="11" />
-        <ellipse cx="50" cy="57" rx="32" ry="29" />
-        <ellipse cx="50" cy="68" rx="11" ry="8.5" />
+        <circle cx="30" cy="21" r="9.5" />
+        <circle cx="70" cy="21" r="9.5" />
+        <ellipse cx="50" cy="41" rx="26" ry="23" />
+        <ellipse cx="50" cy="51" rx="10" ry="7.5" />
       </g>
-      <Eyes y={52} dx={10} />
-      <ellipse cx="50" cy="64" rx="5.5" ry="4" fill={STROKE} stroke="none" />
+      <Solid>
+        <ellipse cx="50" cy="47.5" rx="5" ry="3.8" />
+        <circle cx="41" cy="36" r="3.3" />
+        <circle cx="59" cy="36" r="3.3" />
+      </Solid>
+      <Fine>
+        <path d="M50 51 v4" />
+      </Fine>
+      <Body collar="turtle" />
     </svg>
   );
 }
 
-/** 猪 · 大鼻拱 */
+/** 猪 · 大鼻拱 + 卷耳 */
 export function PigIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
-        <path d="M31 37 q-7 -15 4 -19 q9 -2 11 9" />
-        <path d="M69 37 q7 -15 -4 -19 q-9 -2 -11 9" />
-        <ellipse cx="50" cy="58" rx="31" ry="28" />
-        <ellipse cx="50" cy="66" rx="13" ry="9" />
+        <path d="M33 25 q-7 -15 4 -19 q9 -2 11 9" />
+        <path d="M67 25 q7 -15 -4 -19 q-9 -2 -11 9" />
+        <ellipse cx="50" cy="42" rx="25" ry="22" />
+        <ellipse cx="50" cy="52" rx="12" ry="8.5" />
       </g>
-      <Eyes y={50} dx={11} />
-      <g fill={STROKE} stroke="none">
-        <circle cx="45.5" cy="66" r="2.3" />
-        <circle cx="54.5" cy="66" r="2.3" />
-      </g>
+      <Solid>
+        <circle cx="45.5" cy="52" r="2.3" />
+        <circle cx="54.5" cy="52" r="2.3" />
+        <circle cx="40" cy="37" r="3.2" />
+        <circle cx="60" cy="37" r="3.2" />
+      </Solid>
+      <Fine>
+        <path d="M34 48 q3 3 6 2 M66 48 q-3 3 -6 2" />
+      </Fine>
+      <Body collar="round" />
     </svg>
   );
 }
 
-/** 熊猫 · 黑眼圈 */
+/** 熊猫 · 环纹眼斑 + 黑肩 */
 export function PandaIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
-      <g fill={STROKE} stroke="none">
-        <circle cx="29" cy="30" r="11" />
-        <circle cx="71" cy="30" r="11" />
-      </g>
-      <ellipse cx="50" cy="57" rx="31" ry="28" {...COMMON} />
-      <g fill={STROKE} stroke="none">
-        <ellipse cx="39" cy="54" rx="7" ry="9.5" transform="rotate(-14 39 54)" />
-        <ellipse cx="61" cy="54" rx="7" ry="9.5" transform="rotate(14 61 54)" />
-      </g>
+      <Solid>
+        <circle cx="29" cy="21" r="10" />
+        <circle cx="71" cy="21" r="10" />
+      </Solid>
+      <ellipse cx="50" cy="41" rx="25" ry="22" {...COMMON} />
+      <Solid>
+        <ellipse cx="40" cy="39" rx="6.5" ry="9" transform="rotate(-14 40 39)" />
+        <ellipse cx="60" cy="39" rx="6.5" ry="9" transform="rotate(14 60 39)" />
+        <ellipse cx="50" cy="51" rx="5" ry="3.8" />
+      </Solid>
       <g fill="#ffffff" stroke="none">
-        <circle cx="40" cy="52" r="2.6" />
-        <circle cx="60" cy="52" r="2.6" />
+        <circle cx="41" cy="37" r="2.4" />
+        <circle cx="59" cy="37" r="2.4" />
       </g>
-      <ellipse cx="50" cy="68" rx="5.5" ry="4" fill={STROKE} stroke="none" />
+      <Fine>
+        <path d="M50 55 q0 4 -5 5 M50 55 q0 4 5 5" />
+      </Fine>
+      <Body collar="round" fill={STROKE} />
     </svg>
   );
 }
 
-/** 企鹅 · 白脸黑背 */
+/** 企鹅 · 白脸黑背 + 燕尾白胸 */
 export function PenguinIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
-      <ellipse cx="50" cy="54" rx="30" ry="33" fill={STROKE} stroke="none" />
-      <path
-        d="M50 36 q-19 -2 -19 21 q0 20 19 25 q19 -5 19 -25 q0 -23 -19 -21"
-        fill="#ffffff"
-        stroke="none"
-      />
-      <Eyes y={54} dx={9} r={3} />
-      <path d="M44 63 q6 -5 12 0 q-6 8 -12 0" fill={STROKE} stroke="none" />
+      <ellipse cx="50" cy="40" rx="23" ry="25" fill={STROKE} stroke="none" />
+      <path d="M50 24 q-17 -1 -17 18 q0 17 17 21 q17 -4 17 -21 q0 -19 -17 -18" fill="#ffffff" stroke="none" />
+      <Solid>
+        <circle cx="42" cy="39" r="3" />
+        <circle cx="58" cy="39" r="3" />
+        <path d="M45 47 q5 -4 10 0 q-5 7 -10 0" />
+      </Solid>
+      <Body collar="round" fill={STROKE} />
+      {/* 燕尾白胸 */}
+      <ellipse cx="50" cy="90" rx="17" ry="13" fill="#ffffff" stroke="none" />
     </svg>
   );
 }
 
-/** 鳄鱼 · 头顶凸眼 + 微笑露齿 */
+/** 鳄鱼 · 长吻侧伸（全人群唯一纯侧脸，原站同款） */
 export function AlligatorIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
-        <circle cx="35" cy="33" r="8.5" />
-        <circle cx="65" cy="33" r="8.5" />
-        <path d="M21 52 q29 -13 58 0 q8 3 8 14 q0 17 -13 19 l-48 0 q-13 -2 -13 -19 q0 -11 8 -14" />
+        {/* 眼凸（头顶） */}
+        <circle cx="29" cy="20" r="7.5" />
+        {/* 后颅 */}
+        <ellipse cx="36" cy="38" rx="20" ry="17" />
+        {/* 长吻（向右水平伸出） */}
+        <path d="M42 32 q36 -7 48 4 q9 9 -3 14 l-45 5 q-9 -1 -9 -11 q0 -9 9 -12" />
       </g>
-      <g fill={STROKE} stroke="none">
-        <circle cx="35" cy="33" r="3" />
-        <circle cx="65" cy="33" r="3" />
-        <circle cx="42" cy="55" r="2" />
-        <circle cx="58" cy="55" r="2" />
-      </g>
-      <g {...COMMON} fill="none" style={{ strokeWidth: 'calc(var(--hl-sw, 3.2) * 0.8)' }}>
-        <path d="M33 68 q17 9 34 0" />
-        <path d="M42 72 v5 M58 72 v5" />
-      </g>
+      <Solid>
+        <circle cx="29" cy="20" r="3" />
+        <circle cx="82" cy="40" r="1.8" />
+        <circle cx="89" cy="41" r="1.8" />
+      </Solid>
+      <Fine>
+        {/* 吻线 + 两颗下牙 + 眼后棘 */}
+        <path d="M52 50 q20 3 34 -1" />
+        <path d="M60 52 v5 M71 51 v5" />
+        <path d="M40 16 l4 5 M48 18 l4 5" />
+      </Fine>
+      <Body collar="round" />
     </svg>
   );
 }
 
-/** 猫头鹰 · 大眼圈 */
+/** 猫头鹰 · 大眼圈 + 胸羽波浪纹 */
 export function OwlIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
-        <path d="M33 33 L28 14 q12 2 18 11" />
-        <path d="M67 33 L72 14 q-12 2 -18 11" />
-        <ellipse cx="50" cy="57" rx="30" ry="28" />
-        <circle cx="39" cy="55" r="11" />
-        <circle cx="61" cy="55" r="11" />
+        <path d="M34 25 L30 7 q11 2 16 10" />
+        <path d="M66 25 L70 7 q-11 2 -16 10" />
+        <ellipse cx="50" cy="40" rx="24" ry="22" />
+        <circle cx="40" cy="38" r="10" />
+        <circle cx="60" cy="38" r="10" />
       </g>
-      <g fill={STROKE} stroke="none">
-        <circle cx="39" cy="55" r="4" />
-        <circle cx="61" cy="55" r="4" />
-        <path d="M50 63 l-4.5 6.5 h9 z" />
-      </g>
+      <Solid>
+        <circle cx="40" cy="38" r="3.8" />
+        <circle cx="60" cy="38" r="3.8" />
+        <path d="M50 45 l-4 6 h8 z" />
+      </Solid>
+      <Body collar="round" />
+      <Fine>
+        {/* 胸羽两排波浪 */}
+        <path d="M36 82 q4 -4 8 0 q4 4 8 0 M48 82 q4 -4 8 0 q4 4 8 0" />
+        <path d="M42 90 q4 -4 8 0 q4 4 8 0" />
+      </Fine>
     </svg>
   );
 }
 
-/** 牛 · 小角鼻板（头带一块黑斑） */
+/** 奶牛 · 小角 + 鼻板 + 头斑肩斑 */
 export function CowIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
-        <path d="M29 37 q-11 -4 -9 -17 q9 2 13 11" />
-        <path d="M71 37 q11 -4 9 -17 q-9 2 -13 11" />
-        <ellipse cx="50" cy="56" rx="29" ry="26" />
-        <ellipse cx="50" cy="70" rx="16" ry="10" />
+        <path d="M31 25 q-11 -3 -9 -17 q9 2 13 11" />
+        <path d="M69 25 q11 -3 9 -17 q-9 2 -13 11" />
+        <ellipse cx="50" cy="40" rx="24" ry="21" />
+        <ellipse cx="50" cy="54" rx="14" ry="9" />
       </g>
-      <path d="M38 33 q8 -7 15 0 q-2 9 -8 9 q-7 -1 -7 -9" fill={STROKE} stroke="none" />
-      <Eyes y={52} dx={10} />
-      <g fill={STROKE} stroke="none">
-        <circle cx="44" cy="70" r="2.6" />
-        <circle cx="56" cy="70" r="2.6" />
-      </g>
+      <Solid>
+        <path d="M40 22 q8 -6 14 0 q-2 8 -7 8 q-6 -1 -7 -8" />
+        <circle cx="41" cy="38" r="3.2" />
+        <circle cx="59" cy="38" r="3.2" />
+        <circle cx="44" cy="54" r="2.6" />
+        <circle cx="56" cy="54" r="2.6" />
+      </Solid>
+      <Body collar="round" />
+      <Solid>
+        <path d="M30 84 q8 -4 13 2 q-2 8 -9 7 q-6 -2 -4 -9" />
+      </Solid>
     </svg>
   );
 }
 
-/** 狐狸 · 尖吻长耳 */
+/** 狐狸 · 尖耳内廓 + 尖吻侧伸 + 白领巾 */
 export function FoxIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
-        <path d="M32 37 L27 12 q13 3 19 13" />
-        <path d="M68 37 L73 12 q-13 3 -19 13" />
-        <path d="M50 88 q-23 -6 -27 -25 q-3 -17 9 -23 q18 -9 36 0 q12 6 9 23 q-4 19 -27 25" />
+        <path d="M34 26 L30 6 q12 3 17 12" />
+        <path d="M66 26 L70 6 q-12 3 -17 12" />
+        {/* 窄脸 */}
+        <path d="M50 62 q-18 -4 -21 -20 q-2 -14 8 -19 q13 -6 26 0 q10 5 8 19 q-3 16 -21 20" />
+        {/* 尖吻（向右伸出） */}
+        <path d="M56 44 q14 -2 17 4 q2 7 -7 9 l-12 2 q-6 -1 -6 -7 q0 -7 8 -8" />
       </g>
-      <Eyes y={54} dx={10} />
-      <ellipse cx="50" cy="81" rx="5" ry="3.6" fill={STROKE} stroke="none" />
+      <Fine>
+        <path d="M35 21 l-1.5 -8 q5 2 7 6 M65 21 l1.5 -8 q-5 2 -7 6" />
+      </Fine>
+      <Solid>
+        <circle cx="71" cy="47" r="3.8" />
+        <circle cx="42" cy="36" r="3.2" />
+        <circle cx="57" cy="35" r="2.9" />
+      </Solid>
+      {/* 白领巾胸毛 */}
+      <path d="M42 68 q8 6 16 0 l-3 12 q-5 3 -10 0 z" {...COMMON} />
+      <Body collar="round" />
     </svg>
   );
 }
 
-/** 机器人 · 方头天线（人群里的「特工」梗：agents in the room） */
+/** 机器人 · 方头 + 天线 + 单眼大镜头（致敬原站机器人） */
 export function RobotIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
-        <rect x="25" y="32" width="50" height="44" rx="10" />
-        <rect x="17" y="46" width="8" height="14" rx="3" />
-        <rect x="75" y="46" width="8" height="14" rx="3" />
-        <path d="M50 32 v-14" fill="none" />
+        <path d="M50 18 v-9" fill="none" />
+        <rect x="27" y="18" width="46" height="40" rx="9" />
+        <rect x="19" y="32" width="8" height="13" rx="3" />
+        <rect x="73" y="32" width="8" height="13" rx="3" />
+        {/* 单眼大镜头外圈 */}
+        <circle cx="50" cy="37" r="11" />
       </g>
-      <circle cx="50" cy="13" r="4.5" fill={STROKE} stroke="none" />
-      <g fill={STROKE} stroke="none">
-        <circle cx="40" cy="50" r="5" />
-        <circle cx="60" cy="50" r="5" />
+      <Solid>
+        <circle cx="50" cy="6" r="4" />
+        <circle cx="50" cy="37" r="6.5" />
+      </Solid>
+      <circle cx="52.5" cy="34.5" r="2" fill="#ffffff" stroke="none" />
+      <Fine>
+        <path d="M40 51 h20 M45 51 v4 M55 51 v4" />
+      </Fine>
+      {/* 梯形金属肩 + 领口螺栓 */}
+      <g {...COMMON}>
+        <path d="M26 102 l4 -24 q20 -8 40 0 l4 24" />
       </g>
-      <g fill="#ffffff" stroke="none">
-        <circle cx="41.5" cy="48.5" r="1.5" />
-        <circle cx="61.5" cy="48.5" r="1.5" />
-      </g>
-      <path d="M41 64 h18" fill="none" stroke={STROKE} strokeLinecap="round" style={{ strokeWidth: 'calc(var(--hl-sw, 3.2) * 0.8)' }} />
+      <Solid>
+        <circle cx="38" cy="82" r="1.8" />
+        <circle cx="62" cy="82" r="1.8" />
+      </Solid>
     </svg>
   );
 }
 
 /**
  * 滑板狗 · 登录卡 logo（原站同款：小狗踩滑板）
- * 2026-09-08 Claude·侧视全身像：身体 / 头 / 垂耳 / 翘尾 / 四腿收两笔，
- *   滑板长条 + 双轮；only 用于 CrowdLogin 卡片顶部。
+ * 2026-09-08 Claude·侧视全身像：身体 / 头 / 垂耳 / 翘尾 / 腿收两笔，
+ *   滑板长条 + 双轮；仅用于 CrowdLogin 卡片顶部（角色 v2 不重画 logo）。
  */
 export function SkateDogIcon({ className }: IconProps) {
   return (
@@ -287,11 +384,10 @@ export function SkateDogIcon({ className }: IconProps) {
         {/* 滑板 */}
         <path d="M12 84 q48 9 96 0" fill="none" style={{ strokeWidth: 'calc(var(--hl-sw, 3.2) * 1.2)' }} />
       </g>
-      {/* 鼻 + 眼 */}
+      {/* 鼻 + 眼 + 轮 */}
       <g fill={STROKE} stroke="none">
         <circle cx="97" cy="35" r="3.6" />
         <circle cx="86" cy="31" r="2.6" />
-        {/* 轮 */}
         <circle cx="34" cy="92" r="5" />
         <circle cx="86" cy="92" r="5" />
       </g>
