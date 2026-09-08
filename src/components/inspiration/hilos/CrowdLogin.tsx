@@ -12,14 +12,18 @@
  *        庆祝波浪，不发送任何请求；
  *     ③ GitHub / Google——原站走 OAuth 跳转，复刻不跳转，以波浪回敬。
  *   - 移动端：卡片 min(430px, 92vw) 钳制，超高小屏卡片列内部滚动。
+ *   - 配置项（2026-09-08 Claude·用户点单「边框太粗，提供配置项」）：
+ *     右下角「人群调参」面板——描边粗细 / 人群大小 / 跳跃高度实时可调，
+ *     状态字段见 hilosShared.CrowdConfig，hover 果冻跳动画在 CrowdField。
  */
 
 'use client';
 
 import { useState } from 'react';
 import CrowdField from './CrowdField';
+import CrowdControls from './CrowdControls';
 import { useCrowdSynth } from './useCrowdSynth';
-import { CROWD_TAGLINE } from './hilosShared';
+import { CROWD_CONFIG_DEFAULT, CROWD_TAGLINE, type CrowdConfig } from './hilosShared';
 import { SkateDogIcon } from './animals';
 
 /** GitHub 单色标（Simple Icons 路径，fill currentColor） */
@@ -46,6 +50,10 @@ export default function CrowdLogin() {
   const [wave, setWave] = useState(0); // 全场波浪触发器（波浪 = 本复刻的通用彩蛋反馈）
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
+  /* 2026-09-08 Claude·人群配置项（用户点单「边框太粗，提供配置项」）：
+     状态集中在此，CrowdField 经 CSS 变量/布局参数即时响应 */
+  const [crowdCfg, setCrowdCfg] = useState<CrowdConfig>(CROWD_CONFIG_DEFAULT);
+  const [controlsOpen, setControlsOpen] = useState(false);
   const cheer = () => setWave((w) => w + 1);
 
   /** 邮箱登录：仅前端格式校验（复刻演示无后端），合法 → sent 态 + 全场庆祝 */
@@ -59,8 +67,8 @@ export default function CrowdLogin() {
 
   return (
     <div className="relative h-full w-full overflow-hidden">
-      {/* 人群铺底（划过会跳、开嗓后会叫） */}
-      <CrowdField onAnimalSound={synth.play} waveKey={wave} />
+      {/* 人群铺底（划过会跳、开嗓后会叫；描边/大小/跳跃受配置项驱动） */}
+      <CrowdField onAnimalSound={synth.play} waveKey={wave} config={crowdCfg} />
 
       {/* 居中登录卡（1:1 原站构图） */}
       <div className="absolute inset-0 z-10 flex items-center justify-center overflow-y-auto overscroll-contain p-4">
@@ -154,6 +162,28 @@ export default function CrowdLogin() {
           {!synth.enabled && <path d="M3 3l18 18" />}
         </svg>
       </button>
+
+      {/* 右下角「人群调参」入口 + 面板（复刻原站 Crowd Controls，2026-09-08 Claude·配置项） */}
+      <div className="absolute bottom-5 right-5 z-20 flex flex-col items-end gap-3">
+        {controlsOpen && <CrowdControls value={crowdCfg} onChange={setCrowdCfg} />}
+        <button
+          type="button"
+          onClick={() => setControlsOpen((o) => !o)}
+          aria-expanded={controlsOpen}
+          aria-label={controlsOpen ? 'Close crowd controls' : 'Open crowd controls'}
+          title={controlsOpen ? 'Close crowd controls' : 'Open crowd controls'}
+          className={`flex h-11 w-11 items-center justify-center rounded-full border shadow-lg transition-all hover:scale-105 ${
+            controlsOpen ? 'border-neutral-900 bg-neutral-900 text-white' : 'border-neutral-200 bg-white text-neutral-700'
+          }`}
+        >
+          {/* 滑杆图标（调参语义） */}
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <path d="M4 8h9M19 8h1M4 16h3M13 16h7" />
+            <circle cx="16" cy="8" r="2.2" />
+            <circle cx="10" cy="16" r="2.2" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 }

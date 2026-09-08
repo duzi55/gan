@@ -46,6 +46,21 @@ export function pentaFreq(noteIndex: number, octave = 0): number {
   return PENTA_BASE_FREQ * Math.pow(2, semis / 12);
 }
 
+/**
+ * 人群可调配置（2026-09-08 Claude·用户点单「边框太粗，提供配置项」）：
+ * 默认值经原站比对校准；CrowdLogin 右下角「人群调参」面板实时改写，
+ * 经 CSS 变量 --hl-sw（描边）/ --hl-hop（跳跃）与布局参数 sizeDivisor 生效。
+ */
+export interface CrowdConfig {
+  /** 动物描边粗细（SVG stroke-width，viewBox=100 坐标系；原写死 4.5 偏粗，默认 3.2） */
+  strokeWidth: number;
+  /** 人群尺寸因子：动物边长 ≈ 容器宽 ÷ sizeDivisor（越小越大只），结果钳 64~150px */
+  sizeDivisor: number;
+  /** hover 跳起高度 px（原站 Lift=18；默认 14 配果冻动画更 Q 弹） */
+  hopHeight: number;
+}
+export const CROWD_CONFIG_DEFAULT: CrowdConfig = { strokeWidth: 3.2, sizeDivisor: 10, hopHeight: 14 };
+
 /** 人群中的一只动物（布局输出） */
 export interface CrowdAnimal {
   key: string;
@@ -75,11 +90,11 @@ function hash01(seed: number): number {
  *   （负 gap = 动物相互叠肩），奇数行横向错半格，顶部探出容器上沿；
  *   size 随容器宽 clamp（桌面≈144，移动≈64），间距比对齐原站（0.55/0.575）。
  */
-export function buildCrowdLayout(width: number, height: number): CrowdAnimal[] {
+export function buildCrowdLayout(width: number, height: number, sizeDivisor: number = CROWD_CONFIG_DEFAULT.sizeDivisor): CrowdAnimal[] {
   if (width < 40 || height < 40) return [];
-  /* 2026-09-08 Claude·密度校准：size≈width/10（原站 Size 146px / pitchX 80px
-     的 1.83 重叠比），1440px 屏横向约 18 列与原站一致；移动端正向下钳 64px */
-  const size = Math.min(150, Math.max(64, width / 10));
+  /* 2026-09-08 Claude·密度校准：size≈width/sizeDivisor（默认 10，原站 Size 146px /
+     pitchX 80px 的 1.83 重叠比），1440px 屏横向约 18 列与原站一致；移动端向下钳 64px */
+  const size = Math.min(150, Math.max(64, width / sizeDivisor));
   const pitchX = size * 0.55;
   const pitchY = size * 0.575;
   const cols = Math.ceil(width / pitchX) + 1;

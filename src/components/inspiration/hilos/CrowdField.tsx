@@ -14,7 +14,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ANIMALS, buildCrowdLayout } from './hilosShared';
+import { ANIMALS, buildCrowdLayout, CROWD_CONFIG_DEFAULT, type CrowdConfig } from './hilosShared';
 
 interface CrowdFieldProps {
   /** 发声接口（useCrowdSynth 提供；未传或 disabled 时静默） */
@@ -23,10 +23,12 @@ interface CrowdFieldProps {
   waveKey?: number;
   /** 鼠标视差开关（默认 true；reduced-motion 用户自动禁用） */
   parallax?: boolean;
+  /** 人群可调配置（2026-09-08 Claude·描边/尺寸/跳跃高度，见 hilosShared.CrowdConfig） */
+  config?: CrowdConfig;
   className?: string;
 }
 
-export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true, className }: CrowdFieldProps) {
+export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true, config = CROWD_CONFIG_DEFAULT, className }: CrowdFieldProps) {
   const boxRef = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ w: 0, h: 0 });
   const [drift, setDrift] = useState({ x: 0, y: 0 });
@@ -60,7 +62,7 @@ export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true
     return () => clearTimeout(t);
   }, [waveKey, still]);
 
-  const crowd = useMemo(() => buildCrowdLayout(box.w, box.h), [box.w, box.h]);
+  const crowd = useMemo(() => buildCrowdLayout(box.w, box.h, config.sizeDivisor), [box.w, box.h, config.sizeDivisor]);
 
   /** 鼠标视差：相对容器中心 ±10px 反向漂移（transition 平滑跟随） */
   const handleDrift = (e: React.PointerEvent) => {
@@ -79,16 +81,29 @@ export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true
       className={`absolute inset-0 overflow-hidden ${className ?? ''}`}
       onPointerMove={handleDrift}
       aria-hidden="true"
+      /* 配置项 → CSS 变量：--hl-sw 描边粗细（动物 svg 继承），--hl-hop 跳跃高度（果冻动画） */
+      style={{ ['--hl-sw' as never]: config.strokeWidth, ['--hl-hop' as never]: `${config.hopHeight}px` }}
     >
-      {/* 自包含动效：hl- 前缀（灵感样式隔离铁律），reduced-motion 静态降级 */}
+      {/* 自包含动效：hl- 前缀（灵感样式隔离铁律），reduced-motion 静态降级
+          2026-09-08 Claude·hover 升级果冻跳（squash & stretch，用户点单对齐原站动画感）：
+          keyframes 负责入场挤压拉伸，transform 声明负责保持跳起态与回落过渡 */}
       <style>{`
-        .hl-animal { transition: transform .28s cubic-bezier(.34,1.56,.64,1); will-change: transform; }
-        .hl-animal:hover { transform: translateY(-14px) scale(1.07) !important; }
+        .hl-animal { transition: transform .3s cubic-bezier(.34,1.56,.64,1); will-change: transform; }
+        @keyframes hl-hop {
+          0% { transform: translateY(0) scale(1, 1); }
+          35% { transform: translateY(calc(var(--hl-hop, 14px) * -1.2)) scale(1.1, 0.9); }
+          65% { transform: translateY(calc(var(--hl-hop, 14px) * -0.85)) scale(0.94, 1.08); }
+          100% { transform: translateY(calc(var(--hl-hop, 14px) * -1)) scale(1.06, 1.06); }
+        }
+        .hl-animal:hover {
+          transform: translateY(calc(var(--hl-hop, 14px) * -1)) scale(1.06);
+          animation: hl-hop .38s cubic-bezier(.34,1.56,.64,1);
+        }
         @keyframes hl-wave { 0%,100% { transform: translateY(0); } 40% { transform: translateY(-16px); } }
         .hl-waving { animation: hl-wave .55s cubic-bezier(.34,1.56,.64,1) both; }
         @media (prefers-reduced-motion: reduce) {
           .hl-animal, .hl-waving { transition: none; animation: none; }
-          .hl-animal:hover { transform: none !important; }
+          .hl-animal:hover { transform: none; animation: none; }
         }
       `}</style>
 
