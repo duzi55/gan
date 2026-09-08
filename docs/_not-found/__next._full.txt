@@ -1,13 +1,14 @@
 1:"$Sreact.fragment"
-2:I[8568,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-02afbe7d937b331d.js"],"Navigation"]
+2:I[8568,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-c32d777c72c2b89f.js"],"Navigation"]
 3:I[7121,[],""]
 4:I[4581,[],""]
-5:I[9610,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-02afbe7d937b331d.js"],"MobileNav"]
+5:I[9610,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-c32d777c72c2b89f.js"],"MobileNav"]
 6:I[484,[],"OutletBoundary"]
 7:"$Sreact.suspense"
 a:I[484,[],"ViewportBoundary"]
 c:I[484,[],"MetadataBoundary"]
 e:I[7123,[],"default",1]
+:HL["/gan/_next/static/media/7d4881bb7e1bf84d-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
 :HL["/gan/_next/static/css/4c4b2c54cbb78702.css","style"]
 9:X

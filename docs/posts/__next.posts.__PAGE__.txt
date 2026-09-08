@@ -1,5 +1,5 @@
 1:"$Sreact.fragment"
-2:I[312,["8500","static/chunks/8500-f4d7bfbe7500f274.js","6530","static/chunks/app/posts/page-2846dd59d2cc10c1.js"],"PostsArchive"]
+2:I[312,["8500","static/chunks/8500-f4d7bfbe7500f274.js","6530","static/chunks/app/posts/page-85a0a3e21429c187.js"],"PostsArchive"]
 3:I[484,[],"OutletBoundary"]
 4:"$Sreact.suspense"
 8:I[484,[],"ViewportBoundary"]
