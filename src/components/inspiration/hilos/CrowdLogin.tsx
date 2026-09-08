@@ -70,10 +70,13 @@ export default function CrowdLogin() {
       {/* 人群铺底（划过会跳、开嗓后会叫；描边/大小/跳跃受配置项驱动） */}
       <CrowdField onAnimalSound={synth.play} waveKey={wave} config={crowdCfg} />
 
-      {/* 居中登录卡（1:1 原站构图） */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center overflow-y-auto overscroll-contain p-4">
+      {/* 居中登录卡（1:1 原站构图）
+          2026-09-08 Claude·修复 hover 穿透（用户报「hover 没效果」）：容器
+          inset-0 全屏覆盖曾拦截全部指针事件、人群永远收不到 hover——
+          容器 pointer-events-none 穿透，仅卡片本体恢复交互 */}
+      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center overflow-y-auto overscroll-contain p-4">
         <div
-          className="w-[min(430px,92vw)] rounded-[28px] border border-neutral-100 bg-white px-7 py-9 sm:px-9"
+          className="pointer-events-auto w-[min(430px,92vw)] rounded-[28px] border border-neutral-100 bg-white px-7 py-9 sm:px-9"
           style={{ boxShadow: '0 30px 90px -24px rgba(15,15,20,0.35), 0 4px 18px -6px rgba(15,15,20,0.12)' }}
         >
           <SkateDogIcon className="mx-auto h-16 w-auto" />
