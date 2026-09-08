@@ -83,6 +83,21 @@ const LOADERS: Record<string, ComponentType> = {
    *   用户点单单页互动不衍生，无 apple-canopy:* 加载键；
    *   同日替换下线的 cat-duo 双子猫加载键） */
   'apple-canopy': dynamic(() => import('./orchard/OrchardScene'), { ssr: false, loading: () => <Skeleton /> }),
+
+  /* ── 11 扇形作品集原型 ──
+   * 2026-09-04 Kimi·新增 IN-06 扇形作品集（PortfolioCarousel3D 恢复上架：
+   *   原 ui-components 首版 3D 文件夹轮播，2026-08-26 重构下线，
+   *   用户裁定找回；组件本体留在原目录 ui-components/PortfolioCarousel3D，
+   *   此处跨目录引入；沿 IN-04 / IN-05 先例单页互动不衍生，无
+   *   portfolio-carousel:* 加载键） */
+  'portfolio-carousel': dynamic(() => import('../ui-components/PortfolioCarousel3D'), { ssr: false, loading: () => <Skeleton /> }),
+
+  /* ── 12 人群登录卡原型 + 变体 ──
+   * 2026-09-08 Claude·新增 IN-07 人群登录（hilos.sh 登录页复刻：
+   *   手绘动物人群 + 登录卡 + 动物琴键 + 签到人群墙） */
+  'crowd-login': dynamic(() => import('./hilos/CrowdLogin'), { ssr: false, loading: () => <Skeleton /> }),
+  'crowd-login:keys': dynamic(() => import('./hilos/variants/CrowdKeys'), { ssr: false, loading: () => <Skeleton /> }),
+  'crowd-login:wall': dynamic(() => import('./hilos/variants/CrowdWall'), { ssr: false, loading: () => <Skeleton /> }),
 };
 
 export function GlassMount({ slug, variant }: { slug: string; variant?: string }) {

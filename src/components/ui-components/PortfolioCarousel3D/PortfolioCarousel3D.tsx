@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * PortfolioCarousel3D —— 3D 文件夹作品集轮播（IN-06 扇形作品集 · 原型本体）
+ * 2026-08-24 首版（97c7b26）：六张海报卡收进文件夹，hover/轻点扇形展开，
+ *   滑动翻页、点卡聚焦，触摸手势 + 桌面 hover 双端交互；
+ * 2026-08-26 随 cd9499d 重构（展示组件融入博客设计系统）下线删除；
+ * 2026-09-04 Kimi·恢复上架：用户裁定找回（「我的3d文件夹找不到了」），
+ *   从 git 历史 7396ad8 原样检出 1:1 恢复，注册为灵感 IN-06
+ *   （GlassMount 加载键 portfolio-carousel，见 inspiration/registry.ts）。
+ */
+
 import React, { useRef, useState, useCallback } from "react";
 import "./PortfolioCarousel3D.css";
 

@@ -269,3 +269,16 @@
   .carousel-nav-btn { opacity: 0; transition: opacity 200ms ease; }
   .carousel-container:hover .carousel-nav-btn { opacity: 1; }
 }
+
+/* ============================================
+   Reduced Motion（2026-09-04 Kimi·补：恢复上架为 IN-06 灵感，
+   按《INSPIRATION_RULES.md》第六条双端适配铁律——
+   prefers-reduced-motion 下动画静态降级）
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow { animation: none; }
+  .folder-card,
+  .folder-front,
+  .folder-back,
+  .carousel-nav-btn { transition: none; }
+}

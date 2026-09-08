@@ -10,6 +10,8 @@ import {
   MiniCrt,
   MiniWall,
   MiniOrchard,
+  MiniCarousel,
+  MiniCrowd,
 } from './minis';
 
 /**
@@ -169,6 +171,29 @@ const HEALING_WALL_STAGE =
 const APPLE_SKY_STAGE =
   'radial-gradient(70% 60% at 80% 10%, rgba(255,246,200,0.55), transparent 62%), ' +
   'linear-gradient(180deg, #2f7fd0 0%, #6bb8ee 55%, #cdeeff 100%)';
+
+/**
+ * IN-06 扇形作品集 · 舞台底：浅蓝雾紫舞台（冰蓝 × 薰衣草，浅色系）
+ * 2026-09-04 Kimi·新增：呼应 PortfolioCarousel3D 背景三环的冰蓝渐变
+ *   （#dbeafe / #bfdbfe / #e0f2fe）与六张海报卡的高饱和配色——浅色舞台
+ *   第四种调性（冰蓝调）；coverStage 与原型 stage 复用同一份。
+ */
+const PORTFOLIO_FAN_STAGE =
+  'radial-gradient(80% 80% at 15% 12%, rgba(191,219,254,0.7), transparent 60%), ' +
+  'radial-gradient(85% 85% at 85% 88%, rgba(221,214,254,0.6), transparent 62%), ' +
+  'linear-gradient(160deg, #eef4ff, #e9edfb)';
+
+/**
+ * IN-07 人群登录 · 舞台底：纸白舞台（石灰 × 淡蓝灰斑，浅色系）
+ * 2026-09-08 Claude·新增：呼应 hilos 登录页的纯白底与黑白手绘人群——
+ *   近白纸面 + 两团极淡冷灰光斑，让人群黑线描边成为唯一主角；
+ *   与 IN-02 粉彩 / IN-04 青绿 / IN-05 晴空 / IN-06 冰蓝并立第六种
+ *   浅色舞台语言（纸白调）；coverStage 与原型 stage 复用同一份。
+ */
+const CROWD_PAPER_STAGE =
+  'radial-gradient(80% 80% at 15% 12%, rgba(203,213,225,0.55), transparent 60%), ' +
+  'radial-gradient(85% 85% at 85% 88%, rgba(199,210,254,0.45), transparent 62%), ' +
+  'linear-gradient(160deg, #fafaf9, #f1f1f4)';
 
 export const INSPIRATIONS: InspirationEntry[] = [
   {
@@ -453,6 +478,103 @@ export const INSPIRATIONS: InspirationEntry[] = [
         Mini: MiniOrchard,
         /* 2026-09-03 Kimi·沿 IN-04 先例：用户点单单页沉浸互动不衍生（空数组） */
         variants: [],
+      },
+    ],
+  },
+
+  /**
+   * IN-06 扇形作品集 Folder Fan
+   * 2026-09-04 Kimi·新增灵感（用户裁定恢复：「我的3d文件夹找不到了」——
+   *   PortfolioCarousel3D 为本站 2026-08-24 首版组件（97c7b26），
+   *   2026-08-26 随 cd9499d「展示组件融入博客设计系统」重构下线删除，
+   *   组件本体与 6 张作品集原卡从 git 历史 1:1 检出恢复，零改动上架）：
+   *   - 交互（原样保留）：hover / 轻点文件夹扇形展开六卡、滑动翻页、
+   *     点卡聚焦、左右导航键，触摸手势 + 桌面 hover 双端适配；
+   *   - 溯源：站内首版自有组件，无外部原稿——按 IN-02 起 url 可选化
+   *     规则登记来源身份（label / via），不编造外链；
+   *   - immersive: true —— 首屏净化（沿 IN-02 ~ IN-05 用户口述规范）；
+   *   - 1 件原型（扇形展卡），无变体——沿 IN-04 / IN-05 先例：
+   *     单页沉浸互动不衍生，variants 登记为空数组；
+   *   - 组件本体留在原目录 ui-components/PortfolioCarousel3D（用户要求
+   *     恢复原位置），GlassMount 跨目录引入；微缩图按用户裁定用原卡
+   *     缩略（MiniCarousel，见 minis.tsx）。
+   */
+  {
+    slug: 'portfolio-folder',
+    no: '06',
+    title: '扇形作品集',
+    titleEn: 'FOLDER FAN',
+    desc: '一只会呼吸的作品文件夹——hover 或轻点即扇形展开六张海报卡，滑动翻页、点卡聚焦，桌面与移动端共用同一套轮播语言。',
+    date: '2026-09-04',
+    source: {
+      label: '站内首版组件 · PortfolioCarousel3D 3D 文件夹作品集轮播',
+      via: '本站 2026-08-24 初版（97c7b26），2026-08-26 重构下线（cd9499d），2026-09-04 用户裁定恢复',
+    },
+    immersive: true,
+    coverStage: PORTFOLIO_FAN_STAGE,
+    coverMini: MiniCarousel,
+    prototypes: [
+      {
+        slug: 'portfolio-carousel',
+        no: '01',
+        title: '扇形展卡',
+        titleEn: 'FAN OUT',
+        desc: '六张海报卡收进一只文件夹：指尖或鼠标一碰即扇形散开，左右滑动逐张翻阅，点选一张便聚焦放大。',
+        points: ['柔软体积感', '虚焦景深', '编辑式排版'],
+        stage: PORTFOLIO_FAN_STAGE,
+        Mini: MiniCarousel,
+        /* 2026-09-04 Kimi·沿 IN-04 / IN-05 先例：单页沉浸互动不衍生（空数组） */
+        variants: [],
+      },
+    ],
+  },
+
+  /**
+   * IN-07 人群登录 The Crowd
+   * 2026-09-08 Claude·新增灵感（用户分享 hilos.sh 登录页：全屏黑白手绘
+   *   动物人群 + 居中登录卡；原站人群带声音与调参面板 Crowd Controls）：
+   *   - 交互复刻：参数化人群铺满（负 gap 叠肩 / 交错行 / 顶部探出，
+   *     算法见 hilos/hilosShared.buildCrowdLayout）+ hover 跳起（Lift）
+   *     + hover 发声（sawtooth + 小调五声音阶 + 混响尾，默认静音，
+   *     左下「Unmute the crowd」开嗓）+ 鼠标视差 + 全场波浪彩蛋；
+   *   - 复刻边界（纯前端演示，无后端无 mock）：Watch demo / OAuth 按钮
+   *     以全场波浪代替，邮箱登录仅前端格式校验置 sent 态；
+   *   - immersive: true —— 首屏净化（沿 IN-02 ~ IN-06 用户口述规范）；
+   *   - 纸白舞台（石灰 × 淡蓝灰斑），浅色舞台第六种调性（纸白调）；
+   *   - 1 件原型（人群登录卡）+ 2 变体（动物琴键 / 签到人群墙），
+   *     组件拆四段解耦：hilos/animals.tsx（手绘 SVG 库）/
+   *     hilos/hilosShared.ts（名册·布局·音阶）/ hilos/useCrowdSynth.ts
+   *     （合成器）/ hilos/CrowdField.tsx（人群场）+ CrowdLogin + variants。
+   */
+  {
+    slug: 'the-crowd',
+    no: '07',
+    title: '人群登录',
+    titleEn: 'THE CROWD',
+    desc: '同一群手绘小动物的房间语言——叠肩人群、划过会跳、开嗓会叫——复刻 hilos 登录页的人群与登录卡，并衍生动物琴键与签到人群墙。',
+    date: '2026-09-08',
+    source: {
+      label: 'hilos.sh 登录页 · 手绘动物人群 + 登录卡',
+      url: 'https://hilos.sh/login',
+      via: 'hilos（用户经小红书笔记推荐）',
+    },
+    immersive: true,
+    coverStage: CROWD_PAPER_STAGE,
+    coverMini: MiniCrowd,
+    prototypes: [
+      {
+        slug: 'crowd-login',
+        no: '01',
+        title: '人群登录卡',
+        titleEn: 'CROWD LOGIN',
+        desc: '全屏手绘动物人群托着一张白色登录卡：划过小动物会跳，点左下圆球开嗓后划过会叫（小调五声音阶），登录按钮的彩蛋是全场波浪。',
+        points: ['柔软体积感', '虚焦景深', '编辑式排版'],
+        stage: CROWD_PAPER_STAGE,
+        Mini: MiniCrowd,
+        variants: [
+          { id: 'keys', title: '动物琴键', titleEn: 'ANIMAL KEYS', desc: '人群排成一排琴键：点按弹奏小调五声音阶跨八度，键盘 1–8 同效，按下即跳。' },
+          { id: 'wall', title: '签到人群墙', titleEn: 'CHECK-IN WALL', desc: '48 位小动物成员墙：点击点亮签到、实时计数，呼应「Members belong」。' },
+        ],
       },
     ],
   },

@@ -317,3 +317,89 @@ export function MiniCrt() {
     </div>
   );
 }
+
+/**
+ * 11 · 扇形作品集微缩图（IN-06，文件夹轮播快照）
+ * 2026-09-04 Kimi·新增：PortfolioCarousel3D 恢复上架（原 ui-components 首版
+ *   组件，2026-08-26 重构下线，用户裁定找回注册为灵感）——按用户裁定
+ *   「图片画廊类灵感的微缩图就用原图」（IN-04 起），直接取作品集原卡
+ *   （中央天蓝卡）缩略，双卡错位叠放示意扇形展开；lazy/async，零客户端 JS。
+ */
+export function MiniCarousel() {
+  const BASE = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  return (
+    <div
+      className="relative w-44 overflow-hidden rounded-xl border border-slate-200/70 shadow-xl"
+      style={{ background: 'linear-gradient(160deg, #eef4ff, #e9edfb)' }}
+      aria-hidden
+    >
+      <div className="relative h-24">
+        {/* 后卡（酸橙绿海报，左倾露出） */}
+        <img
+          src={`${BASE}/portfolio-cards/A_bright_lime_green_graphic_de_2026-08-24T00-39-37.png`}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          className="absolute left-4 top-2.5 h-[84px] w-[64px] select-none rounded-lg object-cover shadow-md"
+          style={{ transform: 'rotate(-10deg)' }}
+        />
+        {/* 前卡（天蓝人物卡，右倾压叠） */}
+        <img
+          src={`${BASE}/portfolio-cards/A_sky_blue_gradient_card_with__2026-08-24T00-39-48.png`}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          className="absolute left-[68px] top-1.5 h-[88px] w-[66px] select-none rounded-lg object-cover shadow-lg"
+          style={{ transform: 'rotate(6deg)' }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * 12 · 人群登录微缩图（IN-07，hilos 登录页快照）
+ * 2026-09-08 Claude·新增：复刻自 hilos/CrowdLogin（等比简化）——
+ *   黑白手绘人群（四排错位小圆头 + 豆豆眼）叠肩铺满，中央白色圆角登录卡
+ *   （圆 logo / 灰线 / 黑主按钮 / 浅灰第三方钮）；零 hooks、零图片、
+ *   零动画循环（性能铁律），静态 JSX + Tailwind 自包含。
+ */
+export function MiniCrowd() {
+  /* 一排 8 颗小动物头（白圆 + 粗黑边 + 豆豆眼，重复调用铺四排） */
+  const row = (pos: string) => (
+    <div className={`absolute flex gap-1 ${pos}`} aria-hidden>
+      {Array.from({ length: 8 }, (_, i) => (
+        <i
+          key={i}
+          className="flex h-6 w-6 items-start justify-center gap-[3px] rounded-full border-2 border-neutral-800 bg-white pt-[7px]"
+        >
+          <b className="h-[3px] w-[3px] rounded-full bg-neutral-800" />
+          <b className="h-[3px] w-[3px] rounded-full bg-neutral-800" />
+        </i>
+      ))}
+    </div>
+  );
+  return (
+    <div
+      className="relative h-[7.5rem] w-44 overflow-hidden rounded-xl border border-neutral-200/80 bg-[#fafaf9] shadow-xl"
+      aria-hidden
+    >
+      {/* 人群：四排错位铺满（第二/四排右错半格，复刻叠肩感） */}
+      {row('-left-2 top-0.5')}
+      {row('left-3 top-[26px]')}
+      {row('-left-2 top-[52px]')}
+      {row('left-3 top-[78px]')}
+
+      {/* 登录卡（白圆角 + 黑主按钮，1:1 等比简化） */}
+      <div className="absolute left-1/2 top-1/2 z-10 w-[92px] -translate-x-1/2 -translate-y-1/2 rounded-lg border border-neutral-100 bg-white p-2 shadow-[0_10px_24px_-8px_rgba(15,15,20,0.3)]">
+        <i className="mx-auto block h-3 w-3 rounded-full border-2 border-neutral-800 bg-white" />
+        <i className="mx-auto mt-1 block h-1 w-8 rounded-full bg-neutral-300" />
+        <i className="mt-1.5 block h-1.5 w-full rounded-sm bg-neutral-100 ring-1 ring-neutral-200" />
+        <i className="mt-1 block h-2.5 w-full rounded-md bg-neutral-900" />
+        <i className="mt-1 block h-2 w-full rounded-md bg-neutral-100" />
+      </div>
+    </div>
+  );
+}
