@@ -1,5 +1,5 @@
 1:"$Sreact.fragment"
-2:I[8500,["8500","static/chunks/8500-f4d7bfbe7500f274.js","6235","static/chunks/app/gallery/page-588b9060111cb5b6.js"],""]
+2:I[8500,["8500","static/chunks/8500-f4d7bfbe7500f274.js","6235","static/chunks/app/gallery/page-71de364dce9674c8.js"],""]
 3:I[484,[],"OutletBoundary"]
 4:"$Sreact.suspense"
 8:I[484,[],"ViewportBoundary"]
@@ -7,8 +7,8 @@
 a:I[6869,[],"IconMark"]
 c:I[7121,[],""]
 d:I[4581,[],""]
-10:I[8568,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-02afbe7d937b331d.js"],"Navigation"]
-11:I[9610,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-02afbe7d937b331d.js"],"MobileNav"]
+10:I[8568,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-c32d777c72c2b89f.js"],"Navigation"]
+11:I[9610,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-c32d777c72c2b89f.js"],"MobileNav"]
 :HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
 :HL["/gan/_next/static/css/dc0f948084d7fd00.css","style"]
 7:X

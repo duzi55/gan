@@ -1,7 +1,7 @@
 1:"$Sreact.fragment"
-2:I[8434,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7220","static/chunks/app/about/page-f4289b6782b5abe0.js"],"AuthorBio"]
-3:I[6202,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7220","static/chunks/app/about/page-f4289b6782b5abe0.js"],"BlogStats"]
-4:I[2688,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7220","static/chunks/app/about/page-f4289b6782b5abe0.js"],"Newsletter"]
+2:I[8434,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7220","static/chunks/app/about/page-1aa087d10bd0b004.js"],"AuthorBio"]
+3:I[6202,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7220","static/chunks/app/about/page-1aa087d10bd0b004.js"],"BlogStats"]
+4:I[2688,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7220","static/chunks/app/about/page-1aa087d10bd0b004.js"],"Newsletter"]
 5:I[484,[],"OutletBoundary"]
 6:"$Sreact.suspense"
 a:I[484,[],"ViewportBoundary"]
@@ -9,7 +9,7 @@ b:I[484,[],"MetadataBoundary"]
 c:I[6869,[],"IconMark"]
 e:I[7121,[],""]
 f:I[4581,[],""]
-12:I[8568,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-02afbe7d937b331d.js"],"Navigation"]
+12:I[8568,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-c32d777c72c2b89f.js"],"Navigation"]
 :HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
 :HL["/gan/_next/static/css/dc0f948084d7fd00.css","style"]
 9:X
