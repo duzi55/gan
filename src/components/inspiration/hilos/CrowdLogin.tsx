@@ -13,8 +13,10 @@
  *     ③ GitHub / Google——原站走 OAuth 跳转，复刻不跳转，以波浪回敬。
  *   - 移动端：卡片 min(430px, 92vw) 钳制，超高小屏卡片列内部滚动。
  *   - 配置项（2026-09-08 Claude·用户点单「边框太粗，提供配置项」）：
- *     右下角「人群调参」面板——描边粗细 / 人群大小 / 跳跃高度实时可调，
- *     状态字段见 hilosShared.CrowdConfig，hover 果冻跳动画在 CrowdField。
+ *     右下角「人群调参」面板——人群大小 / 跳跃高度实时可调（v3 换原作
+ *     色块 SVG 后描边项退役），状态字段见 hilosShared.CrowdConfig。
+ *   - 2026-09-08 Claude·卡片文案中文化（用户裁定）：hilos 字标保留，
+ *     标语 / 按钮 / aria 全中文；底部前景带加深至一排上半身压卡片下缘。
  */
 
 'use client';
@@ -94,7 +96,7 @@ export default function CrowdLogin() {
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-neutral-900 text-white">
               <svg viewBox="0 0 10 12" className="ml-0.5 h-2 w-2" fill="currentColor" aria-hidden="true"><path d="M0 0 L10 6 L0 12 z" /></svg>
             </span>
-            Watch demo
+            观看演示
           </button>
 
           {/* 邮箱 magic link（复刻演示无后端，见文件头声明②） */}
@@ -106,7 +108,7 @@ export default function CrowdLogin() {
               disabled={sent}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@company.com"
-              aria-label="Email"
+              aria-label="邮箱"
               className="w-full rounded-xl border border-neutral-200 bg-white px-4 py-3 text-[15px] text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-neutral-400 disabled:opacity-60"
             />
             <button
@@ -115,14 +117,14 @@ export default function CrowdLogin() {
                 sent ? 'bg-emerald-600' : 'bg-neutral-900 hover:bg-neutral-800'
               }`}
             >
-              {sent ? 'Magic link sent ✓' : 'Continue with email'}
+              {sent ? '登录链接已发送 ✓' : '使用邮箱继续'}
             </button>
           </form>
 
-          {/* or 分隔（1:1：细线 + 小字） */}
+          {/* or 分隔（细线 + 小字） */}
           <div className="my-3 flex items-center gap-3 sm:my-4" aria-hidden="true">
             <span className="h-px flex-1 bg-neutral-200" />
-            <span className="text-xs text-neutral-400">or</span>
+            <span className="text-xs text-neutral-400">或</span>
             <span className="h-px flex-1 bg-neutral-200" />
           </div>
 
@@ -134,7 +136,7 @@ export default function CrowdLogin() {
               className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-neutral-100 px-4 py-3 text-[15px] font-medium text-neutral-800 transition-colors hover:bg-neutral-200"
             >
               <GithubIcon className="h-[18px] w-[18px]" />
-              Continue with GitHub
+              使用 GitHub 继续
             </button>
             <button
               type="button"
@@ -142,19 +144,19 @@ export default function CrowdLogin() {
               className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-neutral-100 px-4 py-3 text-[15px] font-medium text-neutral-800 transition-colors hover:bg-neutral-200"
             >
               <GoogleIcon className="h-[18px] w-[18px]" />
-              Continue with Google
+              使用 Google 继续
             </button>
           </div>
         </div>
       </div>
 
-      {/* 左下角声音开关（1:1 原站「Unmute the crowd」圆球） */}
+      {/* 左下角声音开关（原站「Unmute the crowd」圆球，中文 aria） */}
       <button
         type="button"
         onClick={synth.toggle}
         aria-pressed={synth.enabled}
-        aria-label={synth.enabled ? 'Mute the crowd' : 'Unmute the crowd'}
-        title={synth.enabled ? 'Mute the crowd' : 'Unmute the crowd'}
+        aria-label={synth.enabled ? '让人群静音' : '让人群开嗓'}
+        title={synth.enabled ? '让人群静音' : '让人群开嗓'}
         className={`absolute bottom-5 left-5 z-30 flex h-11 w-11 items-center justify-center rounded-full border shadow-lg transition-all hover:scale-105 ${
           synth.enabled ? 'border-neutral-900 bg-neutral-900 text-white' : 'border-neutral-200 bg-white text-neutral-700'
         }`}
@@ -176,8 +178,8 @@ export default function CrowdLogin() {
           type="button"
           onClick={() => setControlsOpen((o) => !o)}
           aria-expanded={controlsOpen}
-          aria-label={controlsOpen ? 'Close crowd controls' : 'Open crowd controls'}
-          title={controlsOpen ? 'Close crowd controls' : 'Open crowd controls'}
+          aria-label={controlsOpen ? '关闭人群调参' : '打开人群调参'}
+          title={controlsOpen ? '关闭人群调参' : '打开人群调参'}
           className={`flex h-11 w-11 items-center justify-center rounded-full border shadow-lg transition-all hover:scale-105 ${
             controlsOpen ? 'border-neutral-900 bg-neutral-900 text-white' : 'border-neutral-200 bg-white text-neutral-700'
           }`}

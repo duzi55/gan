@@ -92,7 +92,7 @@ export interface CrowdAnimal {
   flip: boolean; // 水平镜像（人群朝向更自然）
   rot: number; // 微旋转 deg（手绘松弛感）
   col: number; // 列号（波浪动画按列延迟）
-  /** 是否前景层（2026-09-08 Claude·U 形前景：底部横带 + 卡片左右骑缘列，压卡片前） */
+  /** 是否前景层（2026-09-08 Claude·仅底部一排压卡片下缘——用户裁定，见 buildCrowdLayout） */
   front: boolean;
 }
 
@@ -103,6 +103,16 @@ export interface CrowdAnimal {
 function hash01(seed: number): number {
   const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
   return x - Math.floor(x);
+}
+
+/**
+ * 种类加权选择（2026-09-08 Claude·用户裁定修复：均匀随机曾致机器人占 28%
+ * 满屏电视机——原站以动物为绝对主体、机器人仅零星点缀）：
+ * 94% 出动物（0-17 均分），6% 出机器人（18-24 均分）；
+ * buildCrowdLayout 与 CrowdWall 成员表共用（单一配比口径）。
+ */
+export function weightedAnimalIndex(seed: number): number {
+  return hash01(seed + 7) < 0.94 ? Math.floor(hash01(seed + 3) * 18) : 18 + Math.floor(hash01(seed + 3) * 7);
 }
 
 /**
@@ -129,7 +139,10 @@ export function buildCrowdLayout(width: number, height: number, sizeDivisor: num
   const cardRight = cardLeft + cardW;
   const cardTop = (height - cardH) / 2;
   const cardBottom = cardTop + cardH;
-  const frontBandY = height * 0.72;
+  /* 前景带顶线 = 卡片底 - 0.75 只动物高（2026-09-08 Claude·用户裁定加深：
+     曾按 height×0.72 取值，1116px 舞台下只压到卡片 40px 不明显——改为
+     跟随卡片底定位，一排动物上半身 ~110px 压在卡片下缘，同原站） */
+  const frontBandY = cardBottom - size * 0.75;
   const sideAvoid = cardLeft < size;
   const cols = Math.ceil(width / pitchX) + 1;
   const rows = Math.ceil(height / pitchY) + 1;
@@ -156,8 +169,9 @@ export function buildCrowdLayout(width: number, height: number, sizeDivisor: num
          曾误读局部放大图做成 U 形左右骑缘列，已按用户指正回退） */
       out.push({
         key: `r${row}c${col}`,
-        /* 动物种类与音级按行列错开，相邻不重样、划动成旋律 */
-        animalIndex: (row * 5 + col * 7 + Math.floor(hash01(seed + 3) * 5)) % ANIMALS.length,
+        /* 种类加权：动物 94% / 机器人 6%（见 weightedAnimalIndex 注释）；
+           音级按行列错开，划动成旋律 */
+        animalIndex: weightedAnimalIndex(seed),
         noteIndex: (row * 3 + col) % PENTA_SEMITONES.length,
         octave: row % 3 === 0 ? 1 : 0,
         x,
@@ -173,8 +187,11 @@ export function buildCrowdLayout(width: number, height: number, sizeDivisor: num
   return out;
 }
 
-/** 登录卡副文案（1:1 复刻原站标语） */
-export const CROWD_TAGLINE = 'People and agents shipping in the same rooms.';
+/**
+ * 登录卡副文案（2026-09-08 Claude·用户裁定卡片中文化；
+ * 原站英文 'People and agents shipping in the same rooms.' 存此注释备查）
+ */
+export const CROWD_TAGLINE = '人和 Agent，在同一个房间里把事情做成。';
 
 /**
  * 签到墙成员名（CrowdWall 变体）：动物名 + 序号称谓

@@ -573,7 +573,7 @@ export const INSPIRATIONS: InspirationEntry[] = [
         Mini: MiniCrowd,
         variants: [
           { id: 'keys', title: '动物琴键', titleEn: 'ANIMAL KEYS', desc: '人群排成一排琴键：点按弹奏小调五声音阶跨八度，键盘 1–8 同效，按下即跳。' },
-          { id: 'wall', title: '签到人群墙', titleEn: 'CHECK-IN WALL', desc: '48 位小动物成员墙：点击点亮签到、实时计数，呼应「Members belong」。' },
+          { id: 'wall', title: '签到人群墙', titleEn: 'CHECK-IN WALL', desc: '25 位小动物成员墙：全名册一格一种不重复，点击点亮签到、实时计数，呼应「Members belong」。' },
         ],
       },
     ],

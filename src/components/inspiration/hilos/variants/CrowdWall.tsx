@@ -1,11 +1,13 @@
 /**
  * CrowdWall.tsx —— IN-07 变体 V2：签到人群墙（人群语言 × 房间成员场景）
  * 2026-09-08 Claude·新增：呼应 hilos 产品概念「Bots visit. Members belong.」——
- *   人群从背景走上前台成为「房间成员」：48 位小动物初始灰淡（未到场），
+ *   人群从背景走上前台成为「房间成员」：小动物初始灰淡（未到场），
  *   点击即点亮签到（跳起 + 发声 + 勾角标），再点取消；
- *   顶部实时计数「N / 48 位已到场」，Reset 一键清空；
+ *   顶部实时计数「N / 25 位已到场」，Reset 一键清空；
  *   首次点击自动开嗓（用户手势解锁 AudioContext）；
  *   名册称谓见 hilosShared.wallMemberName（纯 UI 状态，非接口数据）。
+ * 2026-09-08 Claude·成员去重（用户报「这里面有重复的」）：48 格 25 种
+ *   必重复 → 改为全名册 25 格 5×5、一格一种不重复，顺序确定性打散。
  */
 
 'use client';
@@ -14,22 +16,28 @@ import { useMemo, useState } from 'react';
 import { ANIMALS, wallMemberName } from '../hilosShared';
 import { useCrowdSynth } from '../useCrowdSynth';
 
-const TOTAL = 48;
+/* 2026-09-08 Claude·修复重复（用户报「这里面有重复的」）：48 格配 25 种
+   素材必然重复 23 只 → 改为全名册 25 格、一格一种不重复 */
+const TOTAL = ANIMALS.length;
 
 export default function CrowdWall() {
   const synth = useCrowdSynth();
   const [checked, setChecked] = useState<Set<number>>(new Set());
 
-  /* 确定性成员表（同 hilosShared 伪随机思路：同输入同输出） */
-  const members = useMemo(
-    () =>
-      Array.from({ length: TOTAL }, (_, i) => ({
-        animalIndex: (i * 7 + Math.floor(((i * 13) % 10) / 3)) % ANIMALS.length,
-        noteIndex: i % 5,
-        octave: i % 9 === 0 ? 1 : 0,
-      })),
-    [],
-  );
+  /* 成员表 = 全名册 25 种各一只（与 hilos.sh 人群一一对应）；
+     顺序按确定性 hash 打散（同输入同输出），避免 7 款机器人连号扎堆一行 */
+  const members = useMemo(() => {
+    const order = ANIMALS.map((_, i) => i).sort((a, b) => {
+      const ha = Math.sin(a * 127.1 + 311.7) * 43758.5453;
+      const hb = Math.sin(b * 127.1 + 311.7) * 43758.5453;
+      return ha - Math.floor(ha) - (hb - Math.floor(hb));
+    });
+    return order.map((animalIndex, i) => ({
+      animalIndex,
+      noteIndex: i % 5,
+      octave: i % 9 === 0 ? 1 : 0,
+    }));
+  }, []);
 
   /** 签到 / 取消：首次点击自动开嗓；签到发声 + 跳（CSS transition 语言同原型） */
   const toggleMember = (i: number) => {
@@ -45,7 +53,7 @@ export default function CrowdWall() {
   };
 
   return (
-    <div className="flex w-[min(680px,94vw)] flex-col items-center gap-6">
+    <div className="flex w-[min(560px,94vw)] flex-col items-center gap-6">
       <style>{`
         .hl-member { transition: transform .25s cubic-bezier(.34,1.56,.64,1), opacity .25s ease, filter .25s ease; }
         .hl-member:hover { transform: translateY(-6px) scale(1.06); }
@@ -71,8 +79,8 @@ export default function CrowdWall() {
         </button>
       </div>
 
-      {/* 人群墙（未到场灰淡，点亮即签到） */}
-      <div className="grid w-full grid-cols-6 gap-1.5 sm:grid-cols-8">
+      {/* 人群墙（25 格 5×5，未到场灰淡，点亮即签到） */}
+      <div className="grid w-full grid-cols-5 gap-1.5">
         {members.map((m, i) => {
           const { Icon } = ANIMALS[m.animalIndex];
           const on = checked.has(i);
