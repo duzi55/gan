@@ -16,16 +16,16 @@ import { useCrowdSynth } from '../useCrowdSynth';
 
 /** 琴键配置：8 音（音级 + 八度 + 音名 + 键盘映射 + 动物），确定性静态数据
  *  2026-09-08 Claude·音名校准：A3=220Hz 起，C/D/E/G 比同组 A 高（跨年），
- *  正确标记 A3 C4 D4 E4 G4 / A4 C5 D5（原误统一 +3 八度） */
+ *  正确标记 A3 C4 D4 E4 G4 / A4 C5 D5；v3 名册 25 项后索引重选（近似原角色） */
 const KEYS = [
-  { note: 0, octave: 0, name: 'A3', kbd: ['1', 'a'], animal: 0 }, // 小狗
-  { note: 1, octave: 0, name: 'C4', kbd: ['2', 's'], animal: 1 }, // 小猫
-  { note: 2, octave: 0, name: 'D4', kbd: ['3', 'd'], animal: 2 }, // 兔子
-  { note: 3, octave: 0, name: 'E4', kbd: ['4', 'f'], animal: 3 }, // 小熊
-  { note: 4, octave: 0, name: 'G4', kbd: ['5', 'g'], animal: 4 }, // 小猪
-  { note: 0, octave: 1, name: 'A4', kbd: ['6', 'h'], animal: 6 }, // 企鹅
-  { note: 1, octave: 1, name: 'C5', kbd: ['7', 'j'], animal: 8 }, // 猫头鹰
-  { note: 2, octave: 1, name: 'D5', kbd: ['8', 'k'], animal: 9 }, // 奶牛
+  { note: 0, octave: 0, name: 'A3', kbd: ['1', 'a'], animal: 12 }, // 小狗 pup
+  { note: 1, octave: 0, name: 'C4', kbd: ['2', 's'], animal: 11 }, // 小猫 cat
+  { note: 2, octave: 0, name: 'D4', kbd: ['3', 'd'], animal: 13 }, // 兔子 bunny
+  { note: 3, octave: 0, name: 'E4', kbd: ['4', 'f'], animal: 17 }, // 小熊 bear
+  { note: 4, octave: 0, name: 'G4', kbd: ['5', 'g'], animal: 6 }, // 小猪 pig
+  { note: 0, octave: 1, name: 'A4', kbd: ['6', 'h'], animal: 16 }, // 企鹅 penguin
+  { note: 1, octave: 1, name: 'C5', kbd: ['7', 'j'], animal: 10 }, // 猫头鹰 owl
+  { note: 2, octave: 1, name: 'D5', kbd: ['8', 'k'], animal: 14 }, // 奶牛 cow
 ] as const;
 
 export default function CrowdKeys() {

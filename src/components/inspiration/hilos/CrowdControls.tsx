@@ -72,16 +72,7 @@ export default function CrowdControls({ value, onChange }: CrowdControlsProps) {
         </button>
       </div>
       <div className="space-y-3">
-        {/* 描边粗细：viewBox=100 坐标系的 stroke-width */}
-        <Row
-          label="描边粗细"
-          display={value.strokeWidth.toFixed(1)}
-          min={2}
-          max={6}
-          step={0.2}
-          value={value.strokeWidth}
-          onInput={(v) => onChange({ ...value, strokeWidth: v })}
-        />
+        {/* 2026-09-08 Claude·v3：描边滑块下架（用户裁定换原作色块 SVG，无 stroke 可调） */}
         {/* 人群大小：动物边长 ≈ 容器宽 ÷ sizeDivisor（越小越大只） */}
         <Row
           label="人群大小"

@@ -12,24 +12,43 @@
 
 import type { ComponentType } from 'react';
 import {
-  DogIcon, CatIcon, RabbitIcon, BearIcon, PigIcon, PandaIcon,
-  PenguinIcon, AlligatorIcon, OwlIcon, CowIcon, FoxIcon, RobotIcon,
+  HorseIcon, DuckIcon, WolfIcon, DeerIcon, RacoonIcon, BirdIcon, PigIcon,
+  CrocoIcon, FoxIcon, ElephantIcon, OwlIcon, CatIcon, PupIcon, BunnyIcon,
+  CowIcon, SealionIcon, PenguinIcon, BearIcon,
+  Robot01Icon, Robot02Icon, Robot03Icon, Robot04Icon, Robot05Icon, Robot06Icon, Robot07Icon,
 } from './animals';
 
-/** 人群动物花名册：label 供 aria / 签到墙称呼 */
+/**
+ * 人群动物花名册（label 供 aria / 签到墙称呼）
+ * 2026-09-08 Claude·v3 扩充 12→25（用户裁定换用原作素材）：与 hilos.sh
+ *   登录页人群同款的 18 只动物 + 7 款机器人，文件见 animals.tsx。
+ */
 export const ANIMALS: { id: string; label: string; Icon: ComponentType<{ className?: string }> }[] = [
-  { id: 'dog', label: '小狗', Icon: DogIcon },
-  { id: 'cat', label: '小猫', Icon: CatIcon },
-  { id: 'rabbit', label: '兔子', Icon: RabbitIcon },
-  { id: 'bear', label: '小熊', Icon: BearIcon },
+  { id: 'horse', label: '马', Icon: HorseIcon },
+  { id: 'duck', label: '鸭子', Icon: DuckIcon },
+  { id: 'wolf', label: '狼', Icon: WolfIcon },
+  { id: 'deer', label: '鹿', Icon: DeerIcon },
+  { id: 'racoon', label: '浣熊', Icon: RacoonIcon },
+  { id: 'bird', label: '鸟', Icon: BirdIcon },
   { id: 'pig', label: '小猪', Icon: PigIcon },
-  { id: 'panda', label: '熊猫', Icon: PandaIcon },
-  { id: 'penguin', label: '企鹅', Icon: PenguinIcon },
-  { id: 'gator', label: '鳄鱼', Icon: AlligatorIcon },
-  { id: 'owl', label: '猫头鹰', Icon: OwlIcon },
-  { id: 'cow', label: '奶牛', Icon: CowIcon },
+  { id: 'croco', label: '鳄鱼', Icon: CrocoIcon },
   { id: 'fox', label: '狐狸', Icon: FoxIcon },
-  { id: 'robot', label: '机器人', Icon: RobotIcon },
+  { id: 'elephant', label: '大象', Icon: ElephantIcon },
+  { id: 'owl', label: '猫头鹰', Icon: OwlIcon },
+  { id: 'cat', label: '小猫', Icon: CatIcon },
+  { id: 'pup', label: '小狗', Icon: PupIcon },
+  { id: 'bunny', label: '兔子', Icon: BunnyIcon },
+  { id: 'cow', label: '奶牛', Icon: CowIcon },
+  { id: 'sealion', label: '海狮', Icon: SealionIcon },
+  { id: 'penguin', label: '企鹅', Icon: PenguinIcon },
+  { id: 'bear', label: '小熊', Icon: BearIcon },
+  { id: 'robot-01', label: '机器人01', Icon: Robot01Icon },
+  { id: 'robot-02', label: '机器人02', Icon: Robot02Icon },
+  { id: 'robot-03', label: '机器人03', Icon: Robot03Icon },
+  { id: 'robot-04', label: '机器人04', Icon: Robot04Icon },
+  { id: 'robot-05', label: '机器人05', Icon: Robot05Icon },
+  { id: 'robot-06', label: '机器人06', Icon: Robot06Icon },
+  { id: 'robot-07', label: '机器人07', Icon: Robot07Icon },
 ];
 
 /**
@@ -49,17 +68,17 @@ export function pentaFreq(noteIndex: number, octave = 0): number {
 /**
  * 人群可调配置（2026-09-08 Claude·用户点单「边框太粗，提供配置项」）：
  * 默认值经原站比对校准；CrowdLogin 右下角「人群调参」面板实时改写，
- * 经 CSS 变量 --hl-sw（描边）/ --hl-hop（跳跃）与布局参数 sizeDivisor 生效。
+ * 经 CSS 变量 --hl-hop（跳跃）与布局参数 sizeDivisor 生效。
+ * 2026-09-08 Claude·v3（用户裁定换用原作 SVG 素材）：原作为色块填充
+ * 无 stroke，strokeWidth 字段随之退役删除（调参面板同步下架该项）。
  */
 export interface CrowdConfig {
-  /** 动物描边粗细（SVG stroke-width，viewBox=100 坐标系；原写死 4.5 偏粗，默认 3.2） */
-  strokeWidth: number;
   /** 人群尺寸因子：动物边长 ≈ 容器宽 ÷ sizeDivisor（越小越大只），结果钳 64~150px */
   sizeDivisor: number;
   /** hover 跳起高度 px（原站 Lift=18；默认 14 配果冻动画更 Q 弹） */
   hopHeight: number;
 }
-export const CROWD_CONFIG_DEFAULT: CrowdConfig = { strokeWidth: 3.2, sizeDivisor: 10, hopHeight: 14 };
+export const CROWD_CONFIG_DEFAULT: CrowdConfig = { sizeDivisor: 10, hopHeight: 14 };
 
 /** 人群中的一只动物（布局输出） */
 export interface CrowdAnimal {

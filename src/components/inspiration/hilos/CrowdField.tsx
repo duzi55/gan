@@ -107,9 +107,9 @@ export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true
     );
   };
 
-  /* 配置项 → CSS 变量（--hl-sw 描边 / --hl-hop 跳跃高度），前后景容器各挂一份 */
+  /* 配置项 → CSS 变量（--hl-hop 跳跃高度；--hl-sw 已随 v3 原作素材退役），
+     前后景容器各挂一份 */
   const cfgVars = {
-    ['--hl-sw' as never]: config.strokeWidth,
     ['--hl-hop' as never]: `${config.hopHeight}px`,
   } as React.CSSProperties;
   /* 鼠标视差漂移样式（前后景同步漂移） */
