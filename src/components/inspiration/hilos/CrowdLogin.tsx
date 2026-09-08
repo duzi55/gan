@@ -76,18 +76,20 @@ export default function CrowdLogin() {
           容器 pointer-events-none 穿透，仅卡片本体恢复交互 */}
       <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center overflow-y-auto overscroll-contain p-4">
         <div
-          className="pointer-events-auto w-[min(430px,92vw)] rounded-[28px] border border-neutral-100 bg-white px-7 py-9 sm:px-9"
+          className="pointer-events-auto w-[min(430px,92vw)] rounded-[28px] border border-neutral-100 bg-white px-5 py-6 sm:px-9 sm:py-9"
           style={{ boxShadow: '0 30px 90px -24px rgba(15,15,20,0.35), 0 4px 18px -6px rgba(15,15,20,0.12)' }}
         >
-          <SkateDogIcon className="mx-auto h-16 w-auto" />
-          <h1 className="mt-1 text-center text-[34px] font-extrabold tracking-tight text-neutral-900">hilos</h1>
+          {/* 2026-09-08 Claude·移动端适配（用户点单）：小屏压缩 logo/标题/间距，
+              卡片总高从 ~560px 收到 ~500px，给人群留出呼吸空间 */}
+          <SkateDogIcon className="mx-auto h-12 w-auto sm:h-16" />
+          <h1 className="mt-1 text-center text-[30px] font-extrabold tracking-tight text-neutral-900 sm:text-[34px]">hilos</h1>
           <p className="mt-1.5 text-center text-[15px] text-neutral-500">{CROWD_TAGLINE}</p>
 
           {/* Watch demo：原站为视频弹层，复刻以全场波浪彩蛋代替（见文件头声明①） */}
           <button
             type="button"
             onClick={cheer}
-            className="mx-auto mt-4 flex items-center gap-2 text-sm font-medium text-neutral-700 transition-colors hover:text-neutral-950"
+            className="mx-auto mt-3 flex items-center gap-2 text-sm font-medium text-neutral-700 transition-colors hover:text-neutral-950 sm:mt-4"
           >
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-neutral-900 text-white">
               <svg viewBox="0 0 10 12" className="ml-0.5 h-2 w-2" fill="currentColor" aria-hidden="true"><path d="M0 0 L10 6 L0 12 z" /></svg>
@@ -96,7 +98,7 @@ export default function CrowdLogin() {
           </button>
 
           {/* 邮箱 magic link（复刻演示无后端，见文件头声明②） */}
-          <form onSubmit={submitEmail} className="mt-5 space-y-3">
+          <form onSubmit={submitEmail} className="mt-4 space-y-3 sm:mt-5">
             <input
               type="email"
               required
@@ -118,7 +120,7 @@ export default function CrowdLogin() {
           </form>
 
           {/* or 分隔（1:1：细线 + 小字） */}
-          <div className="my-4 flex items-center gap-3" aria-hidden="true">
+          <div className="my-3 flex items-center gap-3 sm:my-4" aria-hidden="true">
             <span className="h-px flex-1 bg-neutral-200" />
             <span className="text-xs text-neutral-400">or</span>
             <span className="h-px flex-1 bg-neutral-200" />
@@ -153,7 +155,7 @@ export default function CrowdLogin() {
         aria-pressed={synth.enabled}
         aria-label={synth.enabled ? 'Mute the crowd' : 'Unmute the crowd'}
         title={synth.enabled ? 'Mute the crowd' : 'Unmute the crowd'}
-        className={`absolute bottom-5 left-5 z-20 flex h-11 w-11 items-center justify-center rounded-full border shadow-lg transition-all hover:scale-105 ${
+        className={`absolute bottom-5 left-5 z-30 flex h-11 w-11 items-center justify-center rounded-full border shadow-lg transition-all hover:scale-105 ${
           synth.enabled ? 'border-neutral-900 bg-neutral-900 text-white' : 'border-neutral-200 bg-white text-neutral-700'
         }`}
       >
@@ -166,8 +168,9 @@ export default function CrowdLogin() {
         </svg>
       </button>
 
-      {/* 右下角「人群调参」入口 + 面板（复刻原站 Crowd Controls，2026-09-08 Claude·配置项） */}
-      <div className="absolute bottom-5 right-5 z-20 flex flex-col items-end gap-3">
+      {/* 右下角「人群调参」入口 + 面板（复刻原站 Crowd Controls，2026-09-08 Claude·配置项）
+          z-30：高于前景人群（z-20），避免被底部前景动物遮挡 */}
+      <div className="absolute bottom-5 right-5 z-30 flex flex-col items-end gap-3">
         {controlsOpen && <CrowdControls value={crowdCfg} onChange={setCrowdCfg} />}
         <button
           type="button"

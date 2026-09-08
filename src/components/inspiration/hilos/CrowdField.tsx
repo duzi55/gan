@@ -75,73 +75,102 @@ export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true
     });
   };
 
-  return (
-    <div
-      ref={boxRef}
-      className={`absolute inset-0 overflow-hidden ${className ?? ''}`}
-      onPointerMove={handleDrift}
-      aria-hidden="true"
-      /* 配置项 → CSS 变量：--hl-sw 描边粗细（动物 svg 继承），--hl-hop 跳跃高度（果冻动画） */
-      style={{ ['--hl-sw' as never]: config.strokeWidth, ['--hl-hop' as never]: `${config.hopHeight}px` }}
-    >
-      {/* 自包含动效：hl- 前缀（灵感样式隔离铁律），reduced-motion 静态降级
-          2026-09-08 Claude·hover 升级果冻跳（squash & stretch，用户点单对齐原站动画感）：
-          keyframes 负责入场挤压拉伸，transform 声明负责保持跳起态与回落过渡 */}
-      <style>{`
-        .hl-animal { transition: transform .3s cubic-bezier(.34,1.56,.64,1); will-change: transform; }
-        @keyframes hl-hop {
-          0% { transform: translateY(0) scale(1, 1); }
-          35% { transform: translateY(calc(var(--hl-hop, 14px) * -1.2)) scale(1.1, 0.9); }
-          65% { transform: translateY(calc(var(--hl-hop, 14px) * -0.85)) scale(0.94, 1.08); }
-          100% { transform: translateY(calc(var(--hl-hop, 14px) * -1)) scale(1.06, 1.06); }
-        }
-        .hl-animal:hover {
-          transform: translateY(calc(var(--hl-hop, 14px) * -1)) scale(1.06);
-          animation: hl-hop .38s cubic-bezier(.34,1.56,.64,1);
-        }
-        @keyframes hl-wave { 0%,100% { transform: translateY(0); } 40% { transform: translateY(-16px); } }
-        .hl-waving { animation: hl-wave .55s cubic-bezier(.34,1.56,.64,1) both; }
-        @media (prefers-reduced-motion: reduce) {
-          .hl-animal, .hl-waving { transition: none; animation: none; }
-          .hl-animal:hover { transform: none; animation: none; }
-        }
-      `}</style>
+  /* 2026-09-08 Claude·前景遮挡层（用户点单对齐原站「部分动物作为前景遮挡卡片底部」）：
+     原站 Crowd Controls 的 Front 参数（240px）即底部前景横带——带内动物渲染在
+     卡片之前，形成「动物从卡片后探出、又压回卡片下缘」的前后景深 */
+  const frontY = box.h * 0.72;
 
-      {/* 视差漂移层（人群整体反向微移，制造景深） */}
-      <div
-        className="absolute inset-0"
+  /** 单只动物渲染（前后景共用同一布局、姿态与事件） */
+  const renderAnimal = (a: (typeof crowd)[number]) => {
+    const { Icon } = ANIMALS[a.animalIndex];
+    return (
+      /* 双层分离：外层静态姿态（rotate/flip），内层动作层（hover 跳 / 波浪），
+         避免 hover transform 覆盖翻转与旋转（2026-09-08 Claude） */
+      <span
+        key={a.key}
+        className="absolute block"
         style={{
-          transform: `translate(${drift.x}px, ${drift.y}px)`,
-          transition: 'transform .6s cubic-bezier(.22,1,.36,1)',
+          left: a.x,
+          top: a.y,
+          width: a.size,
+          height: a.size,
+          transform: `rotate(${a.rot}deg) scaleX(${a.flip ? -1 : 1})`,
         }}
       >
-        {crowd.map((a) => {
-          const { Icon } = ANIMALS[a.animalIndex];
-          return (
-            /* 双层分离：外层静态姿态（rotate/flip），内层动作层（hover 跳 / 波浪），
-               避免 hover transform 覆盖翻转与旋转（2026-09-08 Claude） */
-            <span
-              key={a.key}
-              className="absolute block"
-              style={{
-                left: a.x,
-                top: a.y,
-                width: a.size,
-                height: a.size,
-                transform: `rotate(${a.rot}deg) scaleX(${a.flip ? -1 : 1})`,
-              }}
-            >
-              <span
-                className={`hl-animal block h-full w-full ${waving ? 'hl-waving' : ''}`}
-                style={{ animationDelay: waving ? `${(a.col % 14) * 40}ms` : undefined }}
-                onPointerEnter={() => onAnimalSound?.(a.noteIndex, a.octave)}
-              >
-                <Icon className="h-full w-full drop-shadow-[0_2px_3px_rgba(0,0,0,0.12)]" />
-              </span>
-            </span>
-          );
-        })}
+        <span
+          className={`hl-animal pointer-events-auto block h-full w-full ${waving ? 'hl-waving' : ''}`}
+          style={{ animationDelay: waving ? `${(a.col % 14) * 40}ms` : undefined }}
+          onPointerEnter={() => onAnimalSound?.(a.noteIndex, a.octave)}
+        >
+          <Icon className="h-full w-full drop-shadow-[0_2px_3px_rgba(0,0,0,0.12)]" />
+        </span>
+      </span>
+    );
+  };
+
+  /* 配置项 → CSS 变量（--hl-sw 描边 / --hl-hop 跳跃高度），前后景容器各挂一份 */
+  const cfgVars = {
+    ['--hl-sw' as never]: config.strokeWidth,
+    ['--hl-hop' as never]: `${config.hopHeight}px`,
+  } as React.CSSProperties;
+  /* 鼠标视差漂移样式（前后景同步漂移） */
+  const driftStyle: React.CSSProperties = {
+    transform: `translate(${drift.x}px, ${drift.y}px)`,
+    transition: 'transform .6s cubic-bezier(.22,1,.36,1)',
+  };
+
+  return (
+    <>
+      {/* 后景人群（z-0，卡片之后） */}
+      <div
+        ref={boxRef}
+        className={`absolute inset-0 overflow-hidden ${className ?? ''}`}
+        onPointerMove={handleDrift}
+        aria-hidden="true"
+        style={cfgVars}
+      >
+        {/* 自包含动效：hl- 前缀（灵感样式隔离铁律），reduced-motion 静态降级
+            2026-09-08 Claude·hover 升级果冻跳（squash & stretch，用户点单对齐原站动画感）：
+            keyframes 负责入场挤压拉伸，transform 声明负责保持跳起态与回落过渡 */}
+        <style>{`
+          .hl-animal { transition: transform .3s cubic-bezier(.34,1.56,.64,1); will-change: transform; }
+          @keyframes hl-hop {
+            0% { transform: translateY(0) scale(1, 1); }
+            35% { transform: translateY(calc(var(--hl-hop, 14px) * -1.2)) scale(1.1, 0.9); }
+            65% { transform: translateY(calc(var(--hl-hop, 14px) * -0.85)) scale(0.94, 1.08); }
+            100% { transform: translateY(calc(var(--hl-hop, 14px) * -1)) scale(1.06, 1.06); }
+          }
+          .hl-animal:hover {
+            transform: translateY(calc(var(--hl-hop, 14px) * -1)) scale(1.06);
+            animation: hl-hop .38s cubic-bezier(.34,1.56,.64,1);
+          }
+          @keyframes hl-wave { 0%,100% { transform: translateY(0); } 40% { transform: translateY(-16px); } }
+          .hl-waving { animation: hl-wave .55s cubic-bezier(.34,1.56,.64,1) both; }
+          @media (prefers-reduced-motion: reduce) {
+            .hl-animal, .hl-waving { transition: none; animation: none; }
+            .hl-animal:hover { transform: none; animation: none; }
+          }
+        `}</style>
+
+        {/* 视差漂移层（人群整体反向微移，制造景深） */}
+        <div className="absolute inset-0" style={driftStyle}>
+          {crowd.filter((a) => a.y < frontY).map(renderAnimal)}
+        </div>
       </div>
-    </div>
+
+      {/* 前景人群（z-20，底部 28% 横带压在卡片下缘上）
+          容器 pointer-events-none 穿透 + 动物本体 auto（精准 hover），
+          避免重蹈登录卡全屏容器拦截事件（2026-09-08 Claude·穿透教训） */}
+      <div
+        className="pointer-events-none absolute inset-0 z-20 overflow-hidden"
+        onPointerMove={handleDrift}
+        aria-hidden="true"
+        style={cfgVars}
+      >
+        <div className="absolute inset-0" style={driftStyle}>
+          {crowd.filter((a) => a.y >= frontY).map(renderAnimal)}
+        </div>
+      </div>
+    </>
   );
 }

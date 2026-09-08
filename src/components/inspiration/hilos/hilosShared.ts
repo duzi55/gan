@@ -97,6 +97,19 @@ export function buildCrowdLayout(width: number, height: number, sizeDivisor: num
   const size = Math.min(150, Math.max(64, width / sizeDivisor));
   const pitchX = size * 0.55;
   const pitchY = size * 0.575;
+  /* 移动端卡片侧边避让（2026-09-08 Claude·用户点单移动端适配）：
+     卡片两侧缝隙不足一只动物时（375px 屏卡宽 92vw 两侧仅 15px），「骑卡片
+     左右缘」的后景动物只露出几像素细条——直接跳过不渲染，缝隙透出舞台
+     底色；桌面缝隙大（cardLeft > size）自动不触发；底部前景带动物不避让
+     （压卡片下缘是前景遮挡特性，见 CrowdField frontY） */
+  const cardW = Math.min(430, width * 0.92);
+  const cardH = Math.min(500, height * 0.8);
+  const cardLeft = (width - cardW) / 2;
+  const cardRight = cardLeft + cardW;
+  const cardTop = (height - cardH) / 2;
+  const cardBottom = cardTop + cardH;
+  const frontBandY = height * 0.72;
+  const sideAvoid = cardLeft < size;
   const cols = Math.ceil(width / pitchX) + 1;
   const rows = Math.ceil(height / pitchY) + 1;
   const out: CrowdAnimal[] = [];
@@ -106,14 +119,25 @@ export function buildCrowdLayout(width: number, height: number, sizeDivisor: num
       const stagger = row % 2 === 1 ? pitchX * 0.5 : 0;
       const jx = (hash01(seed + 1) - 0.5) * size * 0.22;
       const jy = (hash01(seed + 2) - 0.5) * size * 0.18;
+      const x = col * pitchX - size * 0.24 + stagger + jx;
+      const y = row * pitchY - size * 0.2 + jy;
+      /* 侧边避让：窄缝下「骑卡片左右缘」的后景动物只露出几像素细条，直接
+         跳过不渲染（缝隙透出舞台底色更干净）；完全落在卡片横向区间内的
+         动物保留（被卡片遮挡后从顶/底缘探出，正是原站的前后景深） */
+      if (sideAvoid && y < frontBandY) {
+        const inCardY = y + size > cardTop + size * 0.4 && y < cardBottom - size * 0.2;
+        const straddleEdge =
+          (x < cardLeft && x + size > cardLeft + 6) || (x < cardRight - 6 && x + size > cardRight);
+        if (inCardY && straddleEdge) continue;
+      }
       out.push({
         key: `r${row}c${col}`,
         /* 动物种类与音级按行列错开，相邻不重样、划动成旋律 */
         animalIndex: (row * 5 + col * 7 + Math.floor(hash01(seed + 3) * 5)) % ANIMALS.length,
         noteIndex: (row * 3 + col) % PENTA_SEMITONES.length,
         octave: row % 3 === 0 ? 1 : 0,
-        x: col * pitchX - size * 0.24 + stagger + jx,
-        y: row * pitchY - size * 0.2 + jy,
+        x,
+        y,
         size: size * (0.88 + hash01(seed + 4) * 0.24),
         flip: hash01(seed + 5) > 0.5,
         rot: (hash01(seed + 6) - 0.5) * 10,
