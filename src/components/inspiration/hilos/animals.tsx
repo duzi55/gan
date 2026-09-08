@@ -68,9 +68,9 @@ export function DogIcon({ className }: IconProps) {
         <ellipse cx="46" cy="40" rx="25" ry="23" />
         {/* 吻筒（向右前方伸出） */}
         <path d="M54 44 q18 -4 21 6 q2 10 -9 13 l-14 2 q-8 0 -7 -9 q0 -8 9 -12" />
-        {/* 近耳（左大垂耳） */}
-        <path d="M28 24 q-17 2 -15 26 q1 15 14 15 q8 0 9 -10 l2 -20" />
       </g>
+      {/* 近耳（左大垂耳填黑——原站同款黑耳狗，丰富人群黑白节奏） */}
+      <path d="M28 24 q-17 2 -15 26 q1 15 14 15 q8 0 9 -10 l2 -20" fill={STROKE} stroke="none" />
       <Solid>
         <ellipse cx="73" cy="49" rx="5.5" ry="4.5" />
         <circle cx="42" cy="36" r="3.4" />
@@ -115,11 +115,12 @@ export function RabbitIcon({ className }: IconProps) {
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
         <path d="M41 24 q-9 -28 2 -29 q10 -1 7 29" />
-        <path d="M60 26 q16 -14 21 -4 q4 10 -12 14" />
         <ellipse cx="50" cy="44" rx="23" ry="21" />
         {/* 门牙 */}
         <path d="M46 55 h8 v7 q-4 2.5 -8 0 z" />
       </g>
+      {/* 垂耳填黑（原站同款黑耳兔） */}
+      <path d="M60 26 q16 -14 21 -4 q4 10 -12 14" fill={STROKE} stroke="none" />
       <Solid>
         <circle cx="42" cy="42" r="3.2" />
         <circle cx="58" cy="42" r="3.2" />
@@ -309,12 +310,13 @@ export function FoxIcon({ className }: IconProps) {
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true" style={{ strokeWidth: 'var(--hl-sw, 3.2)' }}>
       <g {...COMMON}>
         <path d="M34 26 L30 6 q12 3 17 12" />
-        <path d="M66 26 L70 6 q-12 3 -17 12" />
         {/* 窄脸 */}
         <path d="M50 62 q-18 -4 -21 -20 q-2 -14 8 -19 q13 -6 26 0 q10 5 8 19 q-3 16 -21 20" />
         {/* 尖吻（向右伸出） */}
         <path d="M56 44 q14 -2 17 4 q2 7 -7 9 l-12 2 q-6 -1 -6 -7 q0 -7 8 -8" />
       </g>
+      {/* 右耳填黑（原站同款黑耳狐） */}
+      <path d="M66 26 L70 6 q-12 3 -17 12" fill={STROKE} stroke="none" />
       <Fine>
         <path d="M35 21 l-1.5 -8 q5 2 7 6 M65 21 l1.5 -8 q-5 2 -7 6" />
       </Fine>

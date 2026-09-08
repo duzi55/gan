@@ -121,7 +121,7 @@ export function buildCrowdLayout(width: number, height: number, sizeDivisor: num
       const stagger = row % 2 === 1 ? pitchX * 0.5 : 0;
       const jx = (hash01(seed + 1) - 0.5) * size * 0.22;
       const jy = (hash01(seed + 2) - 0.5) * size * 0.18;
-      let x = col * pitchX - size * 0.24 + stagger + jx;
+      const x = col * pitchX - size * 0.24 + stagger + jx;
       const y = row * pitchY - size * 0.2 + jy;
       /* 侧边避让：窄缝下「骑卡片左右缘」的后景动物只露出几像素细条，直接
          跳过不渲染（缝隙透出舞台底色更干净）；完全落在卡片横向区间内的
@@ -132,19 +132,9 @@ export function buildCrowdLayout(width: number, height: number, sizeDivisor: num
           (x < cardLeft && x + size > cardLeft + 6) || (x < cardRight - 6 && x + size > cardRight);
         if (inCardY && straddleEdge) continue;
       }
-      /* U 形前景（2026-09-08 Claude·用户点单对齐原站：卡片左右两侧各一列
-         动物骑缘压前 + 底部横带压前）：
-         ① 底部横带 y ≥ frontBandY；
-         ② 桌面宽缝时（窄缝避让不触发），卡片左右最近一列动物向内骑进
-            卡片边缘 ~25% 并标记前景——压在卡片左右边线上（原站同款） */
-      const cx = x + size / 2;
-      const nearLeftEdge = Math.abs(cx - cardLeft) < pitchX * 0.55;
-      const nearRightEdge = Math.abs(cx - cardRight) < pitchX * 0.55;
-      const inSideCorridor =
-        !sideAvoid && y > cardTop - size * 0.5 && y < cardBottom && (nearLeftEdge || nearRightEdge);
-      if (inSideCorridor) {
-        x = nearLeftEdge ? cardLeft - size * 0.74 : cardRight - size * 0.26;
-      }
+      /* 前景标记（2026-09-08 Claude·用户裁定纠正：原站仅「底部一排」压在
+         卡片下缘，卡片左右边线完整、两侧动物全在后——不要左右覆盖。
+         曾误读局部放大图做成 U 形左右骑缘列，已按用户指正回退） */
       out.push({
         key: `r${row}c${col}`,
         /* 动物种类与音级按行列错开，相邻不重样、划动成旋律 */
@@ -157,7 +147,7 @@ export function buildCrowdLayout(width: number, height: number, sizeDivisor: num
         flip: hash01(seed + 5) > 0.5,
         rot: (hash01(seed + 6) - 0.5) * 10,
         col,
-        front: y >= frontBandY || inSideCorridor,
+        front: y >= frontBandY,
       });
     }
   }

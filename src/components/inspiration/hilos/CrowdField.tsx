@@ -75,9 +75,9 @@ export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true
     });
   };
 
-  /* 2026-09-08 Claude·前景遮挡层（用户点单对齐原站：部分动物作为前景遮挡卡片）：
-     原站为 U 形前景——卡片左右两侧各一列动物骑缘压前 + 底部横带压前
-     （布局层在 hilosShared 打 front 标记，此处按标记分层渲染） */
+  /* 2026-09-08 Claude·前景遮挡层：仅底部一排动物压在卡片下缘（用户裁定
+     对齐原站——卡片左右边线完整、两侧动物全在后，不做左右覆盖）；
+     布局层在 hilosShared 打 front 标记（y ≥ frontBandY），此处按标记分层 */
 
   /** 单只动物渲染（前后景共用同一布局、姿态与事件） */
   const renderAnimal = (a: (typeof crowd)[number]) => {
@@ -157,7 +157,7 @@ export default function CrowdField({ onAnimalSound, waveKey = 0, parallax = true
         </div>
       </div>
 
-      {/* 前景人群（z-20，U 形：底部横带 + 卡片左右骑缘列，压在卡片前）
+      {/* 前景人群（z-20，仅底部一排压在卡片下缘——用户裁定对齐原站）
           容器 pointer-events-none 穿透 + 动物本体 auto（精准 hover），
           避免重蹈登录卡全屏容器拦截事件（2026-09-08 Claude·穿透教训） */}
       <div
