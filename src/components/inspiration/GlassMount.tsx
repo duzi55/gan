@@ -98,6 +98,13 @@ const LOADERS: Record<string, ComponentType> = {
   'crowd-login': dynamic(() => import('./hilos/CrowdLogin'), { ssr: false, loading: () => <Skeleton /> }),
   'crowd-login:keys': dynamic(() => import('./hilos/variants/CrowdKeys'), { ssr: false, loading: () => <Skeleton /> }),
   'crowd-login:wall': dynamic(() => import('./hilos/variants/CrowdWall'), { ssr: false, loading: () => <Skeleton /> }),
+
+  /* ── 13 黑客桌面原型 + 变体 ──
+   * 2026-09-09 Claude·新增 IN-08 黑客桌面（用户口述灵感：黑客帝国风格——
+   *   绿色细线桌面 + 文件夹 + 终端 + 代码雨；组件见 matrix/ 目录五段解耦） */
+  'matrix-desktop': dynamic(() => import('./matrix/MatrixDesktop'), { ssr: false, loading: () => <Skeleton /> }),
+  'matrix-desktop:rain': dynamic(() => import('./matrix/variants/MatrixRain'), { ssr: false, loading: () => <Skeleton /> }),
+  'matrix-desktop:wake': dynamic(() => import('./matrix/variants/MatrixWake'), { ssr: false, loading: () => <Skeleton /> }),
 };
 
 export function GlassMount({ slug, variant }: { slug: string; variant?: string }) {

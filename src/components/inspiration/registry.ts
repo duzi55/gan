@@ -12,6 +12,7 @@ import {
   MiniOrchard,
   MiniCarousel,
   MiniCrowd,
+  MiniMatrix,
 } from './minis';
 
 /**
@@ -111,6 +112,13 @@ export interface InspirationEntry {
    *   返回键配色须按舞台明暗适配（浅色舞台用深色字）。缺省 false 走原序幕。
    */
   immersive?: boolean;
+  /**
+   * 深色舞台标记（可选）
+   * 2026-09-09 Claude·新增（IN-08 黑客桌面起）：immersive 首屏返回键默认按
+   *   「浅色舞台用深色字」适配；darkStage 为 true 表示舞台是深色底，
+   *   返回键改用浅色字保证对比度。仅深色舞台条目标注，历史条目不动。
+   */
+  darkStage?: boolean;
   /** 该灵感下的复刻原型（≥1 件，详情页每件独占一整屏） */
   prototypes: InspirationPrototype[];
 }
@@ -194,6 +202,18 @@ const CROWD_PAPER_STAGE =
   'radial-gradient(80% 80% at 15% 12%, rgba(203,213,225,0.55), transparent 60%), ' +
   'radial-gradient(85% 85% at 85% 88%, rgba(199,210,254,0.45), transparent 62%), ' +
   'linear-gradient(160deg, #fafaf9, #f1f1f4)';
+
+/**
+ * IN-08 黑客桌面 · 舞台底：矩阵深黑绿舞台（荧光绿光斑，深色系）
+ * 2026-09-09 Claude·新增：黑客帝国终端夜色——近黑深绿底 + 双团绿光斑，
+ *   呼应代码雨与细线窗口的荧光绿；第七种舞台语言（矩阵绿调）；
+ *   coverStage 与原型 stage 复用同一份。深色舞台 → Entry.darkStage = true
+ *   （详情页返回键随之用浅色字，见 [slug]/page.tsx）。
+ */
+const MATRIX_STAGE =
+  'radial-gradient(80% 80% at 15% 12%, rgba(34,197,94,0.16), transparent 60%), ' +
+  'radial-gradient(85% 85% at 85% 88%, rgba(16,185,129,0.12), transparent 62%), ' +
+  'linear-gradient(165deg, #030b08, #02100a)';
 
 export const INSPIRATIONS: InspirationEntry[] = [
   {
@@ -574,6 +594,57 @@ export const INSPIRATIONS: InspirationEntry[] = [
         variants: [
           { id: 'keys', title: '动物琴键', titleEn: 'ANIMAL KEYS', desc: '人群排成一排琴键：点按弹奏小调五声音阶跨八度，键盘 1–8 同效，按下即跳。' },
           { id: 'wall', title: '签到人群墙', titleEn: 'CHECK-IN WALL', desc: '25 位小动物成员墙：全名册一格一种不重复，点击点亮签到、实时计数，呼应「Members belong」。' },
+        ],
+      },
+    ],
+  },
+
+  /**
+   * IN-08 黑客桌面 Matrix Desktop
+   * 2026-09-09 Claude·新增灵感（用户口述：黑客帝国一样的桌面——细线条、
+   *   绿色，有文件夹、可打开终端）：
+   *   - 1 件原型（黑客桌面 MatrixDesktop）：代码雨背景 + 图标栅格
+   *     （单击选中 / 双击双点开窗）+ 可拖动细线窗口（文件夹 / 文件查看 /
+   *     终端 / 回收站）+ 可敲命令的终端（help / ls / cat / whoami /
+   *     date / matrix / rabbit）；
+   *   - 2 件变体：代码雨屏保（MatrixRain，点按唤醒 Knock knock 彩蛋）/
+   *     唤醒终端（MatrixWake，1999 开场字幕打字机 + CRT 扫描线）；
+   *   - 溯源：用户口述灵感，无公开原稿——按 url 可选化规则登记来源身份
+   *     （label / via），不编造外链；
+   *   - immersive: true + darkStage: true —— 首屏净化，且返回键用浅色字
+   *     （深黑绿舞台上默认深色字对比度不足）；
+   *   - 组件拆五段解耦：matrix/matrixShared.ts（配色·VFS·命令·文案）/
+   *     DigitalRain.tsx（代码雨画布）/ MatrixWindow.tsx（细线窗口框架）/
+   *     TerminalPane.tsx（终端窗格）/ MatrixDesktop.tsx（原型）+ variants。
+   */
+  {
+    slug: 'matrix-desktop',
+    no: '08',
+    title: '黑客桌面',
+    titleEn: 'MATRIX DESKTOP',
+    desc: '同一块矩阵终端的桌面语言——代码雨、细线窗口、可敲命令的终端——双击文件夹装载程序，点开终端，矩阵便注意到了你。',
+    date: '2026-09-09',
+    source: {
+      label: '用户口述灵感 · 黑客帝国 Matrix 风格桌面（绿色细线 / 文件夹 / 终端 / 代码雨）',
+      via: 'The Matrix (1999) 经典视觉语言',
+    },
+    immersive: true,
+    darkStage: true,
+    coverStage: MATRIX_STAGE,
+    coverMini: MiniMatrix,
+    prototypes: [
+      {
+        slug: 'matrix-desktop',
+        no: '01',
+        title: '黑客桌面',
+        titleEn: 'ZION-OS',
+        desc: '代码雨铺底的 ZION-OS：双击图标开窗，文件夹里藏着装载程序与追踪日志，终端里 help、ls、cat 之外还有两个彩蛋。',
+        points: ['颗粒噪点', '虚焦景深', '编辑式排版'],
+        stage: MATRIX_STAGE,
+        Mini: MiniMatrix,
+        variants: [
+          { id: 'rain', title: '代码雨屏保', titleEn: 'DIGITAL RAIN', desc: '全亮态数字雨里浮出的话——点一下，它会注意到你：白绿一闪，Knock, knock, Neo.' },
+          { id: 'wake', title: '唤醒终端', titleEn: 'WAKE UP', desc: '1999 开场字幕的 CRT 复刻：扫描线里打字机逐字输出，Call trans opt——Knock, knock, Neo.' },
         ],
       },
     ],

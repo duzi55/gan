@@ -128,30 +128,45 @@ export default async function InspirationDetailPage({
         data-snap-stage
         style={{ ...STAGE_HEIGHT, background: prototypes[0].stage }}
       >
-        {/* ④ 颗粒噪点 + ⑤ 虚焦光斑：舞台景深氛围（纯 CSS；immersive 时换粉彩色系） */}
+        {/* ④ 颗粒噪点 + ⑤ 虚焦光斑：舞台景深氛围（纯 CSS；immersive 时换粉彩色系；
+            2026-09-09 Claude·darkStage 深色舞台（IN-08 黑客桌面起）改低调绿光斑——
+            粉彩薄荷/薰衣草会污染矩阵纯绿氛围） */}
         <span className="lg-noise" aria-hidden />
         <span
           className="lg-blob left-[-120px] top-[-90px] h-[420px] w-[420px]"
-          style={{ background: immersive ? IMMERSIVE_BLOB_A : 'rgba(56,189,248,0.3)' }}
+          style={{
+            background: immersive
+              ? entry.darkStage
+                ? 'rgba(34,197,94,0.10)'
+                : IMMERSIVE_BLOB_A
+              : 'rgba(56,189,248,0.3)',
+          }}
           aria-hidden
         />
         <span
           className="lg-blob bottom-[-140px] right-[-110px] h-[420px] w-[420px]"
-          style={{ background: immersive ? IMMERSIVE_BLOB_B : 'rgba(167,139,250,0.28)' }}
+          style={{
+            background: immersive
+              ? entry.darkStage
+                ? 'rgba(16,185,129,0.08)'
+                : IMMERSIVE_BLOB_B
+              : 'rgba(167,139,250,0.28)',
+          }}
           aria-hidden
         />
 
-        {/* 顶部行：返回灵感（immersive 时为唯一 chrome；浅色舞台用深色文字保证对比度）+ 灵感编号（immersive 隐藏） */}
+        {/* 顶部行：返回灵感（immersive 时为唯一 chrome；返回键按舞台明暗适配——
+            2026-09-09 Claude·darkStage 深色舞台用浅色字，浅色舞台保持深色字）+ 灵感编号（immersive 隐藏） */}
         <div
           className={`absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 py-5 font-mono text-[11px] uppercase tracking-[0.3em] md:px-8 ${
-            immersive ? 'text-neutral-700' : 'text-white/60'
+            immersive && !entry.darkStage ? 'text-neutral-700' : 'text-white/60'
           }`}
         >
           {/* 2026-08-28 Claude·双端适配：负 margin 扩大触控热区，11px 小字在移动端不难点 */}
           <Link
             href="/inspiration/"
             className={`-my-2 inline-block py-2 transition-colors ${
-              immersive ? 'hover:text-neutral-950' : 'hover:text-white'
+              immersive && !entry.darkStage ? 'hover:text-neutral-950' : 'hover:text-white'
             }`}
           >
             ← 灵感 Inspiration

@@ -403,3 +403,94 @@ export function MiniCrowd() {
     </div>
   );
 }
+
+/**
+ * 13 · 黑客桌面微缩图（IN-08，矩阵绿快照）
+ * 2026-09-09 Claude·新增：复刻自 matrix/MatrixDesktop（等比简化）——
+ *   深黑绿底 + 数根竖向绿渐变线示意代码雨 + 中央细线小窗口
+ *   （标题栏方点 / 绿字线 / >_ 光标）；零 hooks、零 canvas、零动画循环
+ *   （性能铁律），静态 JSX + 内联色值自包含。
+ */
+export function MiniMatrix() {
+  /* 代码雨示意：8 根竖向渐变线（位置/高度/透明度静态错落，模拟雨列） */
+  const rain = [
+    { left: 8, h: 46, o: 0.5 },
+    { left: 24, h: 64, o: 0.7 },
+    { left: 40, h: 34, o: 0.4 },
+    { left: 58, h: 72, o: 0.8 },
+    { left: 76, h: 44, o: 0.5 },
+    { left: 94, h: 60, o: 0.65 },
+    { left: 112, h: 38, o: 0.45 },
+    { left: 130, h: 66, o: 0.75 },
+    { left: 148, h: 42, o: 0.5 },
+    { left: 164, h: 58, o: 0.6 },
+  ];
+  return (
+    <div
+      className="relative h-[7.5rem] w-44 overflow-hidden rounded-xl shadow-xl"
+      style={{
+        background: 'linear-gradient(165deg, #030b08, #02100a)',
+        border: '1px solid rgba(74,222,128,0.42)',
+      }}
+      aria-hidden
+    >
+      {/* 代码雨：竖向绿渐变线（上淡下淡、中段最亮，示意字符流） */}
+      {rain.map((c, i) => (
+        <i
+          key={i}
+          className="absolute top-2 block w-[2px] rounded-full"
+          style={{
+            left: c.left,
+            height: c.h,
+            opacity: c.o,
+            background:
+              'linear-gradient(to bottom, transparent, #4ade80 45%, #bbf7d0 85%, transparent)',
+          }}
+        />
+      ))}
+
+      {/* 中央细线小窗口（桌面打开态示意）：标题栏方点 + 绿字线 + >_ 光标 */}
+      <div
+        className="absolute left-1/2 top-1/2 w-[104px] -translate-x-1/2 -translate-y-1/2"
+        style={{
+          background: 'rgba(2,8,6,0.88)',
+          border: '1px solid rgba(74,222,128,0.42)',
+          boxShadow: '0 0 14px rgba(74,222,128,0.18)',
+        }}
+      >
+        {/* 标题栏：三颗方点 + 细分隔线 */}
+        <div
+          className="flex items-center gap-1 px-1.5 py-1"
+          style={{ borderBottom: '1px solid rgba(74,222,128,0.16)' }}
+        >
+          <i className="block h-[3px] w-[3px] bg-[#4ade80]" />
+          <i className="block h-[3px] w-[3px] bg-[#4ade80]/60" />
+          <i className="block h-[3px] w-[3px] bg-[#4ade80]/30" />
+          <i className="ml-auto block h-[2px] w-6 bg-[#4ade80]/40" />
+        </div>
+        {/* 内容：两条绿字线 + 命令行 >_ */}
+        <div className="space-y-1 px-1.5 py-1.5">
+          <i className="block h-[3px] w-3/4 bg-[#4ade80]/70" />
+          <i className="block h-[3px] w-1/2 bg-[#4ade80]/40" />
+          <div className="flex items-center gap-[3px] pt-0.5">
+            <span
+              className="text-[6px] leading-none"
+              style={{ color: '#bbf7d0', fontFamily: 'ui-monospace, Consolas, monospace' }}
+            >
+              &gt;
+            </span>
+            <i className="block h-[5px] w-[3px] bg-[#e8fff2]" />
+          </div>
+        </div>
+      </div>
+
+      {/* 底部状态角标（mono 荧光绿小字） */}
+      <span
+        className="absolute bottom-1 left-1.5 text-[5px] uppercase tracking-[0.2em]"
+        style={{ color: 'rgba(74,222,128,0.55)', fontFamily: 'ui-monospace, Consolas, monospace' }}
+      >
+        ZION-OS
+      </span>
+    </div>
+  );
+}
