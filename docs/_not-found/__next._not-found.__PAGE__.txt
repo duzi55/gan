@@ -6,8 +6,8 @@
 9:I[6869,[],"IconMark"]
 b:I[7121,[],""]
 c:I[4581,[],""]
-f:I[8568,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-02afbe7d937b331d.js"],"Navigation"]
-10:I[9610,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-02afbe7d937b331d.js"],"MobileNav"]
+f:I[8568,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-c32d777c72c2b89f.js"],"Navigation"]
+10:I[9610,["8500","static/chunks/8500-f4d7bfbe7500f274.js","7177","static/chunks/app/layout-c32d777c72c2b89f.js"],"MobileNav"]
 :HL["/gan/_next/static/css/0634c25f18e3e31c.css","style"]
 :HL["/gan/_next/static/css/951d9540881f8ab5.css","style"]
 6:X
