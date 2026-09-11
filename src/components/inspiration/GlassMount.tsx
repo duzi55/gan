@@ -105,6 +105,11 @@ const LOADERS: Record<string, ComponentType> = {
   'matrix-desktop': dynamic(() => import('./matrix/MatrixDesktop'), { ssr: false, loading: () => <Skeleton /> }),
   'matrix-desktop:rain': dynamic(() => import('./matrix/variants/MatrixRain'), { ssr: false, loading: () => <Skeleton /> }),
   'matrix-desktop:wake': dynamic(() => import('./matrix/variants/MatrixWake'), { ssr: false, loading: () => <Skeleton /> }),
+
+  /* ── 14 江南小景原型 ──
+   * 2026-09-09 Claude·新增 IN-09 江南小景（用户指定小红书笔记：-Duduu-
+   *   《江南》·小景；画廊组件见 jiangnan/ 目录三段解耦） */
+  'jiangnan-viewer': dynamic(() => import('./jiangnan/JiangnanViewer'), { ssr: false, loading: () => <Skeleton /> }),
 };
 
 export function GlassMount({ slug, variant }: { slug: string; variant?: string }) {

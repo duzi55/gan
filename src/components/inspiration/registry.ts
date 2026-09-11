@@ -13,6 +13,7 @@ import {
   MiniCarousel,
   MiniCrowd,
   MiniMatrix,
+  MiniJiangnan,
 } from './minis';
 
 /**
@@ -214,6 +215,18 @@ const MATRIX_STAGE =
   'radial-gradient(80% 80% at 15% 12%, rgba(34,197,94,0.16), transparent 60%), ' +
   'radial-gradient(85% 85% at 85% 88%, rgba(16,185,129,0.12), transparent 62%), ' +
   'linear-gradient(165deg, #030b08, #02100a)';
+
+/**
+ * IN-09 江南小景 · 舞台底：烟雨雾青舞台（淡青绿 × 雾蓝，浅色系）
+ * 2026-09-09 Claude·新增：江南烟雨的天光水色——雾青淡绿底 + 双团
+ *   青绿 / 雾蓝光斑，呼应场景原画的清冷国风调性；第八种舞台语言
+ *   （烟雨雾青调）；coverStage 与原型 stage 复用同一份。
+ *   浅色舞台（不标 darkStage）→ 详情页返回键自动用深色字。
+ */
+const JIANGNAN_STAGE =
+  'radial-gradient(75% 70% at 18% 10%, rgba(165,220,205,0.5), transparent 62%), ' +
+  'radial-gradient(80% 80% at 85% 90%, rgba(188,214,232,0.45), transparent 60%), ' +
+  'linear-gradient(165deg, #eef4f0, #e3ecee)';
 
 export const INSPIRATIONS: InspirationEntry[] = [
   {
@@ -646,6 +659,54 @@ export const INSPIRATIONS: InspirationEntry[] = [
           { id: 'rain', title: '代码雨屏保', titleEn: 'DIGITAL RAIN', desc: '全亮态数字雨里浮出的话——点一下，它会注意到你：白绿一闪，Knock, knock, Neo.' },
           { id: 'wake', title: '唤醒终端', titleEn: 'WAKE UP', desc: '1999 开场字幕的 CRT 复刻：扫描线里打字机逐字输出，Call trans opt——Knock, knock, Neo.' },
         ],
+      },
+    ],
+  },
+
+  /**
+   * IN-09 江南小景 Jiangnan Scenes
+   * 2026-09-09 Claude·新增灵感（用户指定小红书笔记：-Duduu-《江南》·小景
+   *   ——国风横版场景原画六图，AIGC × Photoshop 电影美术式江南烟雨；
+   *   用户口述「和原先的图片灵感一致」——即沿 IN-04 治愈画卷的画廊语言）：
+   *   - 图片本地入库 /images/inspiration/jiangnan/（webp 已验 RIFF 魔数；
+   *     小红书 CDN 外链带时效签名会过期，严禁直接引用）；原帖图 2 为竖版
+   *     三联拼图（内容与其余单张横版重复），沿 IN-04 竖版重复图剔除惯例
+   *     不收录，文件保留备查；清单收录其余五张横版场景；
+   *   - 原型「满屏画卷」：沿 IN-04 画廊语言 1:1（一图一屏 + 吸附滚动 +
+   *     右侧细轨滚动条 + 底部翻页提示 + 左下图注），画框底色换烟雨深青；
+   *   - 图片画廊类不做衍生变体（INSPIRATION_RULES.md 例外，variants 空数组）；
+   *   - immersive: true —— 首屏净化（沿 IN-02 ~ IN-08 用户口述规范）；
+   *     浅色舞台不标 darkStage，返回键自动深色字；
+   *   - 组件拆三段解耦：jiangnan/jiangnanShared.ts（场景清单单一数据源）/
+   *     JiangnanCaption.tsx（图注）/ JiangnanViewer.tsx（原型）。
+   */
+  {
+    slug: 'jiangnan-scenes',
+    no: '09',
+    title: '江南小景',
+    titleEn: 'JIANGNAN SCENES',
+    desc: '同一卷江南烟雨的场景原画——白墙黛瓦、古树月门、樱雾水乡——一图一屏慢慢向下，人在画中行。',
+    date: '2026-09-09',
+    source: {
+      label: '小红书 · -Duduu-《江南》·小景（国风横版场景原画六图）',
+      url: 'https://xhslink.cn/o/9hFLQ35NS13',
+      via: '-Duduu-（原帖声明含 AI 生成内容）',
+    },
+    immersive: true,
+    coverStage: JIANGNAN_STAGE,
+    coverMini: MiniJiangnan,
+    prototypes: [
+      {
+        slug: 'jiangnan-viewer',
+        no: '01',
+        title: '满屏画卷',
+        titleEn: 'SCENES VIEWER',
+        desc: '江南五景一图占满一屏：滚轮或触摸下翻自动吸附，右侧细轨滚动条随进度滑动，底部翻页提示在末景转为回顶。',
+        points: ['颗粒噪点', '虚焦景深', '编辑式排版'],
+        stage: JIANGNAN_STAGE,
+        Mini: MiniJiangnan,
+        /* 2026-09-09 Claude·沿 IN-04 先例：图片画廊类不衍生变体（空数组） */
+        variants: [],
       },
     ],
   },

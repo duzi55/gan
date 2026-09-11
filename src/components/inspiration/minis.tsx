@@ -12,6 +12,7 @@
  */
 
 import { WALLS } from './wall/wallShared';
+import { JIANGNAN_SCENES } from './jiangnan/jiangnanShared';
 
 /** 01 · 玻璃唱片机微缩图 */
 export function MiniPlayer() {
@@ -491,6 +492,30 @@ export function MiniMatrix() {
       >
         ZION-OS
       </span>
+    </div>
+  );
+}
+
+/**
+ * 14 · 江南小景微缩图（IN-09，场景原画快照）
+ * 2026-09-09 Claude·新增：沿 IN-04 起的例外（用户裁定「图片画廊类灵感的
+ *   微缩图就用原图」）——直接用首幅场景缩略（本地已入库 webp +
+ *   lazy/async，零客户端 JS），不再手写 CSS 微缩组件。
+ */
+export function MiniJiangnan() {
+  return (
+    <div
+      className="relative w-44 overflow-hidden rounded-xl border border-emerald-950/20 shadow-xl"
+      aria-hidden
+    >
+      <img
+        src={JIANGNAN_SCENES[0].src}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+        className="h-24 w-full select-none object-cover"
+      />
     </div>
   );
 }
